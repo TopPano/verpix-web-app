@@ -1,0 +1,7 @@
+{
+  "generator-react-webpack": {
+    "appName": "verpix",
+    "style": "css",
+    "postcss": true
+  }
+}
