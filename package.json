@@ -21,7 +21,7 @@
   },
   "repository": "",
   "keywords": [],
-  "author": "Wei-Ting Chou",
+  "author": "Wei-Ting Chou, Jia-Kuan Su",
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-eslint": "^5.0.0",
@@ -52,15 +52,17 @@
     "null-loader": "^0.1.1",
     "open": "0.0.5",
     "phantomjs-prebuilt": "^2.0.0",
+    "postcss": "^5.0.11",
+    "postcss-cssnext": "^2.5.1",
+    "postcss-loader": "^0.8.0",
+    "precss": "^1.4.0",
     "react-addons-test-utils": "^0.14.0",
     "react-hot-loader": "^1.2.9",
     "rimraf": "^2.4.3",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.0",
-    "webpack-dev-server": "^1.12.0",
-    "postcss": "^5.0.11",
-    "postcss-loader": "^0.8.0"
+    "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
     "core-js": "^2.0.0",

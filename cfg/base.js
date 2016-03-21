@@ -25,7 +25,16 @@ module.exports = {
     hot: true,
     port: defaultSettings.port,
     publicPath: defaultSettings.publicPath,
-    noInfo: false
+    noInfo: false,
+    watchOptions: {
+      poll: 1000
+    }
+  },
+  postcss: () => {
+    return [
+      require('postcss-cssnext')(),
+      require('precss')()
+    ];
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
