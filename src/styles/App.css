@@ -1,0 +1,6 @@
+@import 'common/variables.css';
+
+body {
+  color: $text-color-primary;
+  color: black;
+}

@@ -1,0 +1,36 @@
+@import '../common/variables.css';
+@import '../common/mixins.css';
+
+.logobar-component {
+  .navbar {
+    background: black;
+    height: 60px;
+    .container-fluid {
+      .navbar-header {
+        @mixin centering true, true;
+        img {
+          @mixin centering true, false;
+          top: 50%;
+          /* TODO: How to use translateY(-50%) instead of margin-top? */
+          margin-top: -19px;
+        }
+      }
+      .navbar-nav {
+        > li {
+          > a {
+            /* styles for NavItem */
+            color: $text-color-primary;
+            text-decoration: underline;
+            line-height: 60px;
+            padding-top: 0;
+            padding-bottom: 0;
+            &:hover, &:focus {
+              color: $text-color-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
