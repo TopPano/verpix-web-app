@@ -1,6 +1,6 @@
 @import 'common/variables.css';
 
 body {
+  font-family: $text-font-family;
   color: $text-color-primary;
-  color: black;
 }

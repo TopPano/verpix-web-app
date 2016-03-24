@@ -1,0 +1,14 @@
+@import '../../common/variables.css';
+
+$height: 30px;
+
+.footer-component {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: $height;
+  line-height: $height;
+  background-color: $color-grey;
+}
+

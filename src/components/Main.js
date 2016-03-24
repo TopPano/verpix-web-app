@@ -2,13 +2,17 @@ require('normalize.css');
 require('styles/App.css');
 
 import React from 'react';
-import Logobar from './layout/LogobarComponent';
+import Header from './layout/header/HeaderComponent';
+import Content from './layout/content/ContentComponent';
+import Footer from './layout/footer/FooterComponent';
 
 class AppComponent extends React.Component {
   render() {
     return (
       <div>
-        <Logobar />
+        <Header />
+        <Content />
+        <Footer />
       </div>
     );
   }

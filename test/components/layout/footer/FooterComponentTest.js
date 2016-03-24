@@ -7,16 +7,16 @@
 // import TestUtils from 'react-addons-test-utils';
 import createComponent from 'helpers/shallowRenderHelper';
 
-import LogobarComponent from 'components/layout/LogobarComponent.js';
+import FooterComponent from 'components/layout/footer/FooterComponent.js';
 
-describe('LogobarComponent', () => {
+describe('FooterComponent', () => {
   let component;
 
   beforeEach(() => {
-    component = createComponent(LogobarComponent);
+    component = createComponent(FooterComponent);
   });
 
   it('should have its component name as default className', () => {
-    expect(component.props.className).to.equal('logobar-component');
+    expect(component.props.className).to.equal('footer-component');
   });
 });
