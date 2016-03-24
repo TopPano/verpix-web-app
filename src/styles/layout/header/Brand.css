@@ -1,6 +1,8 @@
 @import '../../common/mixins.css';
 
 .header-brand-component {
-  @mixin centering;
+  img {
+    @mixin centering;
+  }
 }
 

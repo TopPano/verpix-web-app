@@ -1,2 +1,7 @@
 .header-list-component {
+  float: right;
+  .header-list-username {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }

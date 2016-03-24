@@ -4,3 +4,13 @@ body {
   font-family: $text-font-family;
   color: $text-color-primary;
 }
+
+/* Customize for bootstrap. */
+.container,
+.container-fluid,
+.row,
+[class*="col-"],
+[class*="col-"] > :first-child {
+  height: 100%;
+}
+

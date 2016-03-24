@@ -10,7 +10,7 @@ class AppComponent extends React.Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header username={'HAWK LIN'}/>
         <Content />
         <Footer />
       </div>
