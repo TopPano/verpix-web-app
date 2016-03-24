@@ -10,7 +10,7 @@ require('styles/layout/footer/Footer.css');
 class FooterComponent extends React.Component {
   render() {
     return (
-      <div className="footer-component">
+      <div className="footer-component navbar-fixed-bottom">
         <Grid fluid>
           <Row>
             <Col xs={12} sm={8}>

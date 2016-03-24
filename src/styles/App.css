@@ -5,6 +5,10 @@ body {
   color: $text-color-primary;
 }
 
+body * {
+  box-sizing: border-box;
+}
+
 /* Customize for bootstrap. */
 .container,
 .container-fluid,

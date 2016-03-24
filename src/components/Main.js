@@ -11,7 +11,9 @@ class AppComponent extends React.Component {
     return (
       <div>
         <Header username={'HAWK LIN'}/>
-        <Content />
+        <Content>
+          <div>Content</div>
+        </Content>
         <Footer />
       </div>
     );

@@ -10,7 +10,7 @@ require('styles/layout/header/Header.css');
 class HeaderComponent extends React.Component {
   render() {
     return (
-      <div className="header-component">
+      <div className="header-component navbar-fixed-top">
         <Grid fluid>
           <Row>
             <Col xs={4} xsOffset={4}>
