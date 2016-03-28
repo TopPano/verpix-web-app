@@ -23,7 +23,9 @@ class ViewComponent extends React.Component {
   render() {
     return (
       <div className='view-component'>
-        <a href={ this.props.linkUrl }><img className='view-preview' src={ this.props.imgUrl } alt='preview' /></a>
+        <a href={ this.props.linkUrl }>
+          <img className='view-preview' src={ this.props.imgUrl } width={ this.props.width } height={ this.props.height } alt='preview' />
+        </a>
         <div className='view-like'>
           <div className='view-count'>{ this.state.count }</div>
           <img
@@ -42,6 +44,8 @@ ViewComponent.displayName = 'ItemViewComponent';
 ViewComponent.propTypes = {
   linkUrl: React.PropTypes.string.isRequired,
   imgUrl: React.PropTypes.string.isRequired,
+  width: React.PropTypes.number.isRequired,
+  height: React.PropTypes.number.isRequired,
   initialCount: React.PropTypes.number.isRequired,
   initialIsLiked: React.PropTypes.bool.isRequired
 };
@@ -49,7 +53,9 @@ ViewComponent.defaultProps = {
   linkUrl: '',
   imgUrl: '',
   initialCount: 0,
-  initialIsLiked: false
+  initialIsLiked: false,
+  initialWidth: 500,
+  initialHeight: 250
 };
 
 export default ViewComponent;

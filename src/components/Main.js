@@ -6,19 +6,20 @@ import Header from './layout/header/HeaderComponent';
 import Content from './layout/content/ContentComponent';
 import Footer from './layout/footer/FooterComponent';
 
-import View from './item/ViewComponent';
+import Gallery from './item/GalleryComponent';
+
+import testdata from '../../test/data/testdata0.json';
 
 class AppComponent extends React.Component {
   render() {
     return (
       <div>
-        <Header username={ 'HAWK LIN' }/>
+        <Header username={ testdata.user.username }/>
         <Content>
-          <View
-            linkUrl={ 'http://www.google.com' }
-            imgUrl={ 'https://perryponders.files.wordpress.com/2015/06/20090907230522_jelly-fish-1.jpg' }
-            initialCount={ 999 }
-            initialIsLiked={ false }
+          <Gallery
+            posts={ testdata.personal.posts }
+            maxWidth={ testdata.personal.maxWidth }
+            ratio={ testdata.personal.ratio }
           />
         </Content>
         <Footer />
