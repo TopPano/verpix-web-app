@@ -1,2 +1,7 @@
 .gallery-component {
+  overflow: hidden;
+  .gallery-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+  }
 }

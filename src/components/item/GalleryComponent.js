@@ -30,7 +30,7 @@ class GalleryComponent extends React.Component{
   getContainerWidth = () => {
     var el = ReactDOM.findDOMNode(this);
     var style = window.getComputedStyle(el, null);
-    return Math.floor(el.clientWidth - parseInt(style.getPropertyValue('padding-left')) - parseInt(style.getPropertyValue('padding-right')));
+    return Math.floor(el.clientWidth) - parseInt(style.getPropertyValue('padding-left')) - parseInt(style.getPropertyValue('padding-right'));
   }
   render(){
     let numPerRow = Math.ceil(this.state.containerWidth / this.props.maxWidth);
@@ -40,6 +40,7 @@ class GalleryComponent extends React.Component{
       Math.floor(this.state.containerWidth / numPerRow) - paddingLeft - paddingRight :
       this.props.maxWidth - paddingLeft - paddingRight;
     let postHeight = Math.floor(postWidth / this.props.ratio);
+    let wrapperWidth = (postWidth + paddingLeft + paddingRight) * numPerRow;
     let previews = [];
 
     this.props.posts.map((post, k) => {
@@ -57,7 +58,9 @@ class GalleryComponent extends React.Component{
     });
     return(
       <div className='gallery-component container-fluid'>
-        { previews }
+        <div style={{ width: wrapperWidth }} className='gallery-wrapper'>
+          { previews }
+        </div>
       </div>
     );
   }
