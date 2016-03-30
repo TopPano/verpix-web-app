@@ -1,0 +1,29 @@
+$icon-width: 28px;
+$icon-height: 22px;
+
+.counter-component {
+  display: inline-block;
+  * {
+    display: inline-block;
+  }
+  .counter-icon {
+    width: $icon-width;
+    height: $icon-height;
+  }
+  .counter-count {
+    line-height: $icon-height;
+    padding-left: 5px;
+    cursor: default;
+    padding: 0 0 0 5px;
+  }
+  &.counter-right {
+    transform: rotate(180deg);
+    * {
+      transform: rotate(-180deg);
+    }
+    .counter-count {
+      padding: 0 5px 0 0;
+    }
+  }
+}
+
