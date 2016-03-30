@@ -3,6 +3,7 @@
 body {
   font-family: $text-font-family;
   color: $text-color-primary;
+  font-size: $text-font-rootsz;
 }
 
 body * {

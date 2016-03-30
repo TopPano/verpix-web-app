@@ -1,0 +1,19 @@
+$button-width: 41px;
+$button-height: 28px;
+
+.button-component {
+  font-size: 0.875rem;
+  width: $button-width;
+  height: $button-height;
+  line-height: $button-height;
+  max-width: 100%;
+  text-align: center;
+  .button-text {
+    cursor: pointer;
+    background-image: url('../../images/item/button.png');
+  }
+  .button-text-clicked {
+    background-image: url('../../images/item/button-clicked.png');
+  }
+}
+

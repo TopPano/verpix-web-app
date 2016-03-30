@@ -3,6 +3,7 @@ $color-grey: #333333;
 
 $text-color-primary: white;
 $text-font-family: Helvetica;
+$text-font-rootsz: 16px;
 
 $header-height: 60px;
 $footer-height: 30px;
