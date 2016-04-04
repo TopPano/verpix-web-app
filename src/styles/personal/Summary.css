@@ -1,0 +1,44 @@
+@import '../common/mixins.css';
+@import '../common/variables.css';
+
+$summary-profilebg-width: 891px;
+$summary-profilebg-height: 70px;
+
+.personal-summary-component {
+  .personal-summary-main {
+    position: relative;
+    .personal-summary-profilebg {
+      width: $summary-profilebg-width;
+      height: $summary-profilebg-height;
+      max-width: 100%;
+      margin: $personal-profilebg-margin auto;
+      background-image: url('../../images/personal/personal-profile-bg.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 100% 100%;
+    }
+    .personal-summary-profile {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: table-row;
+      > * {
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .personal-summary-profile-left {
+      }
+      .personal-summary-profile-right {
+        .button-component {
+          float: right;
+        }
+      }
+    }
+    .personal-summary-name {
+      text-align: center;
+      padding-top: $personal-profilename-padding;
+    }
+  }
+}
+

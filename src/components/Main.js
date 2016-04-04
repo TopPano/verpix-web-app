@@ -9,6 +9,7 @@ import Footer from './layout/footer/FooterComponent';
 import Gallery from './item/GalleryComponent';
 import Button from './item/ButtonComponent';
 import Counter from './item/CounterComponent';
+import Summary from './personal/SummaryComponent';
 
 import testdata from '../../test/data/testdata0.json';
 
@@ -22,6 +23,7 @@ class AppComponent extends React.Component {
       <div>
         <Header username={ testdata.user.username }/>
         <Content>
+          <Summary />
           <Button
             initialIsClicked={ true }
             text={ 'follow' }
@@ -31,7 +33,7 @@ class AppComponent extends React.Component {
           />
           <Counter
             ref='counterPost'
-            icon={ 'images/personal/counter-post.png' }
+            icon={ 'images/personal/personal-counter-post.png' }
             isIconRight={ true }
             initialCount={ 99 }
           />

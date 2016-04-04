@@ -1,28 +1,33 @@
-$icon-width: 28px;
-$icon-height: 22px;
+@import '../common/variables.css';
+@import '../common/mixins.css';
 
 .counter-component {
-  display: inline-block;
   * {
     display: inline-block;
   }
-  .counter-icon {
-    width: $icon-width;
-    height: $icon-height;
+  line-height: $counter-icon-length;
+  .counter-icon-wrapper {
+    width: $counter-icon-length;
+    height: $counter-icon-length;
+    .counter-icon {
+      margin: 0 auto;
+    }
   }
   .counter-count {
-    line-height: $icon-height;
-    padding-left: 5px;
     cursor: default;
-    padding: 0 0 0 5px;
+    width: $counter-count-width;
+    text-align: left;
+    padding: 0 0 0 $counter-count-padding;
   }
   &.counter-right {
     transform: rotate(180deg);
-    * {
+    .counter-icon-wrapper {
       transform: rotate(-180deg);
     }
     .counter-count {
-      padding: 0 5px 0 0;
+      transform: rotate(-180deg);
+      text-align: right;
+      padding: 0 $counter-count-padding 0 0;
     }
   }
 }

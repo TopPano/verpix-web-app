@@ -5,6 +5,18 @@ $text-color-primary: white;
 $text-font-family: Helvetica;
 $text-font-rootsz: 16px;
 
+/* Variables for layout. */
 $header-height: 60px;
 $footer-height: 30px;
+
+/* Variables for counter component. */
+$counter-icon-length: 32px;
+$counter-count-width: 50px;
+$counter-count-padding: 5px;
+
+/* Variables for personal page. */
+$personal-profile-length: 100px;
+$personal-profilebg-height: 70px;
+$personal-profilebg-margin: calc(($personal-profile-length - $personal-profilebg-height) / 2);
+$personal-profilename-padding: 10px;
 

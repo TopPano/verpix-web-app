@@ -1,0 +1,17 @@
+@import '../common/variables.css';
+
+.personal-profile-component {
+  position: relative;
+  .personal-profile-picture {
+    border-radius: 50%;
+    width: $personal-profile-length;
+    height: $personal-profile-length;
+  }
+  .personal-profile-upload {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+  }
+}
+
