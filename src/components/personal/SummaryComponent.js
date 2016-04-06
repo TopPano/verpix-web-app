@@ -10,8 +10,8 @@ require('styles/personal/Summary.css');
 class SummaryComponent extends React.Component {
   render() {
     return (
-      <div className='personal-summary-component container-fluid'>
-        <div className='personal-summary-main'>
+      <div className='personal-summary-component'>
+        <div className='personal-summary-main container-fluid'>
           <div className='personal-summary-profilebg' />
           <div className='personal-summary-profile'>
             <div className='personal-summary-profile-left'>
@@ -42,6 +42,7 @@ class SummaryComponent extends React.Component {
           </div>
           <div className='personal-summary-name'>{ 'HAWK LIN' }</div>
         </div>
+        <div className='personal-summary-fg' />
       </div>
     );
   }

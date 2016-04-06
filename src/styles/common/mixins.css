@@ -6,3 +6,10 @@
   transform: translate(-50%, -50%)
 }
 
+@define-mixin fullbg $url {
+  background-image: url($(url));
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+}
+

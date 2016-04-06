@@ -16,7 +16,12 @@ $counter-count-padding: 5px;
 
 /* Variables for personal page. */
 $personal-profile-length: 100px;
+$personal-profilebg-width: 891px;
 $personal-profilebg-height: 70px;
 $personal-profilebg-margin: calc(($personal-profile-length - $personal-profilebg-height) / 2);
 $personal-profilename-padding: 10px;
+$personal-summarymain-margin: 20px;
+$personal-fg-top: 55px;
+$personal-fg-height: 87px;
+$personal-summary-height: calc($personal-fg-top + $personal-fg-height);
 
