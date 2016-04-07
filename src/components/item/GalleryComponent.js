@@ -7,8 +7,8 @@ import View from './ViewComponent';
 require('styles/item/Gallery.css');
 
 class GalleryComponent extends React.Component{
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       containerWidth: 0
     };

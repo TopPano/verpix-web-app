@@ -8,7 +8,6 @@
   .personal-summary-main {
     position: relative;
     margin-top: $personal-summarymain-margin;
-    z-index: 9999;
     .personal-summary-profilebg {
       width: $personal-profilebg-width;
       height: $personal-profilebg-height;
