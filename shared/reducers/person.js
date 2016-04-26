@@ -2,11 +2,13 @@ import merge from 'lodash/merge';
 import {
   LOAD_USER_SUMMARY_REQUEST,
   LOAD_USER_SUMMARY_SUCCESS,
-  LOAD_USER_SUMMARY_FAILURE,
+  LOAD_USER_SUMMARY_FAILURE
+} from '../actions/user';
+import {
   LOAD_USER_POSTS_REQUEST,
   LOAD_USER_POSTS_SUCCESS,
   LOAD_USER_POSTS_FAILURE
-} from '../actions/user';
+} from '../actions/post';
 
 export default function person(state={
   isFetching: false,
@@ -33,7 +35,7 @@ export default function person(state={
         postNum: posts
       });
     case LOAD_USER_POSTS_SUCCESS:
-        const { page, feed } = action.response.result;
+      const { page, feed } = action.response.result;
       return merge({}, state, {
         isFetching: false,
         posts: {
