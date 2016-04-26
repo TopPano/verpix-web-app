@@ -1,0 +1,4 @@
+{
+  "apiRoot": "http://dev.verpix.net:3000/api",
+  "staticUrl": "http://localhost:8000"
+}

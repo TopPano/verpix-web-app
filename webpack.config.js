@@ -19,10 +19,10 @@ process.env.REACT_WEBPACK_ENV = env;
 
 // Get available configurations
 const configs = {
-  base: require(path.join(__dirname, 'cfg/base')),
-  dev: require(path.join(__dirname, 'cfg/dev')),
-  dist: require(path.join(__dirname, 'cfg/dist')),
-  test: require(path.join(__dirname, 'cfg/test'))
+  base: require(path.join(__dirname, 'webpack/base')),
+  dev: require(path.join(__dirname, 'webpack/dev')),
+  dist: require(path.join(__dirname, 'webpack/dist')),
+  test: require(path.join(__dirname, 'webpack/test'))
 };
 
 /**

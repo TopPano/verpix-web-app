@@ -6,16 +6,16 @@
   "main": "",
   "scripts": {
     "clean": "rimraf dist/*",
-    "copy": "copyfiles -f ./src/index.html ./src/favicon.ico ./dist",
+    "copy": "copyfiles -f ./shared/favicon.ico ./public/static",
     "dist": "npm run copy & webpack --env=dist",
-    "lint": "eslint ./src",
+    "lint": "eslint ./shared",
     "posttest": "npm run lint",
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
     "serve": "node server.js --env=dev",
     "serve:dist": "node server.js --env=dist",
-    "start": "node server.js --env=dev",
+    "start": "node server/index.js --env=dev",
     "test": "karma start",
     "test:watch": "karma start --autoWatch=true --singleRun=false"
   },
@@ -30,6 +30,7 @@
     "babel-preset-es2015": "^6.0.15",
     "babel-preset-react": "^6.0.15",
     "babel-preset-stage-1": "^6.5.0",
+    "babel-register": "^6.4.3",
     "bower-webpack-plugin": "^0.1.9",
     "chai": "^3.2.0",
     "copyfiles": "^0.2.1",
@@ -37,6 +38,7 @@
     "eslint": "~2.2.0",
     "eslint-loader": "^1.0.0",
     "eslint-plugin-react": "^4.0.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.4",
     "glob": "^7.0.0",
     "isparta-instrumenter-loader": "^1.0.0",
@@ -60,17 +62,26 @@
     "precss": "^1.4.0",
     "react-addons-test-utils": "^0.14.0",
     "react-hot-loader": "^1.2.9",
+    "redux-devtools": "^3.2.0",
+    "redux-devtools-dock-monitor": "^1.1.1",
+    "redux-devtools-log-monitor": "^1.0.11",
     "rimraf": "^2.4.3",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.0",
-    "webpack-dev-server": "^1.12.0"
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.12.0",
+    "webpack-hot-middleware": "^2.10.0"
   },
   "dependencies": {
+    "cookie": "^0.2.3",
+    "cookie-parser": "^1.4.1",
     "core-js": "^2.0.0",
+    "lodash": "^4.11.1",
     "normalize.css": "^3.0.3",
     "react": "^0.14.0",
     "react-bootstrap": "^0.28.3",
-    "react-dom": "^0.14.0"
+    "react-dom": "^0.14.0",
+    "react-router": "^2.3.0",
+    "react-router-redux": "^4.0.2"
   }
 }
