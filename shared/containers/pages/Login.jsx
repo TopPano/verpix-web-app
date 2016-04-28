@@ -70,13 +70,13 @@ class Login extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit.bind(this)} style={{ color: 'black' }}>
         <label>
-          <input ref="email" placeholder="email" value={this.state.email} defaultValue="joe@example.com"
+          <input type="email" ref="email" placeholder="email" value={this.state.email} defaultValue="joe@example.com"
             onChange={this.handleChange.bind(this)} />
         </label>
         <label>
-          <input ref="pass" placeholder="password" />
+          <input type="password" ref="pass" placeholder="password" />
         </label> (hint: password1)<br />
         <button type="submit">login</button>
       </form>
