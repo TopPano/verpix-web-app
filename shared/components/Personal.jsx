@@ -5,8 +5,6 @@ import React, { Component, PropTypes } from 'react';
 import Summary from './Summary.jsx';
 import Gallery from './Gallery.jsx';
 
-import testdata from '../../test/data/testdata0.json';
-
 if (process.env.BROWSER) {
   require('styles/personal/Personal.css');
 }
@@ -23,9 +21,9 @@ export default class Personal extends Component {
       <div className="personal-component">
         <Summary user={user} />
         <Gallery
-          posts={ testdata.personal.posts }
-          maxWidth={ testdata.personal.maxWidth }
-          ratio={ testdata.personal.ratio }
+          posts={ user.posts }
+          maxWidth={ 500 }
+          ratio={ 2 }
         />
       </div>
     );
