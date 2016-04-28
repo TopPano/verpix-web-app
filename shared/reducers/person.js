@@ -16,7 +16,12 @@ export default function person(state={
   followerNum: 0,
   followingNum: 0,
   postNum: 0,
-  posts: {}
+  posts: {
+    page: {
+      count: 0
+    },
+    feed: []
+  }
 }, action) {
   switch (action.type) {
     case LOAD_USER_SUMMARY_REQUEST:
