@@ -12,7 +12,7 @@ if (process.env.BROWSER) {
 export default class Summary extends Component {
 
   render() {
-    const { username, profilePhotoUrl, postNum, followerNum, followingNum } = this.props.user;
+    const { name, profilePhotoUrl, postNum, followerNum, followingNum } = this.props.person;
 
     return (
       <div className='personal-summary-component'>
@@ -46,7 +46,7 @@ export default class Summary extends Component {
               />
             </div>
           </div>
-          <div className='personal-summary-name'>{username}</div>
+          <div className='personal-summary-name'>{name}</div>
         </div>
       </div>
     );
@@ -56,6 +56,6 @@ export default class Summary extends Component {
 Summary.displayName = 'Summary';
 
 Summary.propTypes = {
-  user: PropTypes.object.isRequired
+  person: PropTypes.object.isRequired
 };
 // SummaryComponent.defaultProps = {};

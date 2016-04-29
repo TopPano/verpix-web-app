@@ -17,10 +17,9 @@ export default function person(state={
   followingNum: 0,
   postNum: 0,
   posts: {
-    page: {
-      count: 0
-    },
-    feed: []
+    feed: [],
+    hasNext: true,
+    lastPostId: ''
   }
 }, action) {
   switch (action.type) {
@@ -41,11 +40,16 @@ export default function person(state={
       });
     case LOAD_USER_POSTS_SUCCESS:
       const { page, feed } = action.response.result;
+      let newFeed = state.posts.feed.concat(feed),
+          hasNext = page.hasNextPage,
+          lastPostId = page.end
+
       return merge({}, state, {
         isFetching: false,
         posts: {
-          page,
-          feed
+          feed: newFeed,
+          hasNext,
+          lastPostId
         }
       });
     case LOAD_USER_SUMMARY_FAILURE:

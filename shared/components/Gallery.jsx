@@ -39,14 +39,14 @@ export default class Gallery extends Component{
     let numPerRow = Math.ceil(this.state.containerWidth / maxWidth);
     let paddingLeft = 5, paddingRight = 5;
     let postWidth =
-        posts.page.count >= numPerRow ?
+        posts.length >= numPerRow ?
         Math.floor(this.state.containerWidth / numPerRow) - paddingLeft - paddingRight :
         maxWidth - paddingLeft - paddingRight;
     let postHeight = Math.floor(postWidth / ratio);
     let wrapperWidth = (postWidth + paddingLeft + paddingRight) * numPerRow;
     let previews = [];
 
-    posts.feed.map((post, k) => {
+    posts.map((post, k) => {
       const { sid, thumbnailUrl, likes } = post;
       let linkUrl = 'http://dev.verpix.net/?post=' + sid;
       previews.push(
@@ -74,7 +74,7 @@ export default class Gallery extends Component{
 Gallery.displayName = 'Gallery';
 
 Gallery.propTypes = {
-  posts: PropTypes.object.isRequired,
+  posts: PropTypes.arrayOf(PropTypes.object).isRequired,
   maxWidth: PropTypes.number.isRequired,
   ratio: PropTypes.number.isRequired
 };
