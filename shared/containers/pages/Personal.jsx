@@ -65,8 +65,6 @@ class PersonalPageContainer extends Component {
   }
 }
 
-Personal.displayName = 'Personal';
-
 function mapStateToProps(state) {
   const { person } = state;
   return {

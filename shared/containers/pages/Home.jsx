@@ -1,20 +1,38 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-export default class Home extends Component {
+import LoginPageContainer from './Login.jsx';
+
+class Home extends Component {
   static propTyes = {
-    user: PropTypes.object.isRequired,
+    children: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
   };
 
   render() {
+    const { isAuthenticated, username } = this.props.user;
     return (
       <div>
-        <h1>Welcome to Verpix world!</h1>
-        <p>This is the Home page</p>
+        {isAuthenticated &&
+          <h1>Welcome to Verpix world!</h1>
+        }
+        {!isAuthenticated &&
+          <LoginPageContainer>
+            {this.props.children}
+          </LoginPageContainer>
+        }
       </div>
     );
   }
 }
 
-Home.displayName = 'Home';
+function mapStateToProps(state) {
+  const { user } = state;
+  return {
+    user
+  }
+}
+
+export default connect(mapStateToProps)(Home);

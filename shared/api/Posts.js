@@ -1,8 +1,7 @@
 import Base from './Base';
 
 export default class PostsAPI extends Base {
-  getUserPosts(userId, lastPostId, authToken) {
-    this.apiClient.setAuthToken(authToken);
+  getUserPosts(userId, lastPostId) {
     let query = {};
     if (lastPostId) {
       query.where = {
@@ -11,6 +10,27 @@ export default class PostsAPI extends Base {
         }
       }
     }
-    return this.apiClient.post(`users/${userId}/profile/query`, query);
+    return this.apiClient.post({
+      url: `users/${userId}/profile/query`,
+      payload: query,
+      authenticated: true
+    });
   }
+
+  queryPosts(lastPostId) {
+    let query = {};
+    if (lastPostId) {
+      query.where = {
+        sid: {
+          lt: lastPostId
+        }
+      }
+    }
+    return this.apiClient.post({
+      url: 'users/me/profile/query',
+      payload: query,
+      authenticated: true
+    });
+  }
+
 }

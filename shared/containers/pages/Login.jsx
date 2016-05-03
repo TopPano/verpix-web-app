@@ -1,17 +1,11 @@
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import fetch from 'isomorphic-fetch';
 
-import {
-  LOGIN_USER_REQUEST,
-  LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAILURE
-} from '../../actions/user';
-import config from '../../../etc/client-config.json';
+import { loginUser } from '../../actions/user';
 
-class Login extends Component {
+class LoginPageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = { email: '' };
@@ -19,49 +13,9 @@ class Login extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-
-    const email = this.refs.email.value;
-    const password = this.refs.pass.value;
-
-    if (!email || !password) {
-      return this.props.dispatch({
-        type: LOGIN_USER_FAILURE,
-        error: 'Missing login information'
-      });
-    }
-
-    this.props.dispatch({
-      type: LOGIN_USER_REQUEST
-    });
-
-    const init = {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email,
-        password
-      })
-    };
-
-    fetch(`${config.apiRoot}/users/login`, init).then((res) => {
-      if (res.status >= 400) {
-        return this.props.dispatch({
-          type: LOGIN_USER_FAILURE
-        });
-      }
-
-      return res.json();
-    }).then((data) => {
-      this.props.dispatch({
-        type: LOGIN_USER_SUCCESS,
-        response: data
-      });
-      //this.props.router.replace(`/@${data.userId}`);
-      this.props.history.pushState(null, `/@${data.userId}`);
-    });
+    const email = this.refs.email.value.trim();
+    const password = this.refs.pass.value.trim();
+    this.props.dispatch(loginUser({email, password}));
   }
 
   handleChange(event) {
@@ -84,6 +38,4 @@ class Login extends Component {
   }
 }
 
-Login.displayName = 'Login';
-
-export default connect()(Login);
+export default connect()(LoginPageContainer);
