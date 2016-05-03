@@ -4,6 +4,14 @@ $likebtn-height: 30px;
   position: relative;
   display: inline-block;
   padding: 5px;
+  .view-profile {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
   .view-like {
     position: absolute;
     bottom: 10px;

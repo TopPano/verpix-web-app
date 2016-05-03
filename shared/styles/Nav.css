@@ -1,0 +1,13 @@
+.nav-component {
+  display: inline-block;
+  cursor: pointer;
+  transition: color 0.4s ease;
+  margin: 10px 15px;
+  &:hover {
+    color: grey;
+  }
+  &.nav-component-selected {
+    color: black;
+  }
+}
+

@@ -24,6 +24,6 @@ Profile.propTypes = {
   profilePhotoUrl: PropTypes.string
 };
 Profile.defaultProps = {
-  initialProfileUrl: '/static/images/personal/profile-default.png'
+  initialProfileUrl: '/static/images/profile-photo-default.png'
 };
 
