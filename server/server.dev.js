@@ -19,6 +19,7 @@ import { fetchComponentsData } from './utils';
 
 import routes from '../shared/routes';
 import configureStore from '../shared/store/configureStore';
+import auth from '../shared/lib/auth';
 import DevTools from '../shared/containers/DevTools';
 
 import clientConfig from '../etc/client-config.json';
@@ -26,7 +27,7 @@ import clientConfig from '../etc/client-config.json';
 const app = new Express();
 
 app.use('/static', Express.static('public/static'));
-//app.use(cookieParser);
+app.use(cookieParser());
 
 // Use this middleware to set up hot module reloading via webpack
 const compiler = webpack(config);
@@ -37,11 +38,12 @@ app.use(webpackHotMiddleware(compiler));
 app.use((req, res) => {
   const store = configureStore();
 
-  /*
-  if (!req.cookies.authenticated) {
-    // redirect to home page
+  const accessToken = req.cookies.accessToken || null;
+  if (!accessToken && !req.url.match(/^\/$/ig) /* not the root url */) {
+    return res.redirect(302, '/');
+  } else {
+    auth.setToken(req.cookies.accessToken);
   }
-  */
 
   match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
     if (error) {

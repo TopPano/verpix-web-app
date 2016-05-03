@@ -1,51 +1,50 @@
 import fetch from 'isomorphic-fetch';
 import queryString from 'query-string';
 import Promise from 'bluebird';
+import isEmpty from 'lodash/isEmpty';
+import auth from '../lib/auth';
 
 import config from '../../etc/client-config.json';
 
 export default class ApiClient {
 
-  get(requestUrl, params={}) {
+  get({url, params={}, authenticated=false}) {
     return this.request({
-      url: requestUrl,
+      url,
       method: 'get',
-      params
+      params,
+      authenticated
     });
   }
 
-  post(requestUrl, payload={}) {
+  post({url, payload={}, authenticated=false}) {
     return this.request({
-      url: requestUrl,
+      url,
       method: 'post',
-      body: payload
+      body: payload,
+      authenticated
     });
   }
 
-  put(requestUrl, payload={}) {
+  put({url, payload={}, authenticated=false}) {
     return this.request({
-      url: requestUrl,
+      url,
       method: 'put',
-      body: payload
+      body: payload,
+      authenticated
     });
   }
 
-  delete(requestUrl) {
+  delete({url, authenticated=false}) {
     return this.request({
-      url: requestUrl,
-      method: 'delete'
+      url,
+      method: 'delete',
+      authenticated
     });
   }
 
-  request({ url, method, params={}, body }) {
-    if (this.authToken) {
-      /* eslint-disable */
-      params.access_token = this.authToken;
-      /* eslint-enable */
-    }
-
-    const urlWithQuery = `${url}?${queryString.stringify(params)}`;
-
+  request({ url, method, params={}, body={}, authenticated }) {
+    const urlWithQuery = isEmpty(params) ? `${url}` : `${url}?${queryString.stringify(params)}`;
     const init = {
       method,
       headers: {
@@ -54,26 +53,33 @@ export default class ApiClient {
       }
     };
 
+    if (authenticated) {
+      let token = auth.getToken();
+      if (token) {
+        init.headers['Authorization'] = `${token}`;
+      } else {
+        let error = new Error('No access token saved!');
+        error.status = 401;
+        return Promise.reject(error);
+      }
+    }
+
     if (method !== 'get' && method !== 'head') {
       init.body = JSON.stringify(body);
     }
 
-    return fetch(`${config.apiRoot}/${urlWithQuery}`, init).then(res => {
+    return fetch(`${config.apiRoot}/${urlWithQuery}`, init).then((res) => {
       if (res.status >= 400) {
-        throw new Error('Bad response from server');
+        return Promise.reject({ status: res.status, message: res.statusText });
       }
-
       return res.json();
-    }).then(data => {
+    }).then((data) => {
       if (data && !data.error) {
         return data;
       }
-
       return Promise.reject(data.error);
+    }).catch((err) => {
+      return Promise.reject(err);
     });
-  }
-
-  setAuthToken(authToken) {
-    this.authToken = authToken;
   }
 }

@@ -4,32 +4,39 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE
 } from '../actions/user';
+import auth from '../lib/auth';
 
 export default function user(state={
-  isProcessing: false,
+  isFetching: false,
+  isAuthenticated: auth.isAuthenticated(),
   userId: undefined,
-  created: undefined,
-  auth: {}
+  username: undefined,
+  profilePhotoUrl: undefined,
+  email: undefined,
+  created: undefined
 }, action) {
   switch (action.type) {
     case LOGIN_USER_REQUEST:
       return merge({}, state, {
-        isProcessing: true
+        isFetching: true,
+        isAuthenticated: false
       });
     case LOGIN_USER_SUCCESS:
-      const { id, ttl, created, userId } = action.response;
+      const { userId, created, user: { username, profilePhotoUrl, email } } = action.user;
       return merge({}, state, {
-        isProcessing: false,
+        isFetching: false,
+        isAuthenticated: true,
         userId,
-        created,
-        auth: {
-          token: id,
-          ttl
-        }
+        username,
+        profilePhotoUrl,
+        email,
+        created
       });
     case LOGIN_USER_FAILURE:
       return merge({}, state, {
-        isProcessing: false
+        isFetching: false,
+        isAuthenticated: false,
+        errorMessage: action.message
       });
     default:
       return state;
