@@ -10,7 +10,7 @@ import {
   LOAD_USER_POSTS_FAILURE
 } from '../actions/post';
 
-export default function person(state={
+const DEFAULT_STATE = {
   isFetching: false,
   profilePhotoUrl: undefined,
   followerNum: 0,
@@ -21,7 +21,9 @@ export default function person(state={
     hasNext: true,
     lastPostId: ''
   }
-}, action) {
+};
+
+export default function person(state=DEFAULT_STATE, action) {
   switch (action.type) {
     case LOAD_USER_SUMMARY_REQUEST:
     case LOAD_USER_POSTS_REQUEST:

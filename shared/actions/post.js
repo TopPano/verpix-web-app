@@ -41,3 +41,41 @@ export function loadUserPosts({userId, lastPostId, params={}}) {
     });
   };
 }
+
+export const LOAD_NEWSFEED_REQUEST = 'LOAD_NEWSFEED_REQUEST';
+export const LOAD_NEWSFEED_SUCCESS = 'LOAD_NEWSFEED_SUCCESS';
+export const LOAD_NEWSFEED_FAILURE = 'LOAD_NEWSFEED_FAILURE';
+
+export function loadNewsFeed({lastPostId}) {
+  return (dispatch, getState) => {
+    const { user: { userId } } = getState();
+
+    if (!userId) {
+      return dispatch({
+        type: LOAD_NEWSFEED_FAILURE,
+        error: 'User Not Found'
+      });
+    }
+
+    dispatch({
+      type: LOAD_NEWSFEED_REQUEST
+    });
+
+    return api.posts.queryPosts(userId, lastPostId).then((response) => {
+      console.log('res: '+JSON.stringify(response));
+      dispatch({
+        type: LOAD_NEWSFEED_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: LOAD_NEWSFEED_FAILURE,
+        error
+      });
+      if (error.status === 401) {
+        dispatch(push('/'));
+      }
+    });
+  };
+}
+

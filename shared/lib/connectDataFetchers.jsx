@@ -19,7 +19,7 @@ export default function connectDataFetchers(Component, actionCreators) {
       DataFetchersWrapper.fetchData(
         this.props.dispatch,
         this.props.params,
-        this.props.location.query
+        this.props.location ? this.props.location.query : {}
       );
     }
 

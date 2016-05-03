@@ -3,9 +3,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import connectDataFetchers from '../../lib/connectDataFetchers';
+import { loadNewsFeed } from '../../actions/post';
 import LoginPageContainer from './Login.jsx';
+import NewsFeedPageContainer from './NewsFeed.jsx'
 
-class Home extends Component {
+class HomePageContainer extends Component {
   static propTyes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired
@@ -16,12 +19,12 @@ class Home extends Component {
     return (
       <div>
         {isAuthenticated &&
-          <h1>Welcome to Verpix world!</h1>
+          <NewsFeedPageContainer>
+            {this.props.children}
+          </NewsFeedPageContainer>
         }
         {!isAuthenticated &&
-          <LoginPageContainer>
-            {this.props.children}
-          </LoginPageContainer>
+          <LoginPageContainer />
         }
       </div>
     );
@@ -35,4 +38,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(HomePageContainer);
