@@ -17,8 +17,20 @@ class PersonalPageContainer extends Component {
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
   }
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  componentDidUpdate() {
+    const { person } = this.props;
+    let scrollHeight = document.documentElement.scrollHeight,
+        clientHeight = document.documentElement.clientHeight;
+
+    // Load more post when the page does not have scrollbar.
+    if(person.posts.hasNext && !person.isFetching && (scrollHeight < clientHeight) && (person.posts.feed.length > 0)) {
+      this.loadMorePosts();
+    }
   }
 
   handleScroll = () => {
@@ -30,13 +42,18 @@ class PersonalPageContainer extends Component {
 
       // Scroll to the bottom?
       if(offset === height) {
-        const { params, dispatch } = this.props;
-        dispatch(loadUserPosts({
-          userId: params.id,
-          lastPostId: posts.lastPostId
-        }));
+        this.loadMorePosts();
       }
     }
+  }
+
+  loadMorePosts() {
+    const { params, dispatch } = this.props;
+    const { posts } = this.props.person;
+    dispatch(loadUserPosts({
+      userId: params.id,
+      lastPostId: posts.lastPostId
+    }));
   }
 
   render() {
