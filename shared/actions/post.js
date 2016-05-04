@@ -26,6 +26,7 @@ export function loadUserPosts({userId, lastPostId, params={}, authToken}) {
     });
 
     return api.posts.getUserPosts(queryId, lastPostId, authToken).then((response) => {
+      response.result.firstQuery = lastPostId ? false : true;
       dispatch({
         type: LOAD_USER_POSTS_SUCCESS,
         response
