@@ -13,7 +13,6 @@ export default (
   <Route component={App}>
     <Route component={MainLayout}>
       <Route component={HomePageContainer} path='/' />
-      <Route component={LoginPageContainer} path='/login' />
       <Route component={PersonalPageContainer} path='/@:id' />
     </Route>
   </Route>

@@ -17,7 +17,7 @@ export default class PostsAPI extends Base {
     });
   }
 
-  queryPosts(lastPostId) {
+  queryPosts(userId, lastPostId) {
     let query = {};
     if (lastPostId) {
       query.where = {
@@ -27,10 +27,9 @@ export default class PostsAPI extends Base {
       }
     }
     return this.apiClient.post({
-      url: 'users/me/profile/query',
+      url: `users/${userId}/query`,
       payload: query,
       authenticated: true
     });
   }
-
 }

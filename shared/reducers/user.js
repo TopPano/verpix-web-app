@@ -6,7 +6,7 @@ import {
 } from '../actions/user';
 import auth from '../lib/auth';
 
-export default function user(state={
+const DEFAULT_STATE = {
   isFetching: false,
   isAuthenticated: auth.isAuthenticated(),
   userId: undefined,
@@ -14,7 +14,9 @@ export default function user(state={
   profilePhotoUrl: undefined,
   email: undefined,
   created: undefined
-}, action) {
+};
+
+export default function user(state=DEFAULT_STATE, action) {
   switch (action.type) {
     case LOGIN_USER_REQUEST:
       return merge({}, state, {
