@@ -22,6 +22,7 @@ class PersonalPageContainer extends Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
 
+  /*
   componentDidUpdate() {
     const { person } = this.props;
     let scrollHeight = document.documentElement.scrollHeight,
@@ -32,6 +33,7 @@ class PersonalPageContainer extends Component {
       this.loadMorePosts();
     }
   }
+  */
 
   handleScroll = () => {
     const { posts } = this.props.person;

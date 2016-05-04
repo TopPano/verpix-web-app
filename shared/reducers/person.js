@@ -41,10 +41,17 @@ export default function person(state=DEFAULT_STATE, action) {
         postNum: posts
       });
     case LOAD_USER_POSTS_SUCCESS:
-      const { page, feed } = action.response.result;
-      let newFeed = state.posts.feed.concat(feed),
-          hasNext = page.hasNextPage,
-          lastPostId = page.end
+      const { page, feed, firstQuery } = action.response.result;
+      let hasNext = page.hasNextPage,
+          lastPostId = page.end,
+          newFeed;
+
+      if(firstQuery) {
+        state.posts.feed = [];
+        newFeed = feed;
+      } else {
+        newFeed = state.posts.feed.concat(feed);
+      }
 
       return merge({}, state, {
         isFetching: false,

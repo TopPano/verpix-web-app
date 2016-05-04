@@ -26,6 +26,7 @@ export function loadUserPosts({userId, lastPostId, params={}}) {
     });
 
     return api.posts.getUserPosts(queryId, lastPostId).then((response) => {
+      response.result.firstQuery = lastPostId ? false : true;
       dispatch({
         type: LOAD_USER_POSTS_SUCCESS,
         response
@@ -62,7 +63,6 @@ export function loadNewsFeed({lastPostId}) {
     });
 
     return api.posts.queryPosts(userId, lastPostId).then((response) => {
-      console.log('res: '+JSON.stringify(response));
       dispatch({
         type: LOAD_NEWSFEED_SUCCESS,
         response
