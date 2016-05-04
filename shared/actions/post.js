@@ -25,7 +25,7 @@ export function loadUserPosts({userId, lastPostId, params={}, authToken}) {
       type: LOAD_USER_POSTS_REQUEST
     });
 
-    return api.posts.getUserPosts(queryId, lastPostId).then((response) => {
+    return api.posts.getUserPosts(queryId, lastPostId, authToken).then((response) => {
       response.result.firstQuery = lastPostId ? false : true;
       dispatch({
         type: LOAD_USER_POSTS_SUCCESS,
@@ -62,7 +62,7 @@ export function loadNewsFeed({lastPostId, authToken}) {
       type: LOAD_NEWSFEED_REQUEST
     });
 
-    return api.posts.queryPosts(userId, lastPostId, authToken).then((response) => {
+    return api.posts.getNewsFeed(userId, lastPostId, authToken).then((response) => {
       dispatch({
         type: LOAD_NEWSFEED_SUCCESS,
         response
@@ -70,6 +70,33 @@ export function loadNewsFeed({lastPostId, authToken}) {
     }).catch((error) => {
       dispatch({
         type: LOAD_NEWSFEED_FAILURE,
+        error
+      });
+      if (error.status === 401) {
+        dispatch(push('/'));
+      }
+    });
+  };
+}
+
+export const LOAD_EXPLORE_RECENT_REQUEST = 'LOAD_EXPLORE_RECENT_REQUEST';
+export const LOAD_EXPLORE_RECENT_SUCCESS = 'LOAD_EXPLORE_RECENT_SUCCESS';
+export const LOAD_EXPLORE_RECENT_FAILURE = 'LOAD_EXPLORE_RECENT_FAILURE';
+
+export function loadExploreRecent({lastPostId}) {
+  return (dispatch) => {
+    dispatch({
+      type: LOAD_EXPLORE_RECENT_REQUEST
+    });
+
+    return api.posts.exploreRecent(lastPostId).then((response) => {
+      dispatch({
+        type: LOAD_EXPLORE_RECENT_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: LOAD_EXPLORE_RECENT_FAILURE,
         error
       });
       if (error.status === 401) {

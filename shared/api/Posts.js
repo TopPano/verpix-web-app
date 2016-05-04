@@ -1,40 +1,40 @@
 import Base from './Base';
 
+function genQuery(lastPostId) {
+  let query = {};
+  if (lastPostId) {
+    query.where = {
+      sid: {
+        lt: lastPostId
+      }
+    }
+  }
+  return query;
+}
+
 export default class PostsAPI extends Base {
   getUserPosts(userId, lastPostId, authToken) {
     if (authToken) { this.apiClient.setAuthToken(authToken); }
-
-    let query = {};
-    if (lastPostId) {
-      query.where = {
-        sid: {
-          lt: lastPostId
-        }
-      }
-    }
-
     return this.apiClient.post({
       url: `users/${userId}/profile/query`,
-      payload: query,
+      payload: genQuery(lastPostId),
       authenticated: true
     });
   }
 
-  queryPosts(userId, lastPostId, authToken) {
+  getNewsFeed(userId, lastPostId, authToken) {
     if (authToken) { this.apiClient.setAuthToken(authToken); }
-
-    let query = {};
-    if (lastPostId) {
-      query.where = {
-        sid: {
-          lt: lastPostId
-        }
-      }
-    }
-
     return this.apiClient.post({
       url: `users/${userId}/query`,
-      payload: query,
+      payload: genQuery(lastPostId),
+      authenticated: true
+    });
+  }
+
+  exploreRecent(lastPostId) {
+    return this.apiClient.post({
+      url: 'search/recent',
+      payload: genQuery(lastPostId),
       authenticated: true
     });
   }
