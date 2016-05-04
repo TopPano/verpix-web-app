@@ -4,7 +4,6 @@ import {
   LOAD_NEWSFEED_SUCCESS,
   LOAD_NEWSFEED_FAILURE
 } from '../actions/post';
-import auth from '../lib/auth';
 
 const DEFAULT_STATE = {
   isFetching: false,
@@ -37,7 +36,7 @@ export default function newsFeed(state=DEFAULT_STATE, action) {
       });
     case LOAD_NEWSFEED_FAILURE:
       return merge({}, state, {
-        isFetching: false,
+        isFetching: false
       });
     default:
       return state;

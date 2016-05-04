@@ -5,7 +5,7 @@ export const LOAD_USER_POSTS_REQUEST = 'LOAD_USER_POSTS_REQUEST';
 export const LOAD_USER_POSTS_SUCCESS = 'LOAD_USER_POSTS_SUCCESS';
 export const LOAD_USER_POSTS_FAILURE = 'LOAD_USER_POSTS_FAILURE';
 
-export function loadUserPosts({userId, lastPostId, params={}}) {
+export function loadUserPosts({userId, lastPostId, params={}, authToken}) {
   return (dispatch) => {
     let queryId;
     if (userId) {
@@ -47,7 +47,7 @@ export const LOAD_NEWSFEED_REQUEST = 'LOAD_NEWSFEED_REQUEST';
 export const LOAD_NEWSFEED_SUCCESS = 'LOAD_NEWSFEED_SUCCESS';
 export const LOAD_NEWSFEED_FAILURE = 'LOAD_NEWSFEED_FAILURE';
 
-export function loadNewsFeed({lastPostId}) {
+export function loadNewsFeed({lastPostId, authToken}) {
   return (dispatch, getState) => {
     const { user: { userId } } = getState();
 
@@ -62,7 +62,7 @@ export function loadNewsFeed({lastPostId}) {
       type: LOAD_NEWSFEED_REQUEST
     });
 
-    return api.posts.queryPosts(userId, lastPostId).then((response) => {
+    return api.posts.queryPosts(userId, lastPostId, authToken).then((response) => {
       dispatch({
         type: LOAD_NEWSFEED_SUCCESS,
         response

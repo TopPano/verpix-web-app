@@ -9,9 +9,9 @@ export default function connectDataFetchers(Component, actionCreators) {
       location: React.PropTypes.object.isRequired
     };
 
-    static fetchData(dispatch, params={}, query={}) {
+    static fetchData(dispatch, params={}, query={}, authToken=null) {
       return Promise.all(
-        actionCreators.map(actionCreator => dispatch(actionCreator({params, query})))
+        actionCreators.map(actionCreator => dispatch(actionCreator({params, query, authToken})))
       );
     }
 
@@ -19,7 +19,8 @@ export default function connectDataFetchers(Component, actionCreators) {
       DataFetchersWrapper.fetchData(
         this.props.dispatch,
         this.props.params,
-        this.props.location ? this.props.location.query : {}
+        this.props.location ? this.props.location.query : {},
+        this.props.authToken
       );
     }
 

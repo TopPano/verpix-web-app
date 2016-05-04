@@ -1,6 +1,5 @@
 import api from '../api';
 import fetch from 'isomorphic-fetch';
-import cookie from 'cookie';
 import config from '../../etc/client-config.json';
 import { push } from 'react-router-redux';
 
@@ -10,17 +9,13 @@ export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE';
 
 function requestLogin() {
   return {
-    type: LOGIN_USER_REQUEST,
-    isFetching: true,
-    isAuthenticated: false
+    type: LOGIN_USER_REQUEST
   }
 }
 
 function loginSuccess(user) {
   return {
     type: LOGIN_USER_SUCCESS,
-    isFetching: false,
-    isAuthenticated: true,
     user
   }
 }
@@ -28,8 +23,6 @@ function loginSuccess(user) {
 function loginError(message) {
   return {
     type: LOGIN_USER_FAILURE,
-    isFetching: false,
-    isAuthenticated: false,
     message
   }
 }
@@ -55,7 +48,6 @@ export function loginUser(creds, successRedirectUrl='/') {
       }
       return res.json();
     }).then((data) => {
-      document.cookie = cookie.serialize('accessToken', data.id, { path: '/', maxAge: 900000 });
       dispatch(loginSuccess(data));
       dispatch(push(successRedirectUrl));
     }).catch((err) => {
@@ -64,11 +56,33 @@ export function loginUser(creds, successRedirectUrl='/') {
   }
 }
 
+export const LOGOUT_USER_REQUEST = 'LOGOUT_USER_REQUEST';
+export const LOGOUT_USER_SUCCESS = 'LOGOUT_USER_SUCCESS';
+
+function requestLogout() {
+  return {
+    type: LOGOUT_USER_REQUEST
+  }
+}
+
+function receiveLogout() {
+  return {
+    type: LOGOUT_USER_SUCCESS
+  }
+}
+
+export function logoutUser() {
+  return (dispatch) => {
+    dispatch(requestLogout());
+    dispatch(receiveLogout());
+  }
+}
+
 export const LOAD_USER_SUMMARY_REQUEST = 'LOAD_USER_SUMMARY_REQUEST';
 export const LOAD_USER_SUMMARY_SUCCESS = 'LOAD_USER_SUMMARY_SUCCESS';
 export const LOAD_USER_SUMMARY_FAILURE = 'LOAD_USER_SUMMARY_FAILURE';
 
-export function loadUserSummary({id, params={}}) {
+export function loadUserSummary({id, params={}, authToken}) {
   return (dispatch) => {
     let queryId;
     if (id) {
@@ -88,7 +102,7 @@ export function loadUserSummary({id, params={}}) {
       type: LOAD_USER_SUMMARY_REQUEST
     });
 
-    return api.users.getProfile(queryId).then((response) => {
+    return api.users.getProfile(queryId, authToken).then((response) => {
       dispatch({
         type: LOAD_USER_SUMMARY_SUCCESS,
         response

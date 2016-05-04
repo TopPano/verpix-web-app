@@ -2,11 +2,18 @@ import fetch from 'isomorphic-fetch';
 import queryString from 'query-string';
 import Promise from 'bluebird';
 import isEmpty from 'lodash/isEmpty';
-import auth from '../lib/auth';
+import cookie from 'cookie';
 
 import config from '../../etc/client-config.json';
 
 export default class ApiClient {
+  constructor() {
+    if (process.env.BROWSER) {
+      this.token = cookie.parse(document.cookie).accessToken;
+    } else {
+      this.token = null;
+    }
+  }
 
   get({url, params={}, authenticated=false}) {
     return this.request({
@@ -54,7 +61,12 @@ export default class ApiClient {
     };
 
     if (authenticated) {
-      let token = auth.getToken();
+      let token = null;
+      if (process.env.BROWSER) {
+        token = cookie.parse(document.cookie).accessToken;
+      } else {
+        token = this.token;
+      }
       if (token) {
         init.headers['Authorization'] = `${token}`;
       } else {
@@ -81,5 +93,9 @@ export default class ApiClient {
     }).catch((err) => {
       return Promise.reject(err);
     });
+  }
+
+  setAuthToken(authToken) {
+    this.token = authToken;
   }
 }
