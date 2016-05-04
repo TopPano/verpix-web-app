@@ -35,7 +35,7 @@ export default class Gallery extends Component{
     return Math.floor(el.clientWidth) - parseInt(style.getPropertyValue('padding-left')) - parseInt(style.getPropertyValue('padding-right'));
   }
   render(){
-    const { posts, maxWidth, ratio } = this.props;
+    const { posts, maxWidth, ratio, showProfilePhoto } = this.props;
     let numPerRow = Math.ceil(this.state.containerWidth / maxWidth);
     let paddingLeft = 5, paddingRight = 5;
     let postWidth =
@@ -47,7 +47,7 @@ export default class Gallery extends Component{
     let previews = [];
 
     posts.map((post, k) => {
-      const { sid, thumbnailUrl, likes } = post;
+      const { sid, thumbnailUrl, likes, ownerInfo } = post;
       let linkUrl = 'http://dev.verpix.net/?post=' + sid;
       previews.push(
         <View
@@ -58,6 +58,8 @@ export default class Gallery extends Component{
           initialIsLiked={ likes.isLiked }
           width={ postWidth }
           height={ postHeight }
+          showProfilePhoto={ showProfilePhoto }
+          profilePhotoUrl={ ownerInfo.profilePhotoUrl }
         />
       );
     });
@@ -76,8 +78,10 @@ Gallery.displayName = 'Gallery';
 Gallery.propTypes = {
   posts: PropTypes.arrayOf(PropTypes.object).isRequired,
   maxWidth: PropTypes.number.isRequired,
-  ratio: PropTypes.number.isRequired
+  ratio: PropTypes.number.isRequired,
+  showProfilePhoto: PropTypes.bool
 };
 Gallery.defaultProps = {
+  showProfilePhoto: false
 }
 

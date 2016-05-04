@@ -3,21 +3,21 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import NewsFeed from '../../components/NewsFeed.jsx';
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadNewsFeed } from '../../actions/post';
 
 class NewsFeedPageContainer extends Component {
   static propTyes = {
     children: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired
+    newsFeed: PropTypes.object.isRequired
   };
 
   render() {
-    const { posts } = this.props.newsFeed;
     return (
-      <div>
-        <h1> This is Home Page </h1>
-      </div>
+      <NewsFeed newsFeed={this.props.newsFeed}>
+        {this.props.children}
+      </NewsFeed>
     );
   }
 }
