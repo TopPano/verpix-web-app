@@ -19,7 +19,7 @@ import { fetchComponentsData } from './utils';
 
 import routes from '../shared/routes';
 import configureStore from '../shared/store/configureStore';
-import auth from '../shared/lib/auth';
+//import auth from '../shared/lib/auth';
 import DevTools from '../shared/containers/DevTools';
 
 import clientConfig from '../etc/client-config.json';
@@ -36,14 +36,27 @@ app.use(webpackHotMiddleware(compiler));
 
 // This is fired every time the server side receives a request
 app.use((req, res) => {
-  const store = configureStore();
-
+  let initState = {};
   const accessToken = req.cookies.accessToken || null;
-  if (!accessToken && !req.url.match(/^\/$/ig) /* not the root url */) {
-    return res.redirect(302, '/');
+  if (accessToken) {
+    // restore the client state
+    initState.user = {
+      isAuthenticated: true,
+      userId: req.cookies.userId,
+      username: req.cookies.username,
+      created: req.cookies.created,
+      profilePhotoUrl: req.cookies.profilePhotoUrl,
+      email: req.cookies.email
+    };
   } else {
-    auth.setToken(req.cookies.accessToken);
+    // it's not allow to access pages other than Home without authentication
+    if (!req.url.match(/^\/$/ig)) {
+      return res.redirect(302, '/');
+    }
+    initState.user = { isAuthenticated: false }
   }
+
+  const store = configureStore(initState);
 
   match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
     if (error) {
@@ -55,7 +68,8 @@ app.use((req, res) => {
         store.dispatch,
         renderProps.components,
         renderProps.params,
-        renderProps.location.query
+        renderProps.location.query,
+        accessToken
       )
       .then(() => {
         const html = renderToString(
