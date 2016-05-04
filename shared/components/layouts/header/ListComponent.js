@@ -1,16 +1,20 @@
 'use strict';
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 if (process.env.BROWSER) {
   require('styles/layout/header/List.css');
 }
 
-class ListComponent extends React.Component {
+class ListComponent extends Component {
   render() {
+    const { username, userId } = this.props;
     return (
       <div className="header-list-component">
-        <div className="header-list-username">{this.props.username}</div>
+        {(username !== '') &&
+          <Link className="header-list-username" to={'@' + userId}>{username}</Link>
+        }
       </div>
     );
   }
@@ -18,8 +22,13 @@ class ListComponent extends React.Component {
 
 ListComponent.displayName = 'LayoutHeaderListComponent';
 
-// Uncomment properties you need
-// ListComponent.propTypes = {};
-// ListComponent.defaultProps = {};
+ListComponent.propTypes = {
+  username: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired
+};
+ListComponent.defaultProps = {
+  username: '',
+  userId: ''
+};
 
 export default ListComponent;

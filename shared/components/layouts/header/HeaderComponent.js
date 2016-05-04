@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Brand from './BrandComponent.js';
 import List from './ListComponent.js';
@@ -9,8 +9,9 @@ if (process.env.BROWSER) {
   require('styles/layout/header/Header.css');
 }
 
-class HeaderComponent extends React.Component {
+class HeaderComponent extends Component {
   render() {
+    const { username, userId } = this.props;
     return (
       <div className="header-component navbar-fixed-top">
         <Grid fluid>
@@ -19,7 +20,10 @@ class HeaderComponent extends React.Component {
               <Brand />
             </Col>
             <Col xs={4}>
-              <List username={this.props.username}/>
+              <List
+                username={username}
+                userId={userId}
+              />
             </Col>
           </Row>
         </Grid>
@@ -30,8 +34,13 @@ class HeaderComponent extends React.Component {
 
 HeaderComponent.displayName = 'LayoutHeaderHeaderComponent';
 
-// Uncomment properties you need
-// HeaderComponent.propTypes = {};
-// HeaderComponent.defaultProps = {};
+HeaderComponent.propTypes = {
+  username: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired
+};
+HeaderComponent.defaultProps = {
+  username: '',
+  userId: ''
+};
 
 export default HeaderComponent;

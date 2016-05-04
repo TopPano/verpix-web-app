@@ -1,7 +1,7 @@
 /* eslint react/no-did-mount-set-state: 0 */
 import React, { Component, PropTypes } from 'react';
 
-import Header from './header/HeaderComponent';
+import HeaderContainer from '../../containers/layouts/Header.jsx';
 import Content from './content/ContentComponent';
 import Footer from './footer/FooterComponent';
 
@@ -18,7 +18,7 @@ export default class MainLayout extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <HeaderContainer />
           <Content>
             {this.props.children}
           </Content>
