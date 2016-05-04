@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import { Link } from 'react-router';
 
 if (process.env.BROWSER) {
   require('styles/layout/header/Brand.css');
@@ -10,7 +11,7 @@ class BrandComponent extends React.Component {
   render() {
     return (
       <div className="header-brand-component">
-        <a href="#"><img src="/static/images/layout/header/logo.png" alt="Verpix"></img></a>
+        <Link to={'/'}><img src="/static/images/layout/header/logo.png" alt="Verpix"></img></Link>
       </div>
     );
   }
