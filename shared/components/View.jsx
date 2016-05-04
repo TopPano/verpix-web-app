@@ -2,6 +2,9 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import ViewAuthor from './ViewAuthor.jsx';
+import ViewLike from './ViewLike.jsx';
+
 if (process.env.BROWSER) {
   require('styles/item/View.css');
 }
@@ -9,42 +12,27 @@ if (process.env.BROWSER) {
 export default class View extends Component {
   constructor(props) {
     super(props);
-    this.state =  {
-      count: props.initialCount,
-      isLiked: props.initialIsLiked
-    };
   }
-  handleLikebtnClick = () => {
-    this.setState({
-      count: !this.state.isLiked ?
-        this.state.count + 1 :
-        this.state.count - 1,
-      isLiked: !this.state.isLiked
-    });
-  }
-  render() {
-    const { linkUrl, imgUrl, width, height, showProfilePhoto, profilePhotoUrl } = this.props;
-    const { count, isLiked } = this.state;
-    let profilePhoto;
 
-    if(showProfilePhoto) {
-      profilePhoto = <img className='view-profile' src={profilePhotoUrl}/>;
-    }
+  render() {
+    const { linkUrl, imgUrl, width, height, showAuthor, authorPhotoUrl, authorName, authorId, count, isLiked } = this.props;
 
     return (
       <div className='view-component'>
         <a href={linkUrl}>
           <img className='view-preview' src={imgUrl} width={width} height={height} alt='preview' />
         </a>
-        {profilePhoto}
-        <div className='view-like'>
-          <div className='view-count'>{count}</div>
-          <img
-            className='view-likebtn'
-            onClick={this.handleLikebtnClick}
-            src={isLiked ? '/static/images/view/likebtn-clicked.png' : '/static/images/view/likebtn.png'}
+        {showAuthor &&
+          <ViewAuthor
+            authorPhotoUrl={authorPhotoUrl}
+            authorName={authorName}
+            authorId={authorId}
           />
-        </div>
+        }
+        <ViewLike
+          count={count}
+          isLiked={isLiked}
+        />
       </div>
     );
   }
@@ -57,19 +45,23 @@ View.propTypes = {
   imgUrl: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  initialCount: PropTypes.number.isRequired,
-  initialIsLiked: PropTypes.bool.isRequired,
-  showProfilePhoto: PropTypes.bool,
-  profilePhotoUrl: PropTypes.string
+  count: PropTypes.number.isRequired,
+  isLiked: PropTypes.bool.isRequired,
+  showAuthor: PropTypes.bool,
+  authorPhotoUrl: PropTypes.string,
+  authorName: PropTypes.string,
+  authorId: PropTypes.string
 };
 View.defaultProps = {
   linkUrl: '',
   imgUrl: '',
-  initialCount: 0,
-  initialIsLiked: false,
-  initialWidth: 500,
-  initialHeight: 250,
-  showProfilePhoto: false,
-  profilePhotoUrl: '/static/images/profile-photo-default.png'
+  count: 0,
+  isLiked: false,
+  width: 500,
+  height: 250,
+  showAuthor: false,
+  authorPhotoUrl: '/static/images/profile-photo-default.png',
+  authorName: 'Verpixer',
+  authorId: ''
 };
 

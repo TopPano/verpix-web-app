@@ -21,7 +21,7 @@ export default class NewsFeed extends Component {
           posts={newsFeed.posts.feed}
           maxWidth={500}
           ratio={2}
-          showProfilePhoto={true}
+          showAuthor={true}
         />
       </div>
     );

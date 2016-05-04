@@ -4,33 +4,15 @@ $likebtn-height: 30px;
   position: relative;
   display: inline-block;
   padding: 5px;
-  .view-profile {
+  .view-author-component {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
   }
-  .view-like {
+  .view-like-component {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    height: $likebtn-height;
-    line-height: $likebtn-height;
-    * {
-      display: inline-block;
-    }
-    .view-count {
-      text-align: right;
-      padding-right: 5px;
-      cursor: default;
-    }
-    .view-likebtn {
-      width: $likebtn-height;
-      height: $likebtn-height;
-      cursor: pointer;
-    }
   }
 }
 
