@@ -23,10 +23,17 @@ export default function explorer(state=DEFAULT_STATE, action) {
         isFetching: true
       });
     case LOAD_EXPLORE_RECENT_SUCCESS:
-      const { page, feed } = action.response.result;
-      let newFeed = state.recent.posts.feed.concat(feed);
-      let hasNext = page.hasNextPage;
-      let lastPostId = page.end;
+      const { page, feed, firstQuery } = action.response.result;
+      let hasNext = page.hasNextPage,
+          lastPostId = page.end,
+          newFeed;
+
+      if(firstQuery) {
+        state.recent.posts.feed = [];
+        newFeed = feed;
+      } else {
+        newFeed = state.recent.posts.feed.concat(feed);
+      }
 
       return merge({}, state, {
         isFetching: false,

@@ -1,55 +1,25 @@
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadUserSummary } from '../../actions/user';
 import { loadUserPosts } from '../../actions/post';
+import ScrollablePageContainer from './Scrollable.jsx';
 import Personal from '../../components/Personal.jsx';
 
-class PersonalPageContainer extends Component {
+class PersonalPageContainer extends ScrollablePageContainer {
   static propTyes = {
     person: PropTypes.object.isRequired,
     children: PropTypes.object
   };
 
-  componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
+  hasMoreContent() {
+    return this.props.person.posts.hasNext;
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
-  }
-
-  /*
-  componentDidUpdate() {
-    const { person } = this.props;
-    let scrollHeight = document.documentElement.scrollHeight,
-        clientHeight = document.documentElement.clientHeight;
-
-    // Load more post when the page does not have scrollbar.
-    if(person.posts.hasNext && !person.isFetching && (scrollHeight < clientHeight) && (person.posts.feed.length > 0)) {
-      this.loadMorePosts();
-    }
-  }
-  */
-
-  handleScroll = () => {
-    const { posts } = this.props.person;
-    // Determine: need to read more posts or not.
-    if(posts.hasNext) {
-      var offset = window.scrollY + window.innerHeight;
-      var height = document.documentElement.offsetHeight;
-
-      // Scroll to the bottom?
-      if(offset === height) {
-        this.loadMorePosts();
-      }
-    }
-  }
-
-  loadMorePosts() {
+  loadMoreContent() {
     const { params, dispatch } = this.props;
     const { posts } = this.props.person;
     dispatch(loadUserPosts({

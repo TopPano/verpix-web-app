@@ -4,44 +4,44 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
-import { loadNewsFeed } from '../../actions/post';
+import { loadExploreRecent } from '../../actions/post';
 import ScrollablePageContainer from './Scrollable.jsx';
-import NewsFeed from '../../components/NewsFeed.jsx';
+import Explorer from '../../components/Explorer.jsx';
 
-class NewsFeedPageContainer extends ScrollablePageContainer {
+class ExplorerPageContainer extends ScrollablePageContainer {
   static propTyes = {
     children: PropTypes.object.isRequired,
-    newsFeed: PropTypes.object.isRequired
+    explorer: PropTypes.object.isRequired
   };
 
   hasMoreContent() {
-    return this.props.newsFeed.posts.hasNext;
+    return this.props.explorer.recent.posts.hasNext;
   }
 
   loadMoreContent() {
     const { dispatch } = this.props;
-    const { posts } = this.props.newsFeed;
-    dispatch(loadNewsFeed({
+    const { posts } = this.props.explorer.recent;
+    dispatch(loadExploreRecent({
       lastPostId: posts.lastPostId
     }));
   }
 
   render() {
     return (
-      <NewsFeed newsFeed={this.props.newsFeed}>
+      <Explorer explorer={this.props.explorer.recent}>
         {this.props.children}
-      </NewsFeed>
+      </Explorer>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { newsFeed } = state;
+  const { explorer } = state;
   return {
-    newsFeed
+    explorer
   }
 }
 
 export default connect(mapStateToProps)(
-  connectDataFetchers(NewsFeedPageContainer, [ loadNewsFeed ])
+  connectDataFetchers(ExplorerPageContainer, [ loadExploreRecent ])
 );

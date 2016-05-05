@@ -12,6 +12,7 @@ import {
   LOAD_USER_POSTS_SUCCESS,
   LOAD_USER_POSTS_FAILURE
 } from '../actions/post';
+import { handleLoadPostsSuccess } from './common';
 
 const DEFAULT_STATE = {
   isFetching: false,
@@ -50,26 +51,7 @@ export default function person(state=DEFAULT_STATE, action) {
         isFollowing
       });
     case LOAD_USER_POSTS_SUCCESS:
-      const { page, feed, firstQuery } = action.response.result;
-      let hasNext = page.hasNextPage,
-          lastPostId = page.end,
-          newFeed;
-
-      if(firstQuery) {
-        state.posts.feed = [];
-        newFeed = feed;
-      } else {
-        newFeed = state.posts.feed.concat(feed);
-      }
-
-      return merge({}, state, {
-        isFetching: false,
-        posts: {
-          feed: newFeed,
-          hasNext,
-          lastPostId
-        }
-      });
+      return handleLoadPostsSuccess(state, action);
     case FOLLOW_USER_SUCCESS:
       const followeeId = action.followeeId;
       if (state.id !== followeeId) {

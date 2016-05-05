@@ -11,7 +11,7 @@ export default class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedItem: props.initSelectedItem
+      selectedItem: props.initialSelectedItem
     };
   }
 
@@ -19,6 +19,7 @@ export default class NavBar extends Component {
     this.setState({
       selectedItem: item
     });
+    this.props.clickCallback(item);
   }
 
   render() {
@@ -46,10 +47,12 @@ NavBar.displayName = 'NavBar';
 
 NavBar.propTypes = {
   texts: PropTypes.arrayOf(PropTypes.string).isRequired,
-  initSelectedItem: PropTypes.number.isRequired
+  initialSelectedItem: PropTypes.number.isRequired,
+  clickCallback: PropTypes.func
 };
 NavBar.defaultProps = {
   texts: [],
-  initSelectedItem: 0
+  initialSelectedItem: 0,
+  clickCallBack: () => {}
 };
 
