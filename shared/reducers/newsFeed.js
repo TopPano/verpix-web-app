@@ -4,6 +4,7 @@ import {
   LOAD_NEWSFEED_SUCCESS,
   LOAD_NEWSFEED_FAILURE
 } from '../actions/post';
+import { handleLoadPostsSuccess } from './common';
 
 const DEFAULT_STATE = {
   isFetching: false,
@@ -21,19 +22,7 @@ export default function newsFeed(state=DEFAULT_STATE, action) {
         isFetching: true
       });
     case LOAD_NEWSFEED_SUCCESS:
-      const { page, feed } = action.response.result;
-      let newFeed = state.posts.feed.concat(feed);
-      let hasNext = page.hasNextPage;
-      let lastPostId = page.end;
-
-      return merge({}, state, {
-        isFetching: false,
-        posts: {
-          feed: newFeed,
-          hasNext,
-          lastPostId
-        }
-      });
+      return handleLoadPostsSuccess(state, action);
     case LOAD_NEWSFEED_FAILURE:
       return merge({}, state, {
         isFetching: false

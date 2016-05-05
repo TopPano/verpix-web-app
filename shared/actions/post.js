@@ -63,6 +63,7 @@ export function loadNewsFeed({lastPostId, authToken}) {
     });
 
     return api.posts.getNewsFeed(userId, lastPostId, authToken).then((response) => {
+      response.result.firstQuery = lastPostId ? false : true;
       dispatch({
         type: LOAD_NEWSFEED_SUCCESS,
         response

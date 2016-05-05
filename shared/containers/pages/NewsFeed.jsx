@@ -1,17 +1,30 @@
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import NewsFeed from '../../components/NewsFeed.jsx';
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadNewsFeed } from '../../actions/post';
+import ScrollablePageContainer from './Scrollable.jsx';
+import NewsFeed from '../../components/NewsFeed.jsx';
 
-class NewsFeedPageContainer extends Component {
+class NewsFeedPageContainer extends ScrollablePageContainer {
   static propTyes = {
     children: PropTypes.object.isRequired,
     newsFeed: PropTypes.object.isRequired
   };
+
+  hasMoreContent() {
+    return this.props.newsFeed.posts.hasNext;
+  }
+
+  loadMoreContent() {
+    const { dispatch } = this.props;
+    const { posts } = this.props.newsFeed;
+    dispatch(loadNewsFeed({
+      lastPostId: posts.lastPostId
+    }));
+  }
 
   render() {
     return (
