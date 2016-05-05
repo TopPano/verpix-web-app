@@ -3,10 +3,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import connectDataFetchers from '../../lib/connectDataFetchers';
-import { loadNewsFeed } from '../../actions/post';
+import Home from '../../components/Home.jsx';
 import LoginPageContainer from './Login.jsx';
-import NewsFeedPageContainer from './NewsFeed.jsx'
 
 class HomePageContainer extends Component {
   static propTyes = {
@@ -15,13 +13,13 @@ class HomePageContainer extends Component {
   };
 
   render() {
-    const { isAuthenticated, username } = this.props.user;
+    const { isAuthenticated } = this.props.user;
     return (
       <div>
         {isAuthenticated &&
-          <NewsFeedPageContainer>
+          <Home>
             {this.props.children}
-          </NewsFeedPageContainer>
+          </Home>
         }
         {!isAuthenticated &&
           <LoginPageContainer />

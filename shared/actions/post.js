@@ -91,6 +91,7 @@ export function loadExploreRecent({lastPostId}) {
     });
 
     return api.posts.exploreRecent(lastPostId).then((response) => {
+      response.result.firstQuery = lastPostId ? false : true;
       dispatch({
         type: LOAD_EXPLORE_RECENT_SUCCESS,
         response
