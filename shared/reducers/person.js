@@ -5,7 +5,10 @@ import {
   LOAD_USER_SUMMARY_FAILURE,
   FOLLOW_USER_REQUEST,
   FOLLOW_USER_SUCCESS,
-  FOLLOW_USER_FAILURE
+  FOLLOW_USER_FAILURE,
+  LIST_FOLLOWERS_REQUEST,
+  LIST_FOLLOWERS_SUCCESS,
+  LIST_FOLLOWERS_FAILURE
 } from '../actions/user';
 import {
   LOAD_USER_POSTS_REQUEST,
@@ -23,6 +26,7 @@ const DEFAULT_STATE = {
   followingNum: 0,
   postNum: 0,
   isFollowing: false,
+  followers: {},
   posts: {
     feed: [],
     hasNext: true,
@@ -35,6 +39,7 @@ export default function person(state=DEFAULT_STATE, action) {
     case LOAD_USER_SUMMARY_REQUEST:
     case LOAD_USER_POSTS_REQUEST:
     case FOLLOW_USER_REQUEST:
+    case LIST_FOLLOWERS_REQUEST:
       return merge({}, state, {
         isFetching: true
       });
@@ -54,13 +59,24 @@ export default function person(state=DEFAULT_STATE, action) {
       return handleLoadPostsSuccess(state, action);
     case FOLLOW_USER_SUCCESS:
       const followeeId = action.followeeId;
-      if (state.id !== followeeId) {
-        return merge({}, state, { isFetching: false });
+      let nextState = { isFetching: false };
+      if (state.id === followeeId) {
+        nextState = merge(nextState, { isFollowing: true });
       }
-      return merge({}, state, { isFetching: false, isFollowing: true });
+      if (state.followers.entities[followeeId]) {
+        nextState = merge(nextState, JSON.parse(`{ followers: { ${followeeId}: { isFriend: true } } }`));
+      }
+      return merge({}, state, nextState);
+    case LIST_FOLLOWERS_SUCCESS:
+      const { entities: { followerList } }= action.response;
+      return merge({}, state, {
+        isFetching: false,
+        followers: followerList
+      });
     case LOAD_USER_SUMMARY_FAILURE:
     case LOAD_USER_POSTS_FAILURE:
     case FOLLOW_USER_FAILURE:
+    case LIST_FOLLOWERS_FAILURE:
       return merge({}, state, {
         isFetching: false
       });

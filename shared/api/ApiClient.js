@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import Promise from 'bluebird';
 import isEmpty from 'lodash/isEmpty';
 import cookie from 'cookie';
+import { normalize } from 'normalizr';
 
 import config from '../../etc/client-config.json';
 
@@ -15,30 +16,33 @@ export default class ApiClient {
     }
   }
 
-  get({url, params={}, authenticated=false}) {
+  get({url, params={}, authenticated=false, schema}) {
     return this.request({
       url,
       method: 'get',
       params,
-      authenticated
+      authenticated,
+      schema
     });
   }
 
-  post({url, payload={}, authenticated=false}) {
+  post({url, payload={}, authenticated=false, schema}) {
     return this.request({
       url,
       method: 'post',
       body: payload,
-      authenticated
+      authenticated,
+      schema
     });
   }
 
-  put({url, payload={}, authenticated=false}) {
+  put({url, payload={}, authenticated=false}, schema) {
     return this.request({
       url,
       method: 'put',
       body: payload,
-      authenticated
+      authenticated,
+      schema
     });
   }
 
@@ -50,7 +54,7 @@ export default class ApiClient {
     });
   }
 
-  request({ url, method, params={}, body={}, authenticated }) {
+  request({ url, method, params={}, body={}, authenticated, schema }) {
     const urlWithQuery = isEmpty(params) ? `${url}` : `${url}?${queryString.stringify(params)}`;
     const init = {
       method,
@@ -87,6 +91,9 @@ export default class ApiClient {
       return res.json();
     }).then((data) => {
       if (data && !data.error) {
+        if (schema) {
+          return normalize(data, schema);
+        }
         return data;
       }
       return Promise.reject(data.error);

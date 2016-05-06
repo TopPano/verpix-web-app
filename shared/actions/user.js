@@ -142,3 +142,26 @@ export function followUser(followerId, followedId) {
     });
   }
 }
+
+export const LIST_FOLLOWERS_REQUEST = 'LIST_FOLLOWERS_REQUEST';
+export const LIST_FOLLOWERS_SUCCESS = 'LIST_FOLLOWERS_SUCCESS';
+export const LIST_FOLLOWERS_FAILURE = 'LIST_FOLLOWERS_FAILURE';
+
+export function listFollowers(id) {
+  return (dispatch) => {
+    dispatch({
+      type: LIST_FOLLOWERS_REQUEST
+    });
+    return api.users.listFollowers(id).then((response) => {
+      dispatch({
+        type: LIST_FOLLOWERS_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: LIST_FOLLOWERS_FAILURE,
+        error
+      });
+    });
+  }
+}
