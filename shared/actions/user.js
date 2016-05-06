@@ -131,12 +131,34 @@ export function followUser(followerId, followedId) {
     return api.users.follow(followerId, followedId).then(() => {
       dispatch({
         type: FOLLOW_USER_SUCCESS,
-        followerId,
         followeeId
       });
     }).catch((error) => {
       dispatch({
         type: FOLLOW_USER_FAILURE,
+        error
+      });
+    });
+  }
+}
+
+export const UNFOLLOW_USER_REQUEST = 'UNFOLLOW_USER_REQUEST';
+export const UNFOLLOW_USER_SUCCESS = 'UNFOLLOW_USER_SUCCESS';
+export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
+
+export function unfollowUser(followerId, followedId) {
+  return (dispatch) => {
+    dispatch({
+      type: UNFOLLOW_USER_REQUEST
+    });
+    return api.users.unfollow(followerId, followedId).then(() => {
+      dispatch({
+        type: UNFOLLOW_USER_SUCCESS,
+        followeeId
+      });
+    }).catch((error) => {
+      dispatch({
+        type: UNFOLLOW_USER_FAILURE,
         error
       });
     });

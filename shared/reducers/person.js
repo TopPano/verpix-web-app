@@ -6,6 +6,9 @@ import {
   FOLLOW_USER_REQUEST,
   FOLLOW_USER_SUCCESS,
   FOLLOW_USER_FAILURE,
+  UNFOLLOW_USER_REQUEST,
+  UNFOLLOW_USER_SUCCESS,
+  UNFOLLOW_USER_FAILURE,
   LIST_FOLLOWERS_REQUEST,
   LIST_FOLLOWERS_SUCCESS,
   LIST_FOLLOWERS_FAILURE
@@ -40,6 +43,7 @@ export default function person(state=DEFAULT_STATE, action) {
     case LOAD_USER_SUMMARY_REQUEST:
     case LOAD_USER_POSTS_REQUEST:
     case FOLLOW_USER_REQUEST:
+    case UNFOLLOW_USER_REQUEST:
     case LIST_FOLLOWERS_REQUEST:
       return merge({}, state, {
         isFetching: true
@@ -59,13 +63,21 @@ export default function person(state=DEFAULT_STATE, action) {
     case LOAD_USER_POSTS_SUCCESS:
       return handleLoadPostsSuccess(state, action);
     case FOLLOW_USER_SUCCESS:
-      const followeeId = action.followeeId;
       let nextState = { isFetching: false };
-      if (state.id === followeeId) {
+      if (state.id === action.followeeId) {
         nextState = merge(nextState, { isFollowing: true });
       }
-      if (state.followers.entities[followeeId]) {
-        nextState = merge(nextState, JSON.parse(`{ followers: { ${followeeId}: { isFriend: true } } }`));
+      if (state.followers[action.followeeId]) {
+        nextState = merge(nextState, JSON.parse(`{ followers: { ${action.followeeId}: { isFriend: true } } }`));
+      }
+      return merge({}, state, nextState);
+    case UNFOLLOW_USER_SUCCESS:
+      let nextState = { isFetching: false };
+      if (state.id === action.followeeId) {
+        nextState = merge(nextState, { isFollowing: false });
+      }
+      if (state.followers[action.followeeId]) {
+        nextState = merge(nextState, JSON.parse(`{ followers: { ${action.followeeId}: { isFriend: false } } }`));
       }
       return merge({}, state, nextState);
     case LIST_FOLLOWERS_SUCCESS:
@@ -77,6 +89,7 @@ export default function person(state=DEFAULT_STATE, action) {
     case LOAD_USER_SUMMARY_FAILURE:
     case LOAD_USER_POSTS_FAILURE:
     case FOLLOW_USER_FAILURE:
+    case UNFOLLOW_USER_FAILURE:
     case LIST_FOLLOWERS_FAILURE:
       return merge({}, state, {
         isFetching: false
