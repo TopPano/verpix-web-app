@@ -11,7 +11,10 @@ import {
   UNFOLLOW_USER_FAILURE,
   LIST_FOLLOWERS_REQUEST,
   LIST_FOLLOWERS_SUCCESS,
-  LIST_FOLLOWERS_FAILURE
+  LIST_FOLLOWERS_FAILURE,
+  LIST_FOLLOWING_REQUEST,
+  LIST_FOLLOWING_SUCCESS,
+  LIST_FOLLOWING_FAILURE
 } from '../actions/user';
 import {
   LOAD_USER_POSTS_REQUEST,
@@ -31,6 +34,7 @@ const DEFAULT_STATE = {
   postNum: 0,
   isFollowing: false,
   followers: {},
+  following: {},
   posts: {
     feed: [],
     hasNext: true,
@@ -46,6 +50,7 @@ export default function person(state=DEFAULT_STATE, action) {
     case FOLLOW_USER_REQUEST:
     case UNFOLLOW_USER_REQUEST:
     case LIST_FOLLOWERS_REQUEST:
+    case LIST_FOLLOWING_REQUEST:
       return merge({}, state, {
         isFetching: true
       });
@@ -87,11 +92,18 @@ export default function person(state=DEFAULT_STATE, action) {
         isFetching: false,
         followers: followerList
       });
+    case LIST_FOLLOWING_SUCCESS:
+      const { entities: { followingList } }= action.response;
+      return merge({}, state, {
+        isFetching: false,
+        following: followingList
+      });
     case LOAD_USER_SUMMARY_FAILURE:
     case LOAD_USER_POSTS_FAILURE:
     case FOLLOW_USER_FAILURE:
     case UNFOLLOW_USER_FAILURE:
     case LIST_FOLLOWERS_FAILURE:
+    case LIST_FOLLOWING_FAILURE:
       return merge({}, state, {
         isFetching: false
       });

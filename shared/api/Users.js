@@ -31,4 +31,12 @@ export default class UsersAPI extends Base {
       schema: { result: arrayOf(new Schema('followerList', { idAttribute: 'followerId' })) }
     });
   }
+
+  listFollowing(id) {
+    return this.apiClient.get({
+      url: `users/${id}/following`,
+      authenticated: true,
+      schema: { result: arrayOf(new Schema('followingList', { idAttribute: 'followeeId' })) }
+    });
+  }
 }
