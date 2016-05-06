@@ -3,5 +3,6 @@
   .header-list-username {
     color: inherit;
     text-decoration: underline;
+    cursor: pointer;
   }
 }

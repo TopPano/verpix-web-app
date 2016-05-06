@@ -1,4 +1,4 @@
-import merge from 'lodash/merge';
+import { merge, assign } from 'lodash';
 import cookie from 'cookie';
 import {
   LOGIN_USER_REQUEST,
@@ -49,13 +49,14 @@ export default function user(state=DEFAULT_STATE, action) {
         created
       });
     case LOGOUT_USER_SUCCESS:
-      document.cookie = cookie.serialize('accessToken', '', { expires: 'Thu, 01 Jan 1970 00:00:01 GMT' });
-      document.cookie = cookie.serialize('userId', '', { expires: 'Thu, 01 Jan 1970 00:00:01 GMT' });
-      document.cookie = cookie.serialize('username', '', { expires: 'Thu, 01 Jan 1970 00:00:01 GMT' });
-      document.cookie = cookie.serialize('profilePhotoUrl', '', { expires: 'Thu, 01 Jan 1970 00:00:01 GMT' });
-      document.cookie = cookie.serialize('email', '', { expires: 'Thu, 01 Jan 1970 00:00:01 GMT' });
-      document.cookie = cookie.serialize('created', '', { expires: 'Thu, 01 Jan 1970 00:00:01 GMT' });
-      return merge({}, state, {
+      let expireDate = new Date(0);
+      document.cookie = cookie.serialize('accessToken', '', { expires: expireDate });
+      document.cookie = cookie.serialize('userId', '', { expires: expireDate });
+      document.cookie = cookie.serialize('username', '', { expires: expireDate });
+      document.cookie = cookie.serialize('profilePhotoUrl', '', { expires: expireDate });
+      document.cookie = cookie.serialize('email', '', { expires: expireDate });
+      document.cookie = cookie.serialize('created', '', { expires: expireDate });
+      return assign({}, state, {
         isFetching: false,
         isAuthenticated: false,
         userId: undefined,

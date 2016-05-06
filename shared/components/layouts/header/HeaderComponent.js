@@ -11,7 +11,6 @@ if (process.env.BROWSER) {
 
 class HeaderComponent extends Component {
   render() {
-    const { username, userId } = this.props;
     return (
       <div className="header-component navbar-fixed-top">
         <Grid fluid>
@@ -20,10 +19,7 @@ class HeaderComponent extends Component {
               <Brand />
             </Col>
             <Col xs={4}>
-              <List
-                username={username}
-                userId={userId}
-              />
+              <List {...this.props} />
             </Col>
           </Row>
         </Grid>
@@ -36,11 +32,11 @@ HeaderComponent.displayName = 'LayoutHeaderHeaderComponent';
 
 HeaderComponent.propTypes = {
   username: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired
+  profilePhotoUrl: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+  logoutUser: PropTypes.func.isRequired
 };
 HeaderComponent.defaultProps = {
-  username: '',
-  userId: ''
 };
 
 export default HeaderComponent;

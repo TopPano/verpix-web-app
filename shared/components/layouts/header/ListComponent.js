@@ -1,7 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+
+import UserMenu from '../../UserMenu.jsx';
 
 if (process.env.BROWSER) {
   require('styles/layout/header/List.css');
@@ -9,11 +10,13 @@ if (process.env.BROWSER) {
 
 class ListComponent extends Component {
   render() {
-    const { username, userId } = this.props;
+    const { username } = this.props;
     return (
       <div className="header-list-component">
-        {(username !== '') &&
-          <Link className="header-list-username" to={'@' + userId}>{username}</Link>
+        {username &&
+          <UserMenu {...this.props}>
+            <div className="header-list-username">{username}</div>
+          </UserMenu>
         }
       </div>
     );
@@ -24,11 +27,11 @@ ListComponent.displayName = 'LayoutHeaderListComponent';
 
 ListComponent.propTypes = {
   username: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired
+  profilePhotoUrl: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+  logoutUser: PropTypes.func.isRequired
 };
 ListComponent.defaultProps = {
-  username: '',
-  userId: ''
 };
 
 export default ListComponent;
