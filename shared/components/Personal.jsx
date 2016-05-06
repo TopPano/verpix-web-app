@@ -11,7 +11,10 @@ if (process.env.BROWSER) {
 
 export default class Personal extends Component {
   static propTyes = {
-    person: PropTypes.object.isRequired
+    person: PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
+    followUser: PropTypes.func.isRequired,
+    unfollowUser: PropTypes.func.isRequired
   };
 
   render() {
@@ -19,7 +22,7 @@ export default class Personal extends Component {
 
     return (
       <div className="personal-component">
-        <Summary person={person} />
+        <Summary {...this.props} />
         <Gallery
           posts={person.posts.feed}
           maxWidth={500}
