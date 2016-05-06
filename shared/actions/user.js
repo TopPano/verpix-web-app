@@ -187,3 +187,26 @@ export function listFollowers(id) {
     });
   }
 }
+
+export const LIST_FOLLOWING_REQUEST = 'LIST_FOLLOWING_REQUEST';
+export const LIST_FOLLOWING_SUCCESS = 'LIST_FOLLOWING_SUCCESS';
+export const LIST_FOLLOWING_FAILURE = 'LIST_FOLLOWING_FAILURE';
+
+export function listFollowing(id) {
+  return (dispatch) => {
+    dispatch({
+      type: LIST_FOLLOWING_REQUEST
+    });
+    return api.users.listFollowing(id).then((response) => {
+      dispatch({
+        type: LIST_FOLLOWING_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: LIST_FOLLOWING_FAILURE,
+        error
+      });
+    });
+  }
+}
