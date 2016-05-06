@@ -118,3 +118,50 @@ export function loadUserSummary({id, params={}, authToken}) {
     });
   };
 }
+
+export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST';
+export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS';
+export const FOLLOW_USER_FAILURE = 'FOLLOW_USER_FAILURE';
+
+export function followUser(followerId, followedId) {
+  return (dispatch) => {
+    dispatch({
+      type: FOLLOW_USER_REQUEST
+    });
+    return api.users.follow(followerId, followedId).then(() => {
+      dispatch({
+        type: FOLLOW_USER_SUCCESS,
+        followerId,
+        followeeId
+      });
+    }).catch((error) => {
+      dispatch({
+        type: FOLLOW_USER_FAILURE,
+        error
+      });
+    });
+  }
+}
+
+export const LIST_FOLLOWERS_REQUEST = 'LIST_FOLLOWERS_REQUEST';
+export const LIST_FOLLOWERS_SUCCESS = 'LIST_FOLLOWERS_SUCCESS';
+export const LIST_FOLLOWERS_FAILURE = 'LIST_FOLLOWERS_FAILURE';
+
+export function listFollowers(id) {
+  return (dispatch) => {
+    dispatch({
+      type: LIST_FOLLOWERS_REQUEST
+    });
+    return api.users.listFollowers(id).then((response) => {
+      dispatch({
+        type: LIST_FOLLOWERS_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: LIST_FOLLOWERS_FAILURE,
+        error
+      });
+    });
+  }
+}
