@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import Counter from './Counter';
 import Button from './Button';
+import PhotoUploader from './PhotoUploader';
 import Profile from './Profile';
 
 if (process.env.BROWSER) {
@@ -12,7 +13,8 @@ if (process.env.BROWSER) {
 export default class Summary extends Component {
 
   render() {
-    const { name, profilePhotoUrl, postNum, followerNum, followingNum } = this.props.person;
+    const { name, profilePhotoUrl, postNum, followerNum, followingNum, isFollowing, id } = this.props.person;
+    const isMyself = (this.props.userId === id);
 
     return (
       <div className='personal-summary-component'>
@@ -39,11 +41,16 @@ export default class Summary extends Component {
                 iconPosition={ 'counter-right' }
                 count={followingNum}
               />
-              <Button
-                initialIsClicked={ false }
-                text={ 'follow' }
-                textClicked={ 'unfollow' }
-              />
+              {isMyself ?
+                <PhotoUploader /> :
+                <Button
+                  isClicked={ isFollowing }
+                  textIsUnclicked={ 'follow' }
+                  textIsClicked={ 'unfollow' }
+                  handleWhenIsUnclicked={ this.props.followUser }
+                  handleWhenIsClicked={ this.props.unfollowUser }
+                />
+              }
             </div>
           </div>
           <div className='personal-summary-name'>{name}</div>
@@ -56,6 +63,10 @@ export default class Summary extends Component {
 Summary.displayName = 'Summary';
 
 Summary.propTypes = {
-  person: PropTypes.object.isRequired
+  person: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
+  followUser: PropTypes.func.isRequired,
+  unfollowUser: PropTypes.func.isRequired
 };
+
 // SummaryComponent.defaultProps = {};

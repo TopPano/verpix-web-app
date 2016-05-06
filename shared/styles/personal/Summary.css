@@ -31,6 +31,9 @@
         .button-component {
           float: right;
         }
+        .photo-uploader-component {
+          float: right;
+        }
       }
     }
     .personal-summary-name {

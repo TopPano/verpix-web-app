@@ -123,12 +123,12 @@ export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST';
 export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS';
 export const FOLLOW_USER_FAILURE = 'FOLLOW_USER_FAILURE';
 
-export function followUser(followerId, followedId) {
+export function followUser(followerId, followeeId) {
   return (dispatch) => {
     dispatch({
       type: FOLLOW_USER_REQUEST
     });
-    return api.users.follow(followerId, followedId).then(() => {
+    return api.users.follow(followerId, followeeId).then(() => {
       dispatch({
         type: FOLLOW_USER_SUCCESS,
         followeeId
@@ -146,12 +146,12 @@ export const UNFOLLOW_USER_REQUEST = 'UNFOLLOW_USER_REQUEST';
 export const UNFOLLOW_USER_SUCCESS = 'UNFOLLOW_USER_SUCCESS';
 export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
 
-export function unfollowUser(followerId, followedId) {
+export function unfollowUser(followerId, followeeId) {
   return (dispatch) => {
     dispatch({
       type: UNFOLLOW_USER_REQUEST
     });
-    return api.users.unfollow(followerId, followedId).then(() => {
+    return api.users.unfollow(followerId, followeeId).then(() => {
       dispatch({
         type: UNFOLLOW_USER_SUCCESS,
         followeeId

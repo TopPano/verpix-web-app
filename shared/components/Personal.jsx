@@ -11,14 +11,17 @@ if (process.env.BROWSER) {
 
 export default class Personal extends Component {
   static propTyes = {
-    person: PropTypes.object.isRequired
+    person: PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
+    followUser: PropTypes.func.isRequired,
+    unfollowUser: PropTypes.func.isRequired
   };
 
   render() {
     const { person } = this.props;
     return (
       <div className="personal-component">
-        <Summary person={person} />
+        <Summary {...this.props} />
         <Gallery
           posts={person.posts.feedPosts}
           postIds={person.posts.feedIds}
