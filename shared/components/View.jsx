@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
 import ViewAuthor from './ViewAuthor.jsx';
 import ViewLike from './ViewLike.jsx';
 
@@ -53,14 +54,8 @@ View.propTypes = {
   authorId: PropTypes.string
 };
 View.defaultProps = {
-  linkUrl: '',
-  imgUrl: '',
-  count: 0,
-  isLiked: false,
-  width: 500,
-  height: 250,
   showAuthor: false,
-  authorPhotoUrl: '/static/images/profile-photo-default.png',
+  authorPhotoUrl: DEFAULT_PROFILE_PHOTO_URL,
   authorName: 'Verpixer',
   authorId: ''
 };

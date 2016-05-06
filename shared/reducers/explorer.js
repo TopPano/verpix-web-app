@@ -5,6 +5,7 @@ import {
   LOAD_EXPLORE_RECENT_FAILURE
 } from '../actions/post';
 import { handleLoadPostsSuccess } from './common';
+import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
 
 const DEFAULT_STATE = {
   isFetching: false,
@@ -24,23 +25,26 @@ export default function explorer(state=DEFAULT_STATE, action) {
         isFetching: true
       });
     case LOAD_EXPLORE_RECENT_SUCCESS:
-      const { page, feed, firstQuery } = action.response.result;
+      let { page, feed, firstQuery } = action.response.result;
       let hasNext = page.hasNextPage,
-          lastPostId = page.end,
-          newFeed;
+          lastPostId = page.end;
 
+      feed.map((post) => {
+        if(!post.ownerInfo.profilePhotoUrl) {
+          post.ownerInfo.profilePhotoUrl = DEFAULT_PROFILE_PHOTO_URL;
+        }
+      });
       if(firstQuery) {
         state.recent.posts.feed = [];
-        newFeed = feed;
       } else {
-        newFeed = state.recent.posts.feed.concat(feed);
+        feed = state.recent.posts.feed.concat(feed);
       }
 
       return merge({}, state, {
         isFetching: false,
         recent: {
           posts: {
-            feed: newFeed,
+            feed,
             hasNext,
             lastPostId
           }

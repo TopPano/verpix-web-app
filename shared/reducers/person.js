@@ -10,6 +10,7 @@ import {
   LOAD_USER_POSTS_FAILURE
 } from '../actions/post';
 import { handleLoadPostsSuccess } from './common';
+import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
 
 const DEFAULT_STATE = {
   isFetching: false,
@@ -36,7 +37,7 @@ export default function person(state=DEFAULT_STATE, action) {
       return merge({}, state, {
         isFetching: false,
         username,
-        profilePhotoUrl,
+        profilePhotoUrl: profilePhotoUrl ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL,
         followerNum: followers,
         followingNum: following,
         postNum: posts

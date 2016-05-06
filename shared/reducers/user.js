@@ -7,7 +7,7 @@ import {
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS
 } from '../actions/user';
-//import auth from '../lib/auth';
+import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
 
 const DEFAULT_STATE = {
   isFetching: false,
@@ -29,6 +29,7 @@ export default function user(state=DEFAULT_STATE, action) {
       });
     case LOGIN_USER_SUCCESS:
       const { id, userId, created, user: { username, profilePhotoUrl, email } } = action.user;
+      let _profilePhotoUrl = profilePhotoUrl ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL;
       // XXX: Though Reducer should be pure without any side effect, however, we need to make a copy of the
       //      user state in cookie in order for server to restore from it, so centralize the code here would
       //      be clean.
@@ -36,7 +37,7 @@ export default function user(state=DEFAULT_STATE, action) {
       document.cookie = cookie.serialize('accessToken', id, { path: '/', maxAge: 900000 });
       document.cookie = cookie.serialize('userId', userId, { path: '/', maxAge: 900000 });
       document.cookie = cookie.serialize('username', username, { path: '/', maxAge: 900000 });
-      document.cookie = cookie.serialize('profilePhotoUrl', profilePhotoUrl, { path: '/', maxAge: 900000 });
+      document.cookie = cookie.serialize('profilePhotoUrl', _profilePhotoUrl, { path: '/', maxAge: 900000 });
       document.cookie = cookie.serialize('email', email, { path: '/', maxAge: 900000 });
       document.cookie = cookie.serialize('created', created, { path: '/', maxAge: 900000 });
       return merge({}, state, {
@@ -44,7 +45,7 @@ export default function user(state=DEFAULT_STATE, action) {
         isAuthenticated: true,
         userId,
         username,
-        profilePhotoUrl,
+        profilePhotoUrl: _profilePhotoUrl,
         email,
         created
       });
