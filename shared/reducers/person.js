@@ -39,6 +39,7 @@ const DEFAULT_STATE = {
 };
 
 export default function person(state=DEFAULT_STATE, action) {
+  let nextState = {};
   switch (action.type) {
     case LOAD_USER_SUMMARY_REQUEST:
     case LOAD_USER_POSTS_REQUEST:
@@ -63,7 +64,7 @@ export default function person(state=DEFAULT_STATE, action) {
     case LOAD_USER_POSTS_SUCCESS:
       return handleLoadPostsSuccess(state, action);
     case FOLLOW_USER_SUCCESS:
-      let nextState = { isFetching: false };
+      nextState = { isFetching: false };
       if (state.id === action.followeeId) {
         nextState = merge(nextState, { isFollowing: true });
       }
@@ -72,7 +73,7 @@ export default function person(state=DEFAULT_STATE, action) {
       }
       return merge({}, state, nextState);
     case UNFOLLOW_USER_SUCCESS:
-      let nextState = { isFetching: false };
+      nextState = { isFetching: false };
       if (state.id === action.followeeId) {
         nextState = merge(nextState, { isFollowing: false });
       }
