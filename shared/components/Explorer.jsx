@@ -18,7 +18,8 @@ export default class Explorer extends Component {
     return (
       <div className="explorer-component">
         <Gallery
-          posts={explorer.posts.feed}
+          posts={explorer.posts.feedPosts}
+          postIds={explorer.posts.feedIds}
           maxWidth={500}
           ratio={2}
           showAuthor={true}

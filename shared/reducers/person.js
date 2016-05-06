@@ -36,7 +36,8 @@ const DEFAULT_STATE = {
   followers: {},
   following: {},
   posts: {
-    feed: [],
+    feedPosts: {},
+    feedIds: [],
     hasNext: true,
     lastPostId: ''
   }

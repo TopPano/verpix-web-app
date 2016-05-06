@@ -35,19 +35,19 @@ export default class Gallery extends Component{
     return Math.floor(el.clientWidth) - parseInt(style.getPropertyValue('padding-left')) - parseInt(style.getPropertyValue('padding-right'));
   }
   render(){
-    const { posts, maxWidth, ratio, showAuthor } = this.props;
+    const { posts, postIds, maxWidth, ratio, showAuthor } = this.props;
     let numPerRow = Math.ceil(this.state.containerWidth / maxWidth);
     let paddingLeft = 5, paddingRight = 5;
     let postWidth =
-        posts.length >= numPerRow ?
+        postIds.length >= numPerRow ?
         Math.floor(this.state.containerWidth / numPerRow) - paddingLeft - paddingRight :
         maxWidth - paddingLeft - paddingRight;
     let postHeight = Math.floor(postWidth / ratio);
     let wrapperWidth = (postWidth + paddingLeft + paddingRight) * numPerRow;
     let previews = [];
 
-    posts.map((post, k) => {
-      const { sid, thumbnailUrl, likes, ownerInfo } = post;
+    postIds.map((id, k) => {
+      const { sid, thumbnailUrl, likes, ownerInfo } = posts[id];
       let linkUrl = 'http://dev.verpix.net/?post=' + sid;
       let authorName = ownerInfo.identities.length > 0 ? ownerInfo.identities[0].profile.displayName : ownerInfo.username;
 
@@ -80,7 +80,8 @@ export default class Gallery extends Component{
 Gallery.displayName = 'Gallery';
 
 Gallery.propTypes = {
-  posts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  posts: PropTypes.object.isRequired,
+  postIds: PropTypes.array.isRequired,
   maxWidth: PropTypes.number.isRequired,
   ratio: PropTypes.number.isRequired,
   showAuthor: PropTypes.bool

@@ -18,7 +18,8 @@ export default class NewsFeed extends Component {
     return (
       <div className="newsfeed-component">
         <Gallery
-          posts={newsFeed.posts.feed}
+          posts={newsFeed.posts.feedPosts}
+          postIds={newsFeed.posts.feedIds}
           maxWidth={500}
           ratio={2}
           showAuthor={true}

@@ -1,26 +1,29 @@
-import merge from 'lodash/merge';
+import { merge, assign } from 'lodash';
 import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
 
 export function handleLoadPostsSuccess(state, action) {
-  let { page, feed, firstQuery } = action.response.result;
-  let hasNext = page.hasNextPage,
-      lastPostId = page.end;
+  let { entities: { posts }, result: { result: { page, feed }, firstQuery } } = action.response;
+  let hasNext = page.hasNextPage;
+  let lastPostId = page.end;
 
-  feed.map((post) => {
-    if(!post.ownerInfo.profilePhotoUrl) {
-      post.ownerInfo.profilePhotoUrl = DEFAULT_PROFILE_PHOTO_URL;
+  feed.map((postId) => {
+    if(!posts[postId].ownerInfo.profilePhotoUrl) {
+      posts[postId].ownerInfo.profilePhotoUrl = DEFAULT_PROFILE_PHOTO_URL;
     }
   });
-  if(firstQuery) {
-    state.posts.feed = [];
-  } else {
-    feed = state.posts.feed.concat(feed);
-  }
 
-  return merge({}, state, {
+  let genNextState = undefined;
+  if(firstQuery) {
+    genNextState = assign; /* overwrite the previous state */
+  } else {
+    genNextState = merge;
+    feed = state.posts.feedIds.concat(feed);
+  }
+  return genNextState({}, state, {
     isFetching: false,
     posts: {
-      feed,
+      feedPosts: posts,
+      feedIds: feed,
       hasNext,
       lastPostId
     }

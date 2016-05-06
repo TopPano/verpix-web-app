@@ -1,4 +1,5 @@
 import Base from './Base';
+import { Schema, arrayOf } from 'normalizr';
 
 function genQuery(lastPostId) {
   let query = {};
@@ -18,7 +19,8 @@ export default class PostsAPI extends Base {
     return this.apiClient.post({
       url: `users/${userId}/profile/query`,
       payload: genQuery(lastPostId),
-      authenticated: true
+      authenticated: true,
+      schema: { result: { feed: arrayOf(new Schema('posts', { idAttribute: 'sid' })) }}
     });
   }
 
@@ -27,7 +29,8 @@ export default class PostsAPI extends Base {
     return this.apiClient.post({
       url: `users/${userId}/query`,
       payload: genQuery(lastPostId),
-      authenticated: true
+      authenticated: true,
+      schema: { result: { feed: arrayOf(new Schema('posts', { idAttribute: 'sid' })) }}
     });
   }
 
@@ -35,6 +38,14 @@ export default class PostsAPI extends Base {
     return this.apiClient.post({
       url: 'search/recent',
       payload: genQuery(lastPostId),
+      authenticated: true,
+      schema: { result: { feed: arrayOf(new Schema('posts', { idAttribute: 'sid' })) }}
+    });
+  }
+
+  likePost(id) {
+    return this.apiClient.post({
+      url: `posts/${id}/like`,
       authenticated: true
     });
   }

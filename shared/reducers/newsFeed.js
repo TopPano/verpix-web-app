@@ -9,7 +9,8 @@ import { handleLoadPostsSuccess } from './common';
 const DEFAULT_STATE = {
   isFetching: false,
   posts: {
-    feed: [],
+    feedPosts: {},
+    feedIds: [],
     hasNext: true,
     lastPostId: ''
   }

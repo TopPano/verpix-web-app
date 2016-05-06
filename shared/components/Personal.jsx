@@ -16,12 +16,12 @@ export default class Personal extends Component {
 
   render() {
     const { person } = this.props;
-
     return (
       <div className="personal-component">
         <Summary person={person} />
         <Gallery
-          posts={person.posts.feed}
+          posts={person.posts.feedPosts}
+          postIds={person.posts.feedIds}
           maxWidth={500}
           ratio={2}
         />
