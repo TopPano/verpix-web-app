@@ -15,27 +15,32 @@ export default class Gallery extends Component{
       containerWidth: 0
     };
   }
+
   componentDidMount() {
     this.setState({
       containerWidth: this.getContainerWidth()
     });
     window.addEventListener('resize', this.handleWindowResize);
   }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleWindowResize, false);
   }
+
   handleWindowResize = () => {
     this.setState({
       containerWidth: this.getContainerWidth()
     });
   }
+
   getContainerWidth = () => {
     var el = ReactDOM.findDOMNode(this);
     var style = window.getComputedStyle(el, null);
     return Math.floor(el.clientWidth) - parseInt(style.getPropertyValue('padding-left')) - parseInt(style.getPropertyValue('padding-right'));
   }
+
   render(){
-    const { posts, postIds, maxWidth, ratio, showAuthor } = this.props;
+    const { posts, postIds, maxWidth, ratio, showAuthor, likePost, unlikePost } = this.props;
     let numPerRow = Math.ceil(this.state.containerWidth / maxWidth);
     let paddingLeft = 5, paddingRight = 5;
     let postWidth =
@@ -64,6 +69,8 @@ export default class Gallery extends Component{
           authorPhotoUrl={ ownerInfo.profilePhotoUrl }
           authorName={ authorName }
           authorId={ ownerInfo.sid }
+          likePost={ likePost.bind(this, sid) }
+          unlikePost={ unlikePost.bind(this, sid) }
         />
       );
     });
@@ -84,6 +91,8 @@ Gallery.propTypes = {
   postIds: PropTypes.array.isRequired,
   maxWidth: PropTypes.number.isRequired,
   ratio: PropTypes.number.isRequired,
+  likePost: PropTypes.func.isRequired,
+  unlikePost: PropTypes.func.isRequired,
   showAuthor: PropTypes.bool
 };
 Gallery.defaultProps = {

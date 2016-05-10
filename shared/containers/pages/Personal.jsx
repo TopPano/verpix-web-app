@@ -8,6 +8,7 @@ import { loadUserSummary } from '../../actions/user';
 import { loadUserPosts } from '../../actions/post';
 import { followUser, unfollowUser } from '../../actions/user';
 import { listFollowers, listFollowing } from '../../actions/user';
+import { likePost, unlikePost } from '../../actions/post';
 import ScrollablePageContainer from './Scrollable.jsx';
 import Personal from '../../components/Personal.jsx';
 
@@ -43,6 +44,18 @@ class PersonalPageContainer extends ScrollablePageContainer {
     dispatch(unfollowUser(userId, followeeId));
   }
 
+  like = (postId) => {
+    const { dispatch } = this.props;
+    const { userId } = this.props;
+    dispatch(likePost(userId, postId));
+  }
+
+  unlike = (postId) => {
+    const { dispatch } = this.props;
+    const { userId } = this.props;
+    dispatch(unlikePost(userId, postId));
+  }
+
   render() {
     const { person, userId } = this.props;
     return (
@@ -51,6 +64,8 @@ class PersonalPageContainer extends ScrollablePageContainer {
         userId={userId}
         followUser={this.follow}
         unfollowUser={this.unfollow}
+        likePost={this.like}
+        unlikePost={this.unlike}
       >
         {this.props.children}
       </Personal>

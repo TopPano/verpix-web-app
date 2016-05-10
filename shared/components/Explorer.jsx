@@ -10,11 +10,13 @@ if (process.env.BROWSER) {
 
 export default class Explorer extends Component {
   static propTyes = {
-    explorer: PropTypes.object.isRequired
+    explorer: PropTypes.object.isRequired,
+    likePost: PropTypes.func.isRequired,
+    unlikePost: PropTypes.func.isRequired
   };
 
   render() {
-    const { explorer } = this.props;
+    const { explorer, likePost, unlikePost } = this.props;
     return (
       <div className="explorer-component">
         <Gallery
@@ -23,6 +25,8 @@ export default class Explorer extends Component {
           maxWidth={500}
           ratio={2}
           showAuthor={true}
+          likePost={likePost}
+          unlikePost={unlikePost}
         />
       </div>
     );

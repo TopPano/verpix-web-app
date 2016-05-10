@@ -14,18 +14,18 @@ import {
   LIST_FOLLOWERS_FAILURE,
   LIST_FOLLOWING_REQUEST,
   LIST_FOLLOWING_SUCCESS,
-  LIST_FOLLOWING_FAILURE,
+  LIST_FOLLOWING_FAILURE
+} from '../actions/user';
+import {
+  LOAD_USER_POSTS_REQUEST,
+  LOAD_USER_POSTS_SUCCESS,
+  LOAD_USER_POSTS_FAILURE,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
   LIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
   UNLIKE_POST_FAILURE
-} from '../actions/user';
-import {
-  LOAD_USER_POSTS_REQUEST,
-  LOAD_USER_POSTS_SUCCESS,
-  LOAD_USER_POSTS_FAILURE
 } from '../actions/post';
 import { handleLoadPostsSuccess } from './common';
 import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
@@ -119,36 +119,36 @@ export default function person(state=DEFAULT_STATE, action) {
       nextState = { isFetching: false };
       if (state.posts.feedPosts[action.id]) {
         let count = state.posts.feedPosts[action.id].likes.count + 1;
-        nextState = merge(nextState, JSON.parse(`{
+        nextState = merge(nextState, {
           posts: {
             feedPosts: {
-              ${action.id}: {
+              [action.id]: {
                 likes: {
-                  count: ${count},
+                  count,
                   isLiked: true
                 }
               }
             }
           }
-        }`));
+        });
       }
       return merge({}, state, nextState);
     case UNLIKE_POST_SUCCESS:
       nextState = { isFetching: false };
       if (state.posts.feedPosts[action.id]) {
         let count = state.posts.feedPosts[action.id].likes.count - 1;
-        nextState = merge(nextState, JSON.parse(`{
+        nextState = merge(nextState, {
           posts: {
             feedPosts: {
-              ${action.id}: {
+              [action.id]: {
                 likes: {
-                  count: ${count},
+                  count,
                   isLiked: false
                 }
               }
             }
           }
-        }`));
+        });
       }
       return merge({}, state, nextState);
     case LOAD_USER_SUMMARY_FAILURE:
@@ -156,6 +156,7 @@ export default function person(state=DEFAULT_STATE, action) {
     case FOLLOW_USER_FAILURE:
     case UNFOLLOW_USER_FAILURE:
     case LIST_FOLLOWERS_FAILURE:
+    case LIST_FOLLOWING_FAILURE:
     case LIKE_POST_FAILURE:
     case UNLIKE_POST_FAILURE:
       return merge({}, state, {

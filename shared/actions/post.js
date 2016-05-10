@@ -112,15 +112,15 @@ export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
 export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
 
-export function likePost(id) {
+export function likePost(userId, postId) {
   return (dispatch) => {
     dispatch({
       type: LIKE_POST_REQUEST
     });
-    return api.posts.likePost(id).then(() => {
+    return api.posts.likePost(userId, postId).then(() => {
       dispatch({
         type: LIKE_POST_SUCCESS,
-        id
+        id: postId
       });
     }).catch((error) => {
       dispatch({
@@ -135,15 +135,15 @@ export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
 export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
 export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
 
-export function unlikePost(id) {
+export function unlikePost(userId, postId) {
   return (dispatch) => {
     dispatch({
       type: UNLIKE_POST_REQUEST
     });
-    return api.posts.unlikePost(id).then(() => {
+    return api.posts.unlikePost(userId, postId).then(() => {
       dispatch({
         type: UNLIKE_POST_SUCCESS,
-        id
+        id: postId
       });
     }).catch((error) => {
       dispatch({
@@ -158,7 +158,7 @@ export const SHOW_LIKE_LIST_REQUEST = 'SHOW_LIKE_LIST_REQUEST';
 export const SHOW_LIKE_LIST_SUCCESS = 'SHOW_LIKE_LIST_SUCCESS';
 export const SHOW_LIKE_LIST_FAILURE = 'SHOW_LIKE_LIST_FAILURE';
 
-export function unlikePost(id) {
+export function showLikeList(id) {
   return (dispatch) => {
     dispatch({
       type: SHOW_LIKE_LIST_REQUEST

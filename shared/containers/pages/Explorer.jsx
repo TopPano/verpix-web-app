@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadExploreRecent } from '../../actions/post';
+import { likePost, unlikePost } from '../../actions/post';
 import ScrollablePageContainer from './Scrollable.jsx';
 import Explorer from '../../components/Explorer.jsx';
 
@@ -26,9 +27,25 @@ class ExplorerPageContainer extends ScrollablePageContainer {
     }));
   }
 
+  like = (postId) => {
+    const { dispatch } = this.props;
+    const { userId } = this.props;
+    dispatch(likePost(userId, postId));
+  }
+
+  unlike = (postId) => {
+    const { dispatch } = this.props;
+    const { userId } = this.props;
+    dispatch(unlikePost(userId, postId));
+  }
+
   render() {
     return (
-      <Explorer explorer={this.props.explorer.recent}>
+      <Explorer
+        explorer={this.props.explorer.recent}
+        likePost={this.like}
+        unlikePost={this.unlike}
+      >
         {this.props.children}
       </Explorer>
     );
@@ -37,8 +54,10 @@ class ExplorerPageContainer extends ScrollablePageContainer {
 
 function mapStateToProps(state) {
   const { explorer } = state;
+  const { userId } = state.user;
   return {
-    explorer
+    explorer,
+    userId
   }
 }
 

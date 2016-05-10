@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadNewsFeed } from '../../actions/post';
+import { likePost, unlikePost } from '../../actions/post';
 import ScrollablePageContainer from './Scrollable.jsx';
 import NewsFeed from '../../components/NewsFeed.jsx';
 
@@ -26,9 +27,25 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
     }));
   }
 
+  like = (postId) => {
+    const { dispatch } = this.props;
+    const { userId } = this.props;
+    dispatch(likePost(userId, postId));
+  }
+
+  unlike = (postId) => {
+    const { dispatch } = this.props;
+    const { userId } = this.props;
+    dispatch(unlikePost(userId, postId));
+  }
+
   render() {
     return (
-      <NewsFeed newsFeed={this.props.newsFeed}>
+      <NewsFeed
+        newsFeed={this.props.newsFeed}
+        likePost={this.like}
+        unlikePost={this.unlike}
+      >
         {this.props.children}
       </NewsFeed>
     );
@@ -37,8 +54,10 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
 
 function mapStateToProps(state) {
   const { newsFeed } = state;
+  const { userId } = state.user;
   return {
-    newsFeed
+    newsFeed,
+    userId
   }
 }
 

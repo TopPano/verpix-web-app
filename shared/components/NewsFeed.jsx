@@ -10,11 +10,13 @@ if (process.env.BROWSER) {
 
 export default class NewsFeed extends Component {
   static propTyes = {
-    newsFeed: PropTypes.object.isRequired
+    newsFeed: PropTypes.object.isRequired,
+    likePost: PropTypes.func.isRequired,
+    unlikePost: PropTypes.func.isRequired
   };
 
   render() {
-    const { newsFeed } = this.props;
+    const { newsFeed, likePost, unlikePost } = this.props;
     return (
       <div className="newsfeed-component">
         <Gallery
@@ -23,6 +25,8 @@ export default class NewsFeed extends Component {
           maxWidth={500}
           ratio={2}
           showAuthor={true}
+          likePost={likePost}
+          unlikePost={unlikePost}
         />
       </div>
     );
