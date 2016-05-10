@@ -2,6 +2,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
+
+import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
 import View from './View';
 
 if (process.env.BROWSER) {
@@ -54,7 +56,17 @@ export default class Gallery extends Component{
     postIds.map((id, k) => {
       const { sid, thumbnailUrl, likes, ownerInfo } = posts[id];
       let linkUrl = 'http://dev.verpix.net/?post=' + sid;
-      let authorName = ownerInfo.identities.length > 0 ? ownerInfo.identities[0].profile.displayName : ownerInfo.username;
+      let authorName, authorPhotoUrl;
+
+      if(ownerInfo.identities.length > 0) {
+        const { profile } = ownerInfo.identities[0];
+        authorName = profile.displayName;
+        authorPhotoUrl = profile.photos[0].value;
+      } else {
+        authorName = ownerInfo.username;
+        authorPhotoUrl = ownerInfo.profilePhotoUrl;
+      }
+      authorPhotoUrl = authorPhotoUrl ? authorPhotoUrl : DEFAULT_PROFILE_PHOTO_URL;
 
       previews.push(
         <View
@@ -66,7 +78,7 @@ export default class Gallery extends Component{
           width={ postWidth }
           height={ postHeight }
           showAuthor={ showAuthor }
-          authorPhotoUrl={ ownerInfo.profilePhotoUrl }
+          authorPhotoUrl={ authorPhotoUrl }
           authorName={ authorName }
           authorId={ ownerInfo.sid }
           likePost={ likePost.bind(this, sid) }
