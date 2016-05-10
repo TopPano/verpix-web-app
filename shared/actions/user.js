@@ -169,12 +169,13 @@ export const LIST_FOLLOWERS_REQUEST = 'LIST_FOLLOWERS_REQUEST';
 export const LIST_FOLLOWERS_SUCCESS = 'LIST_FOLLOWERS_SUCCESS';
 export const LIST_FOLLOWERS_FAILURE = 'LIST_FOLLOWERS_FAILURE';
 
-export function listFollowers(id) {
+export function listFollowers({id, params={}}) {
+  const queryId = id ? id : params.id;
   return (dispatch) => {
     dispatch({
       type: LIST_FOLLOWERS_REQUEST
     });
-    return api.users.listFollowers(id).then((response) => {
+    return api.users.listFollowers(queryId).then((response) => {
       dispatch({
         type: LIST_FOLLOWERS_SUCCESS,
         response
@@ -192,12 +193,13 @@ export const LIST_FOLLOWING_REQUEST = 'LIST_FOLLOWING_REQUEST';
 export const LIST_FOLLOWING_SUCCESS = 'LIST_FOLLOWING_SUCCESS';
 export const LIST_FOLLOWING_FAILURE = 'LIST_FOLLOWING_FAILURE';
 
-export function listFollowing(id) {
+export function listFollowing({id, params={}}) {
+  const queryId = id ? id : params.id;
   return (dispatch) => {
     dispatch({
       type: LIST_FOLLOWING_REQUEST
     });
-    return api.users.listFollowing(id).then((response) => {
+    return api.users.listFollowing(queryId).then((response) => {
       dispatch({
         type: LIST_FOLLOWING_SUCCESS,
         response

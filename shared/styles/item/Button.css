@@ -6,14 +6,11 @@ $button-height: 28px;
   width: $button-width;
   height: $button-height;
   line-height: $button-height;
-  max-width: 100%;
   text-align: center;
-  .button-text {
-    cursor: pointer;
-    background-image: url('../../images/item/button.png');
-  }
-  .button-text-clicked {
-    background-image: url('../../images/item/button-clicked.png');
+  background-color: #F44744;
+  cursor: pointer;
+  &.button-component-clicked {
+    background-color: black;
   }
 }
 

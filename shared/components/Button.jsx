@@ -23,11 +23,12 @@ export default class Button extends Component {
   render() {
     const { isClicked, textIsUnclicked, textIsClicked } = this.props;
     return (
-      <div className='button-component'>
-        <div className={ 'button-text ' + (isClicked ? 'button-text-clicked' : '') } onClick={ this.handleBtnClick }>
-          { isClicked ? textIsClicked : textIsUnclicked }
-        </div>
-      </div>
+      <span
+        className={'button-component' + (isClicked ? ' button-component-clicked' : '')}
+        onClick={this.handleBtnClick}
+      >
+        {isClicked ? textIsClicked : textIsUnclicked}
+      </span>
     );
   }
 }

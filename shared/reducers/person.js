@@ -1,4 +1,4 @@
-import merge from 'lodash/merge';
+import { assign, merge } from 'lodash';
 import {
   LOAD_USER_SUMMARY_REQUEST,
   LOAD_USER_SUMMARY_SUCCESS,
@@ -75,7 +75,10 @@ export default function person(state=DEFAULT_STATE, action) {
         nextState = merge(nextState, { isFollowing: true });
       }
       if (state.followers[action.followeeId]) {
-        nextState = merge(nextState, JSON.parse(`{ followers: { ${action.followeeId}: { isFriend: true } } }`));
+        nextState = merge(nextState, { followers: { [action.followeeId]: { isFriend: true } } });
+      }
+      if (state.following[action.followeeId]) {
+        nextState = merge(nextState, { following: { [action.followeeId]: { isFriend: true } } });
       }
       return merge({}, state, nextState);
     case UNFOLLOW_USER_SUCCESS:
@@ -84,18 +87,23 @@ export default function person(state=DEFAULT_STATE, action) {
         nextState = merge(nextState, { isFollowing: false });
       }
       if (state.followers[action.followeeId]) {
-        nextState = merge(nextState, JSON.parse(`{ followers: { ${action.followeeId}: { isFriend: false } } }`));
+        nextState = merge(nextState, { followers: { [action.followeeId]: { isFriend: false } } });
+      }
+      if (state.following[action.followeeId]) {
+        nextState = merge(nextState, { following: { [action.followeeId]: { isFriend: false } } });
       }
       return merge({}, state, nextState);
     case LIST_FOLLOWERS_SUCCESS:
-      const { entities: { followerList } }= action.response;
-      return merge({}, state, {
+      let { entities: { followerList } }= action.response;
+      followerList = followerList ? followerList : {};
+      return assign({}, state, {
         isFetching: false,
         followers: followerList
       });
     case LIST_FOLLOWING_SUCCESS:
-      const { entities: { followingList } }= action.response;
-      return merge({}, state, {
+      let { entities: { followingList } }= action.response;
+      followingList = followingList ? followingList : {};
+      return assign({}, state, {
         isFetching: false,
         following: followingList
       });

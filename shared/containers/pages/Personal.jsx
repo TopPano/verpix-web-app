@@ -7,6 +7,7 @@ import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadUserSummary } from '../../actions/user';
 import { loadUserPosts } from '../../actions/post';
 import { followUser, unfollowUser } from '../../actions/user';
+import { listFollowers, listFollowing } from '../../actions/user';
 import ScrollablePageContainer from './Scrollable.jsx';
 import Personal from '../../components/Personal.jsx';
 
@@ -30,18 +31,16 @@ class PersonalPageContainer extends ScrollablePageContainer {
     }));
   }
 
-  follow() {
+  follow = (followeeId) => {
     const { dispatch } = this.props;
-    const { id } = this.props.person;
     const { userId } = this.props;
-    dispatch(followUser(userId, id));
+    dispatch(followUser(userId, followeeId));
   }
 
-  unfollow() {
+  unfollow = (followeeId) => {
     const { dispatch } = this.props;
-    const { id } = this.props.person;
     const { userId } = this.props;
-    dispatch(unfollowUser(userId, id));
+    dispatch(unfollowUser(userId, followeeId));
   }
 
   render() {
@@ -50,8 +49,8 @@ class PersonalPageContainer extends ScrollablePageContainer {
       <Personal
         person={person}
         userId={userId}
-        followUser={this.follow.bind(this)}
-        unfollowUser={this.unfollow.bind(this)}
+        followUser={this.follow}
+        unfollowUser={this.unfollow}
       >
         {this.props.children}
       </Personal>
@@ -69,5 +68,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(
-  connectDataFetchers(PersonalPageContainer, [ loadUserSummary, loadUserPosts ])
+  connectDataFetchers(PersonalPageContainer, [ loadUserSummary, loadUserPosts, listFollowers, listFollowing ])
 );
