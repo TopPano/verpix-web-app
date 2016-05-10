@@ -14,7 +14,13 @@ import {
   LIST_FOLLOWERS_FAILURE,
   LIST_FOLLOWING_REQUEST,
   LIST_FOLLOWING_SUCCESS,
-  LIST_FOLLOWING_FAILURE
+  LIST_FOLLOWING_FAILURE,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE
 } from '../actions/user';
 import {
   LOAD_USER_POSTS_REQUEST,
@@ -52,6 +58,8 @@ export default function person(state=DEFAULT_STATE, action) {
     case UNFOLLOW_USER_REQUEST:
     case LIST_FOLLOWERS_REQUEST:
     case LIST_FOLLOWING_REQUEST:
+    case LIKE_POST_REQUEST:
+    case UNLIKE_POST_REQUEST:
       return merge({}, state, {
         isFetching: true
       });
@@ -107,12 +115,49 @@ export default function person(state=DEFAULT_STATE, action) {
         isFetching: false,
         following: followingList
       });
+    case LIKE_POST_SUCCESS:
+      nextState = { isFetching: false };
+      if (state.posts.feedPosts[action.id]) {
+        let count = state.posts.feedPosts[action.id].likes.count + 1;
+        nextState = merge(nextState, JSON.parse(`{
+          posts: {
+            feedPosts: {
+              ${action.id}: {
+                likes: {
+                  count: ${count},
+                  isLiked: true
+                }
+              }
+            }
+          }
+        }`));
+      }
+      return merge({}, state, nextState);
+    case UNLIKE_POST_SUCCESS:
+      nextState = { isFetching: false };
+      if (state.posts.feedPosts[action.id]) {
+        let count = state.posts.feedPosts[action.id].likes.count - 1;
+        nextState = merge(nextState, JSON.parse(`{
+          posts: {
+            feedPosts: {
+              ${action.id}: {
+                likes: {
+                  count: ${count},
+                  isLiked: false
+                }
+              }
+            }
+          }
+        }`));
+      }
+      return merge({}, state, nextState);
     case LOAD_USER_SUMMARY_FAILURE:
     case LOAD_USER_POSTS_FAILURE:
     case FOLLOW_USER_FAILURE:
     case UNFOLLOW_USER_FAILURE:
     case LIST_FOLLOWERS_FAILURE:
-    case LIST_FOLLOWING_FAILURE:
+    case LIKE_POST_FAILURE:
+    case UNLIKE_POST_FAILURE:
       return merge({}, state, {
         isFetching: false
       });

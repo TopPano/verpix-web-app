@@ -49,4 +49,19 @@ export default class PostsAPI extends Base {
       authenticated: true
     });
   }
+
+  unlikePost(id) {
+    return this.apiClient.post({
+      url: `posts/${id}/unlike`,
+      authenticated: true
+    });
+  }
+
+  getLikeList(id) {
+    return this.apiClient.get({
+      url: `posts/${id}/likes`,
+      authenticated: true,
+      schema: { result: arrayOf(new Schema('users', { idAttribute: 'userId' })) }
+    });
+  }
 }

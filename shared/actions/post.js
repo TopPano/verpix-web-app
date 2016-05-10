@@ -108,3 +108,71 @@ export function loadExploreRecent({lastPostId}) {
   };
 }
 
+export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
+export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
+export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
+
+export function likePost(id) {
+  return (dispatch) => {
+    dispatch({
+      type: LIKE_POST_REQUEST
+    });
+    return api.posts.likePost(id).then(() => {
+      dispatch({
+        type: LIKE_POST_SUCCESS,
+        id
+      });
+    }).catch((error) => {
+      dispatch({
+        type: LIKE_POST_FAILURE,
+        error
+      })
+    });
+  }
+}
+
+export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
+export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
+export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
+
+export function unlikePost(id) {
+  return (dispatch) => {
+    dispatch({
+      type: UNLIKE_POST_REQUEST
+    });
+    return api.posts.unlikePost(id).then(() => {
+      dispatch({
+        type: UNLIKE_POST_SUCCESS,
+        id
+      });
+    }).catch((error) => {
+      dispatch({
+        type: UNLIKE_POST_FAILURE,
+        error
+      })
+    });
+  }
+}
+
+export const SHOW_LIKE_LIST_REQUEST = 'SHOW_LIKE_LIST_REQUEST';
+export const SHOW_LIKE_LIST_SUCCESS = 'SHOW_LIKE_LIST_SUCCESS';
+export const SHOW_LIKE_LIST_FAILURE = 'SHOW_LIKE_LIST_FAILURE';
+
+export function unlikePost(id) {
+  return (dispatch) => {
+    dispatch({
+      type: SHOW_LIKE_LIST_REQUEST
+    });
+    return api.posts.getlikeList(id).then((response) => {
+      dispatch({
+        type: SHOW_LIKE_LIST_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: SHOW_LIKE_LIST_FAILURE,
+        error
+      })
+    });
+  }
+}
