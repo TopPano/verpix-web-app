@@ -5,14 +5,16 @@ import { connect } from 'react-redux';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadNewsFeed } from '../../actions/post';
-import { likePost, unlikePost } from '../../actions/post';
 import ScrollablePageContainer from './Scrollable.jsx';
 import NewsFeed from '../../components/NewsFeed.jsx';
 
 class NewsFeedPageContainer extends ScrollablePageContainer {
   static propTyes = {
     children: PropTypes.object.isRequired,
-    newsFeed: PropTypes.object.isRequired
+    newsFeed: PropTypes.object.isRequired,
+    like: PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
+    isRequestingFollow: PropTypes.bool.isRequired
   };
 
   hasMoreContent() {
@@ -27,24 +29,19 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
     }));
   }
 
-  like = (postId) => {
-    const { dispatch } = this.props;
-    const { userId } = this.props;
-    dispatch(likePost(userId, postId));
-  }
-
-  unlike = (postId) => {
-    const { dispatch } = this.props;
-    const { userId } = this.props;
-    dispatch(unlikePost(userId, postId));
-  }
-
   render() {
+    const { newsFeed, userId, like, isRequestingFollow } = this.props;
     return (
       <NewsFeed
-        newsFeed={this.props.newsFeed}
+        newsFeed={newsFeed}
+        userId={userId}
+        like={like}
+        isRequestingFollow={isRequestingFollow}
+        followUser={this.follow}
+        unfollowUser={this.unfollow}
         likePost={this.like}
         unlikePost={this.unlike}
+        getLikelist={this.getLikelist}
       >
         {this.props.children}
       </NewsFeed>
@@ -53,11 +50,15 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
 }
 
 function mapStateToProps(state) {
-  const { newsFeed } = state;
+  const { newsFeed, like } = state;
   const { userId } = state.user;
+  // TODO: Please Fix: it is tricky to use state.person.isFetching to decide is user is requesting follow/unfollow now.
+  const isRequestingFollow = state.person.isFetching;
   return {
     newsFeed,
-    userId
+    like,
+    userId,
+    isRequestingFollow
   }
 }
 

@@ -163,7 +163,7 @@ export function showLikeList(id) {
     dispatch({
       type: SHOW_LIKE_LIST_REQUEST
     });
-    return api.posts.getlikeList(id).then((response) => {
+    return api.posts.getLikeList(id).then((response) => {
       dispatch({
         type: SHOW_LIKE_LIST_SUCCESS,
         response

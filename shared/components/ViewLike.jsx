@@ -21,10 +21,13 @@ export default class ViewLike extends Component {
   }
 
   render() {
-    const { count, isLiked } = this.props;
+    const { count, isLiked, showLikelist } = this.props;
     return (
       <div className='view-like-component'>
-        <div className='view-like-count'>{count}</div>
+        {count > 0 ?
+          <div onClick={showLikelist} className='view-like-count view-like-count-clickable'>{count}</div> :
+          <div className='view-like-count'>{count}</div>
+        }
         <img
           onClick={this.handleClick}
           className='view-like-btn'
@@ -41,7 +44,8 @@ ViewLike.propTypes = {
   count: PropTypes.number.isRequired,
   isLiked: PropTypes.bool.isRequired,
   likePost: PropTypes.func.isRequired,
-  unlikePost: PropTypes.func.isRequired
+  unlikePost: PropTypes.func.isRequired,
+  showLikelist: PropTypes.func.isRequired
 };
 ViewLike.defaultProps = {
 };

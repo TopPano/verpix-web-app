@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
+import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';
 import Counter from './Counter';
 import Button from './Button';
 import PhotoUploader from './PhotoUploader';
@@ -29,16 +29,8 @@ export default class Summary extends Component {
     for(let id in people) {
       const who = people[id][type];
       const { isFriend } = people[id];
-      let username, profilePhotoUrl;
-      if(who.identities.length > 0) {
-        const { profile } = who.identities[0];
-        username = profile.displayName;
-        profilePhotoUrl = profile.photos[0].value;
-      } else {
-        username = who.username;
-        profilePhotoUrl = who.profilePhotoUrl;
-      }
-      profilePhotoUrl = profilePhotoUrl ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL;
+      const username = parseUsername(who);
+      const profilePhotoUrl = parseProfilePhotoUrl(who);
       list.push({
         username,
         profilePhotoUrl,

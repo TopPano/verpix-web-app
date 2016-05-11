@@ -13,24 +13,32 @@ export default class Personal extends Component {
   static propTyes = {
     person: PropTypes.object.isRequired,
     userId: PropTypes.string.isRequired,
+    like: PropTypes.object.isRequired,
     followUser: PropTypes.func.isRequired,
     unfollowUser: PropTypes.func.isRequired,
     likePost: PropTypes.func.isRequired,
-    unlikePost: PropTypes.func.isRequired
+    unlikePost: PropTypes.func.isRequired,
+    getLikelist: PropTypes.func.isRequired
   };
 
   render() {
-    const { person, likePost, unlikePost } = this.props;
+    const { person, like, userId, likePost, unlikePost, followUser, unfollowUser, getLikelist } = this.props;
     return (
       <div className="personal-component">
         <Summary {...this.props} />
         <Gallery
           posts={person.posts.feedPosts}
           postIds={person.posts.feedIds}
+          isFetchingPosts={person.isFetching}
           maxWidth={500}
           ratio={2}
+          userId={userId}
+          like={like}
+          followUser={followUser}
+          unfollowUser={unfollowUser}
           likePost={likePost}
           unlikePost={unlikePost}
+          getLikelist={getLikelist}
         />
       </div>
     );
