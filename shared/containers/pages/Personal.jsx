@@ -48,15 +48,39 @@ class PersonalPageContainer extends ScrollablePageContainer {
     }
   }
 
+  followAndUpdate = (followeeId) => {
+    this.follow(followeeId);
+    this.updateFollowerList();
+  }
+
+  unfollowAndUpdate = (followeeId) => {
+    this.unfollow(followeeId);
+    this.updateFollowerList();
+  }
+
+  updateFollowerList = () => {
+    setTimeout(() => {
+      if(this.props.person.isFetching) {
+        this.updateFollowerList();
+      } else {
+        const { dispatch } = this.props;
+        const { id } = this.props.person;
+        dispatch(loadUserSummary({id}));
+        dispatch(listFollowing({id}));
+      }
+    });
+  }
+
   render() {
     const { person, userId, like } = this.props;
+    const isMyself = userId === person.id;
     return (
       <Personal
         person={person}
         userId={userId}
         like={like}
-        followUser={this.follow}
-        unfollowUser={this.unfollow}
+        followUser={isMyself ? this.followAndUpdate : this.follow}
+        unfollowUser={isMyself ? this.unfollowAndUpdate : this.unfollow}
         likePost={this.like}
         unlikePost={this.unlike}
         getLikelist={this.getLikelist}
