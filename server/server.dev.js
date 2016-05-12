@@ -105,8 +105,9 @@ function renderHTML(html, initialState, config) {
     <head>
       <meta charset="utf8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" conten"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
       <title>Verpix</title>
+      <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
       <link rel="stylesheet" href="${config.staticUrl}/static/build/app.css">
     </head>
