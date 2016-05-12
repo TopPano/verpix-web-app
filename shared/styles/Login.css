@@ -7,7 +7,10 @@ $buttonWidth: 272px;
   width: 177vh;
   min-width: 100%;
   height: 100vh;
-  min-height: 600px;
+  @media (height <= 600px) {
+    height: 600px;
+    width: 1072px;
+  }
   background-image: url('/static/images/login/bg.jpg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
