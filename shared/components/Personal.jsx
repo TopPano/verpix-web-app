@@ -18,11 +18,12 @@ export default class Personal extends Component {
     unfollowUser: PropTypes.func.isRequired,
     likePost: PropTypes.func.isRequired,
     unlikePost: PropTypes.func.isRequired,
-    getLikelist: PropTypes.func.isRequired
+    getLikelist: PropTypes.func.isRequired,
+    loadMorePosts: PropTypes.func.isRequired
   };
 
   render() {
-    const { person, like, userId, likePost, unlikePost, followUser, unfollowUser, getLikelist } = this.props;
+    const { person, like, userId, likePost, unlikePost, followUser, unfollowUser, getLikelist, loadMorePosts } = this.props;
     return (
       <div className="personal-component">
         <Summary {...this.props} />
@@ -38,6 +39,7 @@ export default class Personal extends Component {
           likePost={likePost}
           unlikePost={unlikePost}
           getLikelist={getLikelist}
+          loadMorePosts={loadMorePosts}
         />
       </div>
     );

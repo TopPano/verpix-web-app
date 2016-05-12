@@ -43,6 +43,10 @@ export default class Gallery extends Component{
     return Math.floor(el.clientWidth) - parseInt(style.getPropertyValue('padding-left')) - parseInt(style.getPropertyValue('padding-right'));
   }
 
+  handleClickMoreBtn = () => {
+    this.props.loadMorePosts();
+  }
+
   showLikelist = (postId) => {
     this.props.getLikelist(postId);
     this.waitUpdateLikelist(postId);
@@ -130,6 +134,7 @@ export default class Gallery extends Component{
           followUser={followUser}
           unfollowUser={unfollowUser}
         />
+        <div className='gallery-more-btn' onClick={this.handleClickMoreBtn}/>
       </div>
     );
   }
@@ -149,6 +154,7 @@ Gallery.propTypes = {
   likePost: PropTypes.func.isRequired,
   unlikePost: PropTypes.func.isRequired,
   getLikelist: PropTypes.func.isRequired,
+    loadMorePosts: PropTypes.func.isRequired,
   showAuthor: PropTypes.bool
 };
 Gallery.defaultProps = {

@@ -20,7 +20,11 @@ class ExplorerPageContainer extends ScrollablePageContainer {
     return this.props.explorer.recent.posts.hasNext;
   }
 
-  loadMoreContent() {
+  isFetchingContent() {
+    return this.props.explorer.recent.isFetching;
+  }
+
+  requestMoreContent() {
     const { dispatch } = this.props;
     const { posts } = this.props.explorer.recent;
     dispatch(loadExploreRecent({
@@ -40,6 +44,7 @@ class ExplorerPageContainer extends ScrollablePageContainer {
         likePost={this.like}
         unlikePost={this.unlike}
         getLikelist={this.getLikelist}
+        loadMorePosts={this.loadMoreContent}
       >
         {this.props.children}
       </Explorer>

@@ -22,7 +22,11 @@ class PersonalPageContainer extends ScrollablePageContainer {
     return this.props.person.posts.hasNext;
   }
 
-  loadMoreContent() {
+  isFetchingContent() {
+    return this.props.person.isFetching;
+  }
+
+  requestMoreContent() {
     const { dispatch } = this.props;
     const { id } = this.props.person;
     const { lastPostId } = this.props.person.posts;
@@ -44,6 +48,7 @@ class PersonalPageContainer extends ScrollablePageContainer {
         likePost={this.like}
         unlikePost={this.unlike}
         getLikelist={this.getLikelist}
+        loadMorePosts={this.loadMoreContent}
       >
         {this.props.children}
       </Personal>
