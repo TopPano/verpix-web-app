@@ -38,36 +38,36 @@ function recent(state=DEFAULT_STATE, action) {
       nextState = { isFetching: false };
       if (state.posts.feedPosts[action.id]) {
         let count = state.posts.feedPosts[action.id].likes.count + 1;
-        nextState = merge(nextState, JSON.parse(`{
+        nextState = merge(nextState, {
           posts: {
             feedPosts: {
-              ${action.id}: {
+              [action.id]: {
                 likes: {
-                  count: ${count},
+                  count,
                   isLiked: true
                 }
               }
             }
           }
-        }`));
+        });
       }
       return merge({}, state, nextState);
     case UNLIKE_POST_SUCCESS:
       nextState = { isFetching: false };
       if (state.posts.feedPosts[action.id]) {
         let count = state.posts.feedPosts[action.id].likes.count - 1;
-        nextState = merge(nextState, JSON.parse(`{
+        nextState = merge(nextState, {
           posts: {
             feedPosts: {
-              ${action.id}: {
+              [action.id]: {
                 likes: {
-                  count: ${count},
+                  count,
                   isLiked: false
                 }
               }
             }
           }
-        }`));
+        });
       }
       return merge({}, state, nextState);
     case LOAD_EXPLORE_RECENT_FAILURE:

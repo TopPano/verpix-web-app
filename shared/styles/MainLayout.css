@@ -4,11 +4,21 @@ body {
   font-family: $text-font-family;
   color: $text-color-primary;
   font-size: $text-font-rootsz;
-  background-color: #B3ECFF;
+  background-color: #fafafa;
+  background-color: #E6E6FA;
+  overflow-y: scroll;
 }
 
 body * {
   box-sizing: border-box;
+}
+
+/* Prevent default styles when they are on focused */
+textarea,
+input,
+button,
+select {
+  outline: none;
 }
 
 /* Customize for bootstrap. */

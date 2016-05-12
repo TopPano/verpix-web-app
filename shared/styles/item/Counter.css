@@ -18,6 +18,9 @@
     width: $counter-count-width;
     text-align: left;
     padding: 0 0 0 $counter-count-padding;
+    &.counter-count-clickable {
+      cursor: pointer;
+    }
   }
   &.counter-right {
     transform: rotate(180deg);

@@ -17,6 +17,7 @@ export default class View extends Component {
 
   render() {
     const { linkUrl, imgUrl, width, height, showAuthor, authorPhotoUrl, authorName, authorId, count, isLiked } = this.props;
+    const { likePost, unlikePost, showLikelist } = this.props;
 
     return (
       <div className='view-component'>
@@ -33,6 +34,9 @@ export default class View extends Component {
         <ViewLike
           count={count}
           isLiked={isLiked}
+          likePost={likePost}
+          unlikePost={unlikePost}
+          showLikelist={showLikelist}
         />
       </div>
     );
@@ -48,6 +52,9 @@ View.propTypes = {
   height: PropTypes.number.isRequired,
   count: PropTypes.number.isRequired,
   isLiked: PropTypes.bool.isRequired,
+  likePost: PropTypes.func.isRequired,
+  unlikePost: PropTypes.func.isRequired,
+  showLikelist: PropTypes.func.isRequired,
   showAuthor: PropTypes.bool,
   authorPhotoUrl: PropTypes.string,
   authorName: PropTypes.string,

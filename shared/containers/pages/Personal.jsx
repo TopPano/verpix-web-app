@@ -6,13 +6,15 @@ import { connect } from 'react-redux';
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadUserSummary } from '../../actions/user';
 import { loadUserPosts } from '../../actions/post';
-import { followUser, unfollowUser } from '../../actions/user';
+import { listFollowers, listFollowing } from '../../actions/user';
 import ScrollablePageContainer from './Scrollable.jsx';
 import Personal from '../../components/Personal.jsx';
 
 class PersonalPageContainer extends ScrollablePageContainer {
   static propTyes = {
     person: PropTypes.object.isRequired,
+    like: PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
     children: PropTypes.object
   };
 
@@ -30,28 +32,18 @@ class PersonalPageContainer extends ScrollablePageContainer {
     }));
   }
 
-  follow() {
-    const { dispatch } = this.props;
-    const { id } = this.props.person;
-    const { userId } = this.props;
-    dispatch(followUser(userId, id));
-  }
-
-  unfollow() {
-    const { dispatch } = this.props;
-    const { id } = this.props.person;
-    const { userId } = this.props;
-    dispatch(unfollowUser(userId, id));
-  }
-
   render() {
-    const { person, userId } = this.props;
+    const { person, userId, like } = this.props;
     return (
       <Personal
         person={person}
         userId={userId}
-        followUser={this.follow.bind(this)}
-        unfollowUser={this.unfollow.bind(this)}
+        like={like}
+        followUser={this.follow}
+        unfollowUser={this.unfollow}
+        likePost={this.like}
+        unlikePost={this.unlike}
+        getLikelist={this.getLikelist}
       >
         {this.props.children}
       </Personal>
@@ -60,14 +52,15 @@ class PersonalPageContainer extends ScrollablePageContainer {
 }
 
 function mapStateToProps(state) {
-  const { person } = state;
+  const { person, like } = state;
   const { userId } = state.user;
   return {
     person,
+    like,
     userId
   }
 }
 
 export default connect(mapStateToProps)(
-  connectDataFetchers(PersonalPageContainer, [ loadUserSummary, loadUserPosts ])
+  connectDataFetchers(PersonalPageContainer, [ loadUserSummary, loadUserPosts, listFollowers, listFollowing ])
 );

@@ -1,6 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+
+import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';
 import Counter from './Counter';
 import Button from './Button';
 import PhotoUploader from './PhotoUploader';
@@ -11,10 +13,42 @@ if (process.env.BROWSER) {
 }
 
 export default class Summary extends Component {
+  genFollowingList() {
+    const people = this.props.person.following;
+    return this.genPeopleList(people, 'following')
+  }
+
+  genFollowerList() {
+    const people = this.props.person.followers;
+    return this.genPeopleList(people, 'follower')
+  }
+
+  genPeopleList(people, type) {
+    let list = [];
+
+    for(let id in people) {
+      const who = people[id][type];
+      const { isFriend } = people[id];
+      const username = parseUsername(who);
+      const profilePhotoUrl = parseProfilePhotoUrl(who);
+      list.push({
+        username,
+        profilePhotoUrl,
+        id,
+        isFriend
+      });
+    }
+
+    return list;
+  }
 
   render() {
     const { name, profilePhotoUrl, postNum, followerNum, followingNum, isFollowing, id } = this.props.person;
-    const isMyself = (this.props.userId === id);
+    const { userId, followUser, unfollowUser } = this.props;
+    // userId: id of logged-in user, id: id of the person of current page.
+    const isMyself = (userId === id);
+    const followerList = this.genFollowerList();
+    const followingList = this.genFollowingList();
 
     return (
       <div className='personal-summary-component'>
@@ -30,6 +64,11 @@ export default class Summary extends Component {
               <Counter
                 icon={ '/static/images/personal/personal-counter-like.png' }
                 count={followerNum}
+                showList={true}
+                list={followerList}
+                userId={userId}
+                followUser={followUser}
+                unfollowUser={unfollowUser}
               />
             </div>
             <Profile
@@ -40,6 +79,11 @@ export default class Summary extends Component {
                 icon={ '/static/images/personal/personal-counter-follower.png' }
                 iconPosition={ 'counter-right' }
                 count={followingNum}
+                showList={true}
+                list={followingList}
+                userId={userId}
+                followUser={followUser}
+                unfollowUser={unfollowUser}
               />
               {isMyself ?
                 <PhotoUploader /> :
@@ -47,8 +91,8 @@ export default class Summary extends Component {
                   isClicked={ isFollowing }
                   textIsUnclicked={ 'follow' }
                   textIsClicked={ 'unfollow' }
-                  handleWhenIsUnclicked={ this.props.followUser }
-                  handleWhenIsClicked={ this.props.unfollowUser }
+                  handleWhenIsUnclicked={ followUser.bind(this, id) }
+                  handleWhenIsClicked={ unfollowUser.bind(this, id) }
                 />
               }
             </div>

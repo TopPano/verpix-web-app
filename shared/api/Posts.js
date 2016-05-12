@@ -43,16 +43,18 @@ export default class PostsAPI extends Base {
     });
   }
 
-  likePost(id) {
+  likePost(userId, postId) {
     return this.apiClient.post({
-      url: `posts/${id}/like`,
+      url: `posts/${postId}/like`,
+      payload: { userId },
       authenticated: true
     });
   }
 
-  unlikePost(id) {
+  unlikePost(userId, postId) {
     return this.apiClient.post({
-      url: `posts/${id}/unlike`,
+      url: `posts/${postId}/unlike`,
+      payload: { userId },
       authenticated: true
     });
   }

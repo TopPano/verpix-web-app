@@ -19,7 +19,9 @@ class HeaderComponent extends Component {
               <Brand />
             </Col>
             <Col xs={4}>
-              <List {...this.props} />
+              {this.props.username &&
+                <List {...this.props} />
+              }
             </Col>
           </Row>
         </Grid>
@@ -31,10 +33,10 @@ class HeaderComponent extends Component {
 HeaderComponent.displayName = 'LayoutHeaderHeaderComponent';
 
 HeaderComponent.propTypes = {
-  username: PropTypes.string.isRequired,
-  profilePhotoUrl: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired,
-  logoutUser: PropTypes.func.isRequired
+  username: PropTypes.string,
+  profilePhotoUrl: PropTypes.string,
+  userId: PropTypes.string,
+  logoutUser: PropTypes.func
 };
 HeaderComponent.defaultProps = {
 };

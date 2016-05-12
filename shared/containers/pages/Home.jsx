@@ -15,7 +15,7 @@ class HomePageContainer extends Component {
   render() {
     const { isAuthenticated } = this.props.user;
     return (
-      <div>
+      <div style={{height: '100%'}}>
         {isAuthenticated &&
           <Home>
             {this.props.children}

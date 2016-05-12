@@ -1,0 +1,37 @@
+$photoWidth: 40px;
+
+.people-list-component {
+}
+  
+.modal.people-list-modal {
+  text-align: center;
+  &:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+
+  .modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    .people-list-item {
+      margin: 5px 0;
+      .people-list-item-photo {
+        border-radius: 50%;
+        width: $photoWidth;
+        height: $photoWidth;
+      }
+      .people-list-item-name {
+        color: black;
+        margin-left: 10px;
+      }
+      .button-component {
+        float: right;
+        margin: 6px 0;
+      }
+    }
+  }
+}
+

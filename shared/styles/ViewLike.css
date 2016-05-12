@@ -5,15 +5,19 @@ $likebtn-height: 30px;
   line-height: $likebtn-height;
   * {
     display: inline-block;
-    cursor: pointer;
   }
   .view-like-count {
     text-align: right;
     padding-right: 5px;
+    cursor: default;
+    &.view-like-count-clickable {
+      cursor: pointer;
+    }
   }
   .view-like-btn {
     width: $likebtn-height;
     height: $likebtn-height;
+    cursor: pointer;
   }
 }
 

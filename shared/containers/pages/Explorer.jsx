@@ -11,7 +11,10 @@ import Explorer from '../../components/Explorer.jsx';
 class ExplorerPageContainer extends ScrollablePageContainer {
   static propTyes = {
     children: PropTypes.object.isRequired,
-    explorer: PropTypes.object.isRequired
+    explorer: PropTypes.object.isRequired,
+    like: PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
+    isRequestingFollow: PropTypes.bool.isRequired
   };
 
   hasMoreContent() {
@@ -27,8 +30,19 @@ class ExplorerPageContainer extends ScrollablePageContainer {
   }
 
   render() {
+    const { explorer, userId, like, isRequestingFollow } = this.props;
     return (
-      <Explorer explorer={this.props.explorer.recent}>
+      <Explorer
+        explorer={explorer.recent}
+        userId={userId}
+        like={like}
+        isRequestingFollow={isRequestingFollow}
+        followUser={this.follow}
+        unfollowUser={this.unfollow}
+        likePost={this.like}
+        unlikePost={this.unlike}
+        getLikelist={this.getLikelist}
+      >
         {this.props.children}
       </Explorer>
     );
@@ -36,9 +50,15 @@ class ExplorerPageContainer extends ScrollablePageContainer {
 }
 
 function mapStateToProps(state) {
-  const { explorer } = state;
+  const { explorer, like } = state;
+  const { userId } = state.user;
+  // TODO: Please Fix: it is tricky to use state.person.isFetching to decide is user is requesting follow/unfollow now.
+  const isRequestingFollow = state.person.isFetching;
   return {
-    explorer
+    explorer,
+    like,
+    userId,
+    isRequestingFollow
   }
 }
 
