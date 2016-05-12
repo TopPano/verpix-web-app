@@ -7,7 +7,10 @@ import {
 import {
   FOLLOW_USER_REQUEST,
   FOLLOW_USER_SUCCESS,
-  FOLLOW_USER_FAILURE
+  FOLLOW_USER_FAILURE,
+  UNFOLLOW_USER_REQUEST,
+  UNFOLLOW_USER_SUCCESS,
+  UNFOLLOW_USER_FAILURE
 } from '../actions/user';
 
 const DEFAULT_STATE = {
@@ -22,6 +25,7 @@ export default function likeList(state=DEFAULT_STATE, action) {
   switch (action.type) {
     case SHOW_LIKE_LIST_REQUEST:
     case FOLLOW_USER_REQUEST:
+    case UNFOLLOW_USER_REQUEST:
       return merge({}, state, {
         isFetching: true
       });
@@ -40,7 +44,7 @@ export default function likeList(state=DEFAULT_STATE, action) {
           isFetching: false,
           list: {
             users: {
-              [aciton.followeeId]: {
+              [action.followeeId]: {
                 user: {
                   followers: [
                     {
@@ -56,8 +60,25 @@ export default function likeList(state=DEFAULT_STATE, action) {
         });
       }
       return state;
+    case UNFOLLOW_USER_SUCCESS:
+      if (state.list.users[action.followeeId]) {
+        return assign({}, state, {
+          isFetching: false,
+          list: {
+            users: {
+              [action.followeeId]: {
+                user: {
+                  followers: []
+                }
+              }
+            }
+          }
+        });
+      }
+      return state;
     case SHOW_LIKE_LIST_FAILURE:
     case FOLLOW_USER_FAILURE:
+    case UNFOLLOW_USER_FAILURE:
       return merge({}, state, {
         isFetching: false
       });
