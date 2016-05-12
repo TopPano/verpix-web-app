@@ -29,7 +29,6 @@ export default class Personal extends Component {
         <Gallery
           posts={person.posts.feedPosts}
           postIds={person.posts.feedIds}
-          isFetchingPosts={person.isFetching}
           maxWidth={500}
           ratio={2}
           userId={userId}

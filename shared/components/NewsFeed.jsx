@@ -13,7 +13,6 @@ export default class NewsFeed extends Component {
     newsFeed: PropTypes.object.isRequired,
     userId: PropTypes.string.isRequired,
     like: PropTypes.object.isRequired,
-    isRequestingFollow: PropTypes.bool.isRequired,
     followUser: PropTypes.func.isRequired,
     unfollowUser: PropTypes.func.isRequired,
     likePost: PropTypes.func.isRequired,
@@ -22,13 +21,12 @@ export default class NewsFeed extends Component {
   };
 
   render() {
-    const { newsFeed, like, userId, isRequestingFollow, likePost, unlikePost, followUser, unfollowUser, getLikelist } = this.props;
+    const { newsFeed, like, userId, likePost, unlikePost, followUser, unfollowUser, getLikelist } = this.props;
     return (
       <div className="newsfeed-component">
         <Gallery
           posts={newsFeed.posts.feedPosts}
           postIds={newsFeed.posts.feedIds}
-          isFetchingPosts={isRequestingFollow}
           maxWidth={500}
           ratio={2}
           userId={userId}

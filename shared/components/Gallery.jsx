@@ -78,28 +78,8 @@ export default class Gallery extends Component{
     return list;
   }
 
-  followUserAndUpdate = (userId) => {
-    this.props.followUser(userId);
-    this.waitUpdatePosts();
-  }
-
-  unfollowUserAndUpdate = (userId) => {
-    this.props.unfollowUser(userId);
-    this.waitUpdatePosts();
-  }
-
-  waitUpdatePosts = () => {
-    setTimeout(() => {
-      if(this.props.isFetchingPosts) {
-        this.waitUpdatePosts();
-      } else {
-        this.props.getLikelist(this.state.lastClickedPostId);
-      }
-    }, 50);
-  }
-
   render() {
-    const { posts, postIds, maxWidth, ratio, showAuthor, likePost, unlikePost } = this.props;
+    const { posts, postIds, maxWidth, ratio, showAuthor, likePost, unlikePost, followUser, unfollowUser } = this.props;
     let numPerRow = Math.ceil(this.state.containerWidth / maxWidth);
     let paddingLeft = 5, paddingRight = 5;
     let postWidth =
@@ -147,8 +127,8 @@ export default class Gallery extends Component{
           ref='peopleList'
           list={likelist}
           userId={userId}
-          followUser={this.followUserAndUpdate}
-          unfollowUser={this.unfollowUserAndUpdate}
+          followUser={followUser}
+          unfollowUser={unfollowUser}
         />
       </div>
     );
@@ -160,7 +140,6 @@ Gallery.displayName = 'Gallery';
 Gallery.propTypes = {
   posts: PropTypes.object.isRequired,
   postIds: PropTypes.array.isRequired,
-  isFetchingPosts: PropTypes.bool.isRequired,
   maxWidth: PropTypes.number.isRequired,
   ratio: PropTypes.number.isRequired,
   userId: PropTypes.string.isRequired,

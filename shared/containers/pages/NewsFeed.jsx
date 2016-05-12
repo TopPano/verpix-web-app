@@ -13,8 +13,7 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
     children: PropTypes.object.isRequired,
     newsFeed: PropTypes.object.isRequired,
     like: PropTypes.object.isRequired,
-    userId: PropTypes.string.isRequired,
-    isRequestingFollow: PropTypes.bool.isRequired
+    userId: PropTypes.string.isRequired
   };
 
   hasMoreContent() {
@@ -30,13 +29,12 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
   }
 
   render() {
-    const { newsFeed, userId, like, isRequestingFollow } = this.props;
+    const { newsFeed, userId, like } = this.props;
     return (
       <NewsFeed
         newsFeed={newsFeed}
         userId={userId}
         like={like}
-        isRequestingFollow={isRequestingFollow}
         followUser={this.follow}
         unfollowUser={this.unfollow}
         likePost={this.like}
@@ -52,13 +50,10 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
 function mapStateToProps(state) {
   const { newsFeed, like } = state;
   const { userId } = state.user;
-  // TODO: Please Fix: it is tricky to use state.person.isFetching to decide is user is requesting follow/unfollow now.
-  const isRequestingFollow = state.person.isFetching;
   return {
     newsFeed,
     like,
-    userId,
-    isRequestingFollow
+    userId
   }
 }
 

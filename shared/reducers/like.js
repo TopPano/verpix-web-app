@@ -62,17 +62,9 @@ export default function likeList(state=DEFAULT_STATE, action) {
       return state;
     case UNFOLLOW_USER_SUCCESS:
       if (state.list.users[action.followeeId]) {
+        state.list.users[action.followeeId].user.followers = [];
         return assign({}, state, {
-          isFetching: false,
-          list: {
-            users: {
-              [action.followeeId]: {
-                user: {
-                  followers: []
-                }
-              }
-            }
-          }
+          isFetching: false
         });
       }
       return state;
