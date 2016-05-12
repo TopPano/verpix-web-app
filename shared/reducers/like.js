@@ -28,6 +28,28 @@ export default function likeList(state=DEFAULT_STATE, action) {
           userIds: result
         }
       })
+    case FOLLOW_USER_SUCCESS:
+      if (state.list.users[action.followeeId]) {
+        return merge({}, state, {
+          isFetching: false,
+          list: {
+            users: {
+              [aciton.followeeId]: {
+                user: {
+                  followers: [
+                    {
+                      followerId: action.followerId,
+                      followeeId: action.followeeId,
+                      followAt: new Date()
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        });
+      }
+      return state;
     case SHOW_LIKE_LIST_FAILURE:
       return merge({}, state, {
         isFetching: false

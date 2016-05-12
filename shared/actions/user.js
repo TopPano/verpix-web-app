@@ -131,6 +131,7 @@ export function followUser(followerId, followeeId) {
     return api.users.follow(followerId, followeeId).then(() => {
       dispatch({
         type: FOLLOW_USER_SUCCESS,
+        followerId,
         followeeId
       });
     }).catch((error) => {
