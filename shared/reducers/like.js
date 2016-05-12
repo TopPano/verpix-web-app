@@ -4,6 +4,11 @@ import {
   SHOW_LIKE_LIST_SUCCESS,
   SHOW_LIKE_LIST_FAILURE
 } from '../actions/post';
+import {
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
+  FOLLOW_USER_FAILURE
+} from '../actions/user';
 
 const DEFAULT_STATE = {
   isFetching: false,
@@ -16,6 +21,7 @@ const DEFAULT_STATE = {
 export default function likeList(state=DEFAULT_STATE, action) {
   switch (action.type) {
     case SHOW_LIKE_LIST_REQUEST:
+    case FOLLOW_USER_REQUEST:
       return merge({}, state, {
         isFetching: true
       });
@@ -51,6 +57,7 @@ export default function likeList(state=DEFAULT_STATE, action) {
       }
       return state;
     case SHOW_LIKE_LIST_FAILURE:
+    case FOLLOW_USER_FAILURE:
       return merge({}, state, {
         isFetching: false
       });
