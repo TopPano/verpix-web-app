@@ -36,6 +36,18 @@ class PersonalPageContainer extends ScrollablePageContainer {
     }));
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.params.id !== this.props.params.id) {
+      // The id is changed, reload all state
+      const { dispatch } = this.props;
+      const { id } = nextProps.params;
+      dispatch(loadUserSummary({id}));
+      dispatch(loadUserPosts({userId: id}));
+      dispatch(listFollowers({id}));
+      dispatch(listFollowing({id}));
+    }
+  }
+
   render() {
     const { person, userId, like } = this.props;
     return (
