@@ -6,6 +6,7 @@ body {
   font-size: $text-font-rootsz;
   background-color: #fafafa;
   background-color: #E6E6FA;
+  overflow-y: scroll;
 }
 
 body * {
