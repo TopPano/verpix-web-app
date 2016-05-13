@@ -4,6 +4,7 @@ import {
   LOGIN_USER_REQUEST,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
+  FACEBOOK_TOKEN_LOGIN_SUCCESS,
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS
 } from '../actions/user';
@@ -28,7 +29,17 @@ export default function user(state=DEFAULT_STATE, action) {
         isAuthenticated: false
       });
     case LOGIN_USER_SUCCESS:
-      const { id, userId, created, user: { username, profilePhotoUrl, email } } = action.user;
+    case FACEBOOK_TOKEN_LOGIN_SUCCESS:
+      if (action.type === LOGIN_USER_SUCCESS) {
+        const { id, userId, created, user: { username, profilePhotoUrl, email } } = action.response;
+      } else {
+        const {
+          token: { id, userId, created },
+          user: { profilePhotoUrl, email },
+          identity: { profile: { displayName } }
+        } = action.response.auth;
+      }
+      let _username = username ? username : displayName;
       let _profilePhotoUrl = profilePhotoUrl ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL;
       // XXX: Though Reducer should be pure without any side effect, however, we need to make a copy of the
       //      user state in cookie in order for server to restore from it, so centralize the code here would
@@ -36,7 +47,7 @@ export default function user(state=DEFAULT_STATE, action) {
       //      Move these code to action creator (loginUser) if it has any side effect.
       document.cookie = cookie.serialize('accessToken', id, { path: '/', maxAge: 900000 });
       document.cookie = cookie.serialize('userId', userId, { path: '/', maxAge: 900000 });
-      document.cookie = cookie.serialize('username', username, { path: '/', maxAge: 900000 });
+      document.cookie = cookie.serialize('username', _username, { path: '/', maxAge: 900000 });
       document.cookie = cookie.serialize('profilePhotoUrl', _profilePhotoUrl, { path: '/', maxAge: 900000 });
       document.cookie = cookie.serialize('email', email, { path: '/', maxAge: 900000 });
       document.cookie = cookie.serialize('created', created, { path: '/', maxAge: 900000 });
@@ -44,7 +55,7 @@ export default function user(state=DEFAULT_STATE, action) {
         isFetching: false,
         isAuthenticated: true,
         userId,
-        username,
+        username: _username,
         profilePhotoUrl: _profilePhotoUrl,
         email,
         created

@@ -13,10 +13,10 @@ function requestLogin() {
   }
 }
 
-function loginSuccess(user) {
+function loginSuccess(actionType, response) {
   return {
-    type: LOGIN_USER_SUCCESS,
-    user
+    type: actionType,
+    response
   }
 }
 
@@ -48,7 +48,36 @@ export function loginUser(creds, successRedirectUrl='/') {
       }
       return res.json();
     }).then((data) => {
-      dispatch(loginSuccess(data));
+      dispatch(loginSuccess(LOGOUT_USER_SUCCESS, data));
+      dispatch(push(successRedirectUrl));
+    }).catch((err) => {
+      dispatch(loginError(err));
+    });
+  }
+}
+
+export const FACEBOOK_TOKEN_LOGIN_SUCCESS = 'FACEBOOK_TOKEN_LOGIN_SUCCESS';
+
+export function facebookTokenLogin(token, successRedirectUrl='/') {
+  return (dispatch) => {
+    if (!token) {
+      return dispatch(loginError('Missing Facebook Authentication Token'));
+    }
+
+    let init = {
+      method: 'get',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    dispatch(requestLogin());
+    fetch(`${config.apiRoot}/users/auth/facebook/token?include=user`, init).then((res) => {
+      if (res.status >= 400) {
+        return dispatch(loginError(res.statusText));
+      }
+      return res.json();
+    }).then((data) => {
+      dispatch(loginSuccess(FACEBOOK_TOKEN_LOGIN_SUCCESS, data));
       dispatch(push(successRedirectUrl));
     }).catch((err) => {
       dispatch(loginError(err));
