@@ -60,16 +60,18 @@ export default function user(state=DEFAULT_STATE, action) {
         isFetching: true,
         isAuthenticated: false
       });
-    case LOGIN_USER_SUCCESS:
+    case LOGIN_USER_SUCCESS: {
       const { id, userId, created, user: { username, profilePhotoUrl, email } } = action.response;
       return updateStateForLoginSuccess(state, id, userId, username, profilePhotoUrl, email, created);
-    case FACEBOOK_TOKEN_LOGIN_SUCCESS:
+    }
+    case FACEBOOK_TOKEN_LOGIN_SUCCESS: {
       const {
         token: { id, userId, created },
         user: { profilePhotoUrl, email },
         identity: { profile: { displayName } }
       } = action.response.auth;
       return updateStateForLoginSuccess(state, id, userId, displayName, profilePhotoUrl, email, created);
+    }
     case LOGOUT_USER_SUCCESS:
       let expireDate = new Date(0);
       document.cookie = cookie.serialize('accessToken', '', { expires: expireDate });

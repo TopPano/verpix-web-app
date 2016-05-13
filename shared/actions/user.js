@@ -48,7 +48,7 @@ export function loginUser(creds, successRedirectUrl='/') {
       }
       return res.json();
     }).then((data) => {
-      dispatch(loginSuccess(LOGOUT_USER_SUCCESS, data));
+      dispatch(loginSuccess(LOGIN_USER_SUCCESS, data));
       dispatch(push(successRedirectUrl));
     }).catch((err) => {
       dispatch(loginError(err));
