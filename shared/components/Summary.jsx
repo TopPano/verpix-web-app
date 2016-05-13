@@ -43,7 +43,7 @@ export default class Summary extends Component {
   }
 
   render() {
-    const { name, profilePhotoUrl, postNum, followerNum, followingNum, isFollowing, id } = this.props.person;
+    const { username, profilePhotoUrl, postNum, followerNum, followingNum, isFollowing, id } = this.props.person;
     const { userId, followUser, unfollowUser } = this.props;
     // userId: id of logged-in user, id: id of the person of current page.
     const isMyself = (userId === id);
@@ -97,7 +97,7 @@ export default class Summary extends Component {
               }
             </div>
           </div>
-          <div className='personal-summary-name'>{name}</div>
+          <div className='personal-summary-name'>{username}</div>
         </div>
       </div>
     );
