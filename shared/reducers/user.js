@@ -20,6 +20,38 @@ const DEFAULT_STATE = {
   created: undefined
 };
 
+function updateStateForLoginSuccess(
+  state,
+  accessToken,
+  userId,
+  username,
+  profilePhotoUrl,
+  email,
+  created
+) {
+  let _profilePhotoUrl = profilePhotoUrl ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL;
+
+  // XXX: Though Reducer should be pure without any side effect, however, we need to make a copy of the
+  //      user state in cookie in order for server to restore from it, so centralize the code here would
+  //      be clean.
+  //      Move these code to action creator (loginUser) if it has any side effect.
+  document.cookie = cookie.serialize('accessToken', accessToken, { path: '/', maxAge: 900000 });
+  document.cookie = cookie.serialize('userId', userId, { path: '/', maxAge: 900000 });
+  document.cookie = cookie.serialize('username', username, { path: '/', maxAge: 900000 });
+  document.cookie = cookie.serialize('profilePhotoUrl', _profilePhotoUrl, { path: '/', maxAge: 900000 });
+  document.cookie = cookie.serialize('email', email, { path: '/', maxAge: 900000 });
+  document.cookie = cookie.serialize('created', created, { path: '/', maxAge: 900000 });
+  return merge({}, state, {
+    isFetching: false,
+    isAuthenticated: true,
+    userId,
+    username,
+    profilePhotoUrl: _profilePhotoUrl,
+    email,
+    created
+  });
+}
+
 export default function user(state=DEFAULT_STATE, action) {
   switch (action.type) {
     case LOGIN_USER_REQUEST:
@@ -29,37 +61,15 @@ export default function user(state=DEFAULT_STATE, action) {
         isAuthenticated: false
       });
     case LOGIN_USER_SUCCESS:
+      const { id, userId, created, user: { username, profilePhotoUrl, email } } = action.response;
+      return updateStateForLoginSuccess(state, id, userId, username, profilePhotoUrl, email, created);
     case FACEBOOK_TOKEN_LOGIN_SUCCESS:
-      if (action.type === LOGIN_USER_SUCCESS) {
-        const { id, userId, created, user: { username, profilePhotoUrl, email } } = action.response;
-      } else {
-        const {
-          token: { id, userId, created },
-          user: { profilePhotoUrl, email },
-          identity: { profile: { displayName } }
-        } = action.response.auth;
-      }
-      let _username = username ? username : displayName;
-      let _profilePhotoUrl = profilePhotoUrl ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL;
-      // XXX: Though Reducer should be pure without any side effect, however, we need to make a copy of the
-      //      user state in cookie in order for server to restore from it, so centralize the code here would
-      //      be clean.
-      //      Move these code to action creator (loginUser) if it has any side effect.
-      document.cookie = cookie.serialize('accessToken', id, { path: '/', maxAge: 900000 });
-      document.cookie = cookie.serialize('userId', userId, { path: '/', maxAge: 900000 });
-      document.cookie = cookie.serialize('username', _username, { path: '/', maxAge: 900000 });
-      document.cookie = cookie.serialize('profilePhotoUrl', _profilePhotoUrl, { path: '/', maxAge: 900000 });
-      document.cookie = cookie.serialize('email', email, { path: '/', maxAge: 900000 });
-      document.cookie = cookie.serialize('created', created, { path: '/', maxAge: 900000 });
-      return merge({}, state, {
-        isFetching: false,
-        isAuthenticated: true,
-        userId,
-        username: _username,
-        profilePhotoUrl: _profilePhotoUrl,
-        email,
-        created
-      });
+      const {
+        token: { id, userId, created },
+        user: { profilePhotoUrl, email },
+        identity: { profile: { displayName } }
+      } = action.response.auth;
+      return updateStateForLoginSuccess(state, id, userId, displayName, profilePhotoUrl, email, created);
     case LOGOUT_USER_SUCCESS:
       let expireDate = new Date(0);
       document.cookie = cookie.serialize('accessToken', '', { expires: expireDate });
