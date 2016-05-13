@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
 import ViewAuthor from './ViewAuthor.jsx';
@@ -16,14 +17,14 @@ export default class View extends Component {
   }
 
   render() {
-    const { linkUrl, imgUrl, width, height, showAuthor, authorPhotoUrl, authorName, authorId, count, isLiked } = this.props;
+    const { postId, imgUrl, width, height, showAuthor, authorPhotoUrl, authorName, authorId, count, isLiked } = this.props;
     const { likePost, unlikePost, showLikelist } = this.props;
 
     return (
       <div className='view-component'>
-        <a href={linkUrl}>
+        <Link to={'viewer/@' + postId}>
           <img className='view-preview' src={imgUrl} width={width} height={height} alt='preview' />
-        </a>
+        </Link>
         {showAuthor &&
           <ViewAuthor
             authorPhotoUrl={authorPhotoUrl}
@@ -46,7 +47,7 @@ export default class View extends Component {
 View.displayName = 'ItemView';
 
 View.propTypes = {
-  linkUrl: PropTypes.string.isRequired,
+  postId: PropTypes.string.isRequired,
   imgUrl: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,

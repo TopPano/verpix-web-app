@@ -1,7 +1,22 @@
+@import '../common/variables.css';
+
 .gallery-component {
   overflow: hidden;
   .gallery-wrapper {
     max-width: 100%;
     margin: 0 auto;
+  }
+  .gallery-more-btn {
+    height: 50px;
+    width: 50px;
+    position: fixed;
+    bottom: $footer-height;
+    left: 50%;
+    background-image: url('/static/images/load-more-btn.png');
+    background-size: 100% 100%;
+    background-color: white;
+    border-radius: 50%;
+    transform: rotate(90deg) translateY(50%);
+    cursor: pointer;
   }
 }

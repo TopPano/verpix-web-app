@@ -20,7 +20,11 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
     return this.props.newsFeed.posts.hasNext;
   }
 
-  loadMoreContent() {
+  isFetchingContent() {
+    return this.props.newsFeed.isFetching;
+  }
+
+  requestMoreContent() {
     const { dispatch } = this.props;
     const { posts } = this.props.newsFeed;
     dispatch(loadNewsFeed({
@@ -40,6 +44,7 @@ class NewsFeedPageContainer extends ScrollablePageContainer {
         likePost={this.like}
         unlikePost={this.unlike}
         getLikelist={this.getLikelist}
+        loadMorePosts={this.loadMoreContent}
       >
         {this.props.children}
       </NewsFeed>

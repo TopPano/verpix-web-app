@@ -22,7 +22,11 @@ class PersonalPageContainer extends ScrollablePageContainer {
     return this.props.person.posts.hasNext;
   }
 
-  loadMoreContent() {
+  isFetchingContent() {
+    return this.props.person.isFetching;
+  }
+
+  requestMoreContent() {
     const { dispatch } = this.props;
     const { id } = this.props.person;
     const { lastPostId } = this.props.person.posts;
@@ -32,18 +36,55 @@ class PersonalPageContainer extends ScrollablePageContainer {
     }));
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.params.id !== this.props.params.id) {
+      // The id is changed, reload all state
+      const { dispatch } = this.props;
+      const { id } = nextProps.params;
+      dispatch(loadUserSummary({id}));
+      dispatch(loadUserPosts({userId: id}));
+      dispatch(listFollowers({id}));
+      dispatch(listFollowing({id}));
+    }
+  }
+
+  followAndUpdate = (followeeId) => {
+    this.follow(followeeId);
+    this.updateFollowerList();
+  }
+
+  unfollowAndUpdate = (followeeId) => {
+    this.unfollow(followeeId);
+    this.updateFollowerList();
+  }
+
+  updateFollowerList = () => {
+    setTimeout(() => {
+      if(this.props.person.isFetching) {
+        this.updateFollowerList();
+      } else {
+        const { dispatch } = this.props;
+        const { id } = this.props.person;
+        dispatch(loadUserSummary({id}));
+        dispatch(listFollowing({id}));
+      }
+    });
+  }
+
   render() {
     const { person, userId, like } = this.props;
+    const isMyself = userId === person.id;
     return (
       <Personal
         person={person}
         userId={userId}
         like={like}
-        followUser={this.follow}
-        unfollowUser={this.unfollow}
+        followUser={isMyself ? this.followAndUpdate : this.follow}
+        unfollowUser={isMyself ? this.unfollowAndUpdate : this.unfollow}
         likePost={this.like}
         unlikePost={this.unlike}
         getLikelist={this.getLikelist}
+        loadMorePosts={this.loadMoreContent}
       >
         {this.props.children}
       </Personal>

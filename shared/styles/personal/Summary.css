@@ -37,6 +37,7 @@
       }
     }
     .personal-summary-name {
+      font-weight: bold;
       text-align: center;
       padding-top: $personal-profilename-padding;
     }

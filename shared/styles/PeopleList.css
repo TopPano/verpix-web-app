@@ -26,6 +26,7 @@ $photoWidth: 40px;
       .people-list-item-name {
         color: black;
         margin-left: 10px;
+        text-decoration: none;
       }
       .button-component {
         float: right;
