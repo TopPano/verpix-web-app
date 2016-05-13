@@ -96,14 +96,13 @@ export default class Gallery extends Component{
 
     postIds.map((id, k) => {
       const { sid, thumbnailUrl, likes, ownerInfo } = posts[id];
-      const linkUrl = 'http://dev.verpix.net/?post=' + sid;
       const authorName = parseUsername(ownerInfo);
       const authorPhotoUrl = parseProfilePhotoUrl(ownerInfo);
 
       previews.push(
         <View
           key={k}
-          linkUrl={linkUrl}
+          postId={sid}
           imgUrl={thumbnailUrl}
           count={likes.count}
           isLiked={likes.isLiked}
