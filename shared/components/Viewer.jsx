@@ -1,8 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-
-import { VIEWER_URL } from '../lib/const';
+import startViewer from '../lib/viewer.js';
 
 if (process.env.BROWSER) {
   require('styles/Viewer.css');
@@ -15,23 +14,29 @@ export default class Viewer extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+    }
+  }
+
+  componentDidMount() {
+    if (process.env.BROWSER) {
+      let params = {
+        modelId: this.props.postId,
+        center: {
+          lat: 0,
+          lng: 30
+        },
+        zoom: 70,
+        canvas: 'container'
+      };
+      startViewer(params);
+    }
   }
 
   render() {
-    const { postId } = this.props;
-    const url = VIEWER_URL + '?post=' + postId;
     return (
       <div className="viewer-component">
-        <iframe
-          src={url}
-          width='100%'
-          height='100%'
-          style={{border: 'none'}}
-          webkitAllowFullScreen
-          mozAllowFullScreen
-          allowFullScreen
-        >
-        </iframe>
+        <div id='container' />
       </div>
     );
   }
