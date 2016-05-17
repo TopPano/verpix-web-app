@@ -29,8 +29,8 @@ export default class PeopleList extends Component {
       const isMyself = (userId === id);
       peopleList.push(
         <div key={k} className='people-list-item'>
-          <Link to={'@' + id} onClick={this.hideList}><img className='people-list-item-photo' src={profilePhotoUrl} /></Link>
-          <Link to={'@' + id} onClick={this.hideList} className='people-list-item-name'>{username}</Link>
+          <Link to={'/@' + id} onClick={this.hideList}><img className='people-list-item-photo' src={profilePhotoUrl} /></Link>
+          <Link to={'/@' + id} onClick={this.hideList} className='people-list-item-name'>{username}</Link>
           {!isMyself &&
             <Button
               isClicked={isFriend}

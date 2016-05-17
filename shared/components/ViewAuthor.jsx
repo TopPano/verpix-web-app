@@ -16,8 +16,8 @@ export default class ViewAuthor extends Component {
     const { authorPhotoUrl, authorName, authorId } = this.props;
     return (
       <div className='view-author-component'>
-        <Link to={'@' + authorId}><img className='view-author-photo' src={authorPhotoUrl}/></Link>
-        <Link to={'@' + authorId} className='view-author-name'>{authorName}</Link>
+        <Link to={'/@' + authorId}><img className='view-author-photo' src={authorPhotoUrl}/></Link>
+        <Link to={'/@' + authorId} className='view-author-name'>{authorName}</Link>
       </div>
     );
   }

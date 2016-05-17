@@ -35,7 +35,7 @@ export default class UserMenu extends Component {
         <div className='usermenu-profile'>
           <img className='usermenu-profile-photo' src={profilePhotoUrl} />
           <span className='usermenu-profile-name'>{username}</span>
-          <Link to={'@' + userId} onClick={this.handleClickGohome}><img className='usermenu-profile-gohome' src='/static/images/usermenu-gohome.png' /></Link>
+          <Link to={'/@' + userId} onClick={this.handleClickGohome}><img className='usermenu-profile-gohome' src='/static/images/usermenu-gohome.png' /></Link>
         </div>
         <Link className='usermenu-logout' to={'/'} onClick={this.handleClickLogout}>{'LOG OUT'}</Link>
       </Popover>

@@ -22,7 +22,7 @@ export default class View extends Component {
 
     return (
       <div className='view-component'>
-        <Link to={'viewer/@' + postId}>
+        <Link to={'/viewer/@' + postId}>
           <img className='view-preview' src={imgUrl} width={width} height={height} alt='preview' />
         </Link>
         {showAuthor &&
