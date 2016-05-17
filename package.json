@@ -76,6 +76,7 @@
     "cookie": "^0.2.3",
     "cookie-parser": "^1.4.1",
     "core-js": "^2.0.0",
+    "is-empty": "^1.0.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.11.1",
     "normalize.css": "^3.0.3",
@@ -89,6 +90,7 @@
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
     "screenfull": "^3.0.0",
-    "three": "^0.76.1"
+    "three": "^0.76.1",
+    "validator": "^5.2.0"
   }
 }

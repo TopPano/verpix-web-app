@@ -29,8 +29,12 @@ $buttonWidth: 272px;
     .join-main {
       background-image: url('/static/images/login/join-caption.png');
     }
+    .err-main {
+      background-image: url('/static/images/login/err-caption.png');
+    }
     .login-main,
-    .join-main {
+    .join-main,
+    .err-main {
       max-width: 100%;
       display: flex;
       flex-direction: column;
@@ -52,6 +56,7 @@ $buttonWidth: 272px;
         margin-bottom: 15px;
         text-align: center;
         line-height: 20px;
+        white-space: pre;
       }
       input {
         width: $inputWidth;
@@ -74,9 +79,7 @@ $buttonWidth: 272px;
         line-height: 45px;
         text-align: center;
         cursor: pointer;
-        &.login-submit {
-          background-color: #E93F3F;
-        }
+        background-color: #E93F3F;
         &.login-facebook {
           height: 66px;
           line-height: 66px;

@@ -2,6 +2,11 @@
 
 import React, { Component, PropTypes } from 'react';
 import FacebookLogin from 'react-facebook-login';
+import { merge, trim } from 'lodash';
+import { isEmail } from 'validator';
+import isEmpty from 'is-empty';
+
+import { LOGIN_ERR_MSG } from '../lib/const';
 
 if (process.env.BROWSER) {
   require('styles/Login.css');
@@ -11,8 +16,17 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isInLogin: true,
-      fbLoginStatus: null
+      isInLogin: false,
+      isInErr: false,
+      errMsg: '',
+      inputs: {
+        loginEmail: '',
+        loginPasswd: '',
+        joinName: '',
+        joinEmail: '',
+        joinPasswd: '',
+        joinPasswdAgain: ''
+      }
     }
   }
 
@@ -21,19 +35,79 @@ export default class Login extends Component {
     facebookLogin: PropTypes.func.isRequired
   };
 
+  handleInputChange = (input) => {
+    this.setState(merge({}, this.state, {
+      inputs: {
+        [input]: trim(this.refs[input].value)
+      }
+    }));
+  }
+
   handleFacebookLogin = (response) => {
     this.props.facebookLogin(response.accessToken);
   }
 
   handleSubmitLogin = (e) => {
     e.preventDefault();
-    const email = this.refs.loginEmail.value.trim();
-    const password = this.refs.loginPass.value.trim();
-    this.props.loginUser(email, password);
+    const { inputs } = this.state;
+    const email = inputs.loginEmail;
+    const passwd = inputs.loginPasswd;
+
+    if(isEmpty(email)) {
+      this.showErrMsg(LOGIN_ERR_MSG.EMAIL.EMPTY);
+      return;
+    }
+    if(!isEmail(email)) {
+      this.showErrMsg(LOGIN_ERR_MSG.EMAIL.INVALID);
+      return;
+    }
+    if(isEmpty(passwd)) {
+      this.showErrMsg(LOGIN_ERR_MSG.PASSWORD.EMPTY);
+      return;
+    }
+    this.props.loginUser(email, passwd);
   }
 
   handleSubmitJoin = (e) => {
     e.preventDefault();
+    const { inputs } = this.state;
+    const name = inputs.joinName;
+    const email = inputs.joinEmail;
+    const passwd = inputs.joinPasswd;
+    const passwdAgain = inputs.joinPasswdAgain;
+
+    if(isEmpty(name)) {
+      this.showErrMsg(LOGIN_ERR_MSG.USERNAME.EMPTY);
+      return;
+    }
+    if(!this.isValidName(name)) {
+      this.showErrMsg(LOGIN_ERR_MSG.USERNAME.INVALID);
+      return;
+    }
+    if(isEmpty(email)) {
+      this.showErrMsg(LOGIN_ERR_MSG.EMAIL.EMPTY);
+      return;
+    }
+    if(!isEmail(email)) {
+      this.showErrMsg(LOGIN_ERR_MSG.EMAIL.INVALID);
+      return;
+    }
+    if(isEmpty(passwd) || isEmpty(passwdAgain)) {
+      this.showErrMsg(LOGIN_ERR_MSG.PASSWORD.EMPTY);
+      return;
+    }
+    if(passwd !== passwdAgain) {
+      this.showErrMsg(LOGIN_ERR_MSG.PASSWORD.NOT_MATCHED);
+      return;
+    }
+    // TODO: this.props.signupUser(name, email, passwd);
+  }
+
+  handleExitErr = (e) => {
+    e.preventDefault();
+    this.setState({
+      isInErr: false
+    });
   }
 
   gotoJoin = (e) => {
@@ -43,7 +117,21 @@ export default class Login extends Component {
     });
   }
 
+  showErrMsg = (msg) => {
+    this.setState({
+      isInErr: true,
+      errMsg: msg
+    });
+  }
+
+  isValidName(name) {
+    const regex = new RegExp('[a-z]+((.|_)?[a-z0-9])+'),
+          result = regex.exec(name);
+    return result && result[0] === name;
+  }
+
   render() {
+    const { isInErr, isInLogin, inputs } = this.state;
     const fbBtn =
       <FacebookLogin
         appId='589634317860022'
@@ -51,34 +139,44 @@ export default class Login extends Component {
         scope={'publish_actions'}
         callback={this.handleFacebookLogin}
         cssClass='login-facebook'
-        textButton={'Log in with Facebook'}
+        textButton={isInLogin ? 'Log in with Facebook' : 'Join with Facebook'}
       />;
+    const login =
+      <div className='login-main'>
+        {fbBtn}
+        <div className='login-text'>or Log in with email</div>
+        <form className='login-form' onSubmit={this.handleSubmitLogin}>
+          <input type='email' ref='loginEmail' placeholder='Email' onChange={this.handleInputChange.bind(this, 'loginEmail')} value={inputs.loginEmail} />
+          <input type='password' ref='loginPasswd' placeholder='Password' onChange={this.handleInputChange.bind(this, 'loginPasswd')} value={inputs.loginPasswd} />
+          <button type='submit'>LOG IN</button>
+        </form>
+        <button className='login-goto-join' onClick={this.gotoJoin}>JOIN NOW</button>
+      </div>;
+    const join =
+      <div className='join-main'>
+        {fbBtn}
+        <div className='login-text'>or Join with email</div>
+        <form className='login-form' onSubmit={this.handleSubmitJoin}>
+          <input type='text' ref='joinName' placeholder='Your name' onChange={this.handleInputChange.bind(this, 'joinName')} value={inputs.joinName} />
+          <input type='email' ref='joinEmail' placeholder='Email' onChange={this.handleInputChange.bind(this, 'joinEmail')} value={inputs.joinEmail} />
+          <input type='password' ref='joinPasswd' placeholder='Password' onChange={this.handleInputChange.bind(this, 'joinPasswd')} value={inputs.joinPasswd} />
+          <input type='password' ref='joinPasswdAgain' placeholder='Confirm password' onChange={this.handleInputChange.bind(this, 'joinPasswdAgain')} value={inputs.joinPasswdAgain} />
+          <button type='submit'>JOIN</button>
+        </form>
+      </div>;
+    const err =
+      <div className='err-main'>
+        <form className='login-form' onSubmit={this.handleExitErr}>
+          <div className='login-text'>{this.state.errMsg}</div>
+          <button>GO BACK</button>
+        </form>
+      </div>;
+    const output = isInErr ? err : (isInLogin ? login : join);
+
     return (
       <div className='login-component'>
         <div className='login-wrapper'>
-          {this.state.isInLogin ?
-            <div className='login-main'>
-              {fbBtn}
-              <div className='login-text'>or Log in with email</div>
-              <form className='login-form' onSubmit={this.handleSubmitLogin}>
-                <input type='email' ref='loginEmail' placeholder='email' />
-                <input type='password' ref='loginPass' placeholder='password' />
-                <button className='login-submit' type='submit'>LOG IN</button>
-              </form>
-              <button className='login-goto-join' onClick={this.gotoJoin}>JOIN NOW</button>
-            </div> :
-            <div className='join-main'>
-              {fbBtn}
-              <div className='login-text'>or Join with email</div>
-              <form className='login-form' onSubmit={this.handleSubmitJoin}>
-                <input type='text' ref='joinName' placeholder='username' />
-                <input type='email' ref='joinEmail' placeholder='email' />
-                <input type='password' ref='loginPass' placeholder='password' />
-                <input type='password' ref='loginPassAgain' placeholder='retype password' />
-                <button className='login-submit' type='submit'>JOIN</button>
-              </form>
-            </div>
-          }
+          {output}
         </div>
       </div>
     );
