@@ -16,7 +16,7 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isInLogin: false,
+      isInLogin: true,
       isInErr: false,
       errMsg: '',
       inputs: {
@@ -31,9 +31,24 @@ export default class Login extends Component {
   }
 
   static propTyes = {
+    user: PropTypes.object.isRequired,
     loginUser: PropTypes.func.isRequired,
-    facebookLogin: PropTypes.func.isRequired
+    facebookLogin: PropTypes.func.isRequired,
+    cleanErrMsg: PropTypes.func.isRequired
   };
+
+  componentDidUpdate() {
+    const { errorMessage } = this.props.user;
+    const { cleanErrMsg } = this.props;
+    if(!this.state.isInErr && errorMessage) {
+      cleanErrMsg();
+      if(errorMessage === 'Unauthorized') {
+        this.showErrMsg(LOGIN_ERR_MSG.AJAX.UNAUTHORIZD);
+      } else {
+        this.showErrMsg(LOGIN_ERR_MSG.AJAX.OTHERS);
+      }
+    }
+  }
 
   handleInputChange = (input) => {
     this.setState(merge({}, this.state, {

@@ -1,12 +1,17 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Login from '../../components/Login';
-import { loginUser, facebookTokenLogin } from '../../actions/user';
+import { loginUser, facebookTokenLogin, resetErrMsg } from '../../actions/user';
 
 class LoginPageContainer extends Component {
+  static propTyes = {
+    children: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
+  };
+
   login = (email, password) => {
     this.props.dispatch(loginUser({email, password}));
   }
@@ -15,11 +20,27 @@ class LoginPageContainer extends Component {
     this.props.dispatch(facebookTokenLogin(token));
   }
 
+  cleanErrMsg = () => {
+    this.props.dispatch(resetErrMsg());
+  }
+
   render() {
     return (
-      <Login loginUser={this.login} facebookLogin={this.facebookLogin} />
+      <Login
+        user={this.props.user}
+        loginUser={this.login}
+        facebookLogin={this.facebookLogin}
+        cleanErrMsg={this.cleanErrMsg}
+      />
     );
   }
 }
 
-export default connect()(LoginPageContainer);
+function mapStateToProps(state) {
+  const { user } = state;
+  return {
+    user
+  }
+}
+
+export default connect(mapStateToProps)(LoginPageContainer);

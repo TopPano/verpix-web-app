@@ -5,6 +5,7 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
   FACEBOOK_TOKEN_LOGIN_SUCCESS,
+  RESET_USER_ERROR_MESSAGE,
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS
 } from '../actions/user';
@@ -17,7 +18,8 @@ const DEFAULT_STATE = {
   username: undefined,
   profilePhotoUrl: undefined,
   email: undefined,
-  created: undefined
+  created: undefined,
+  errorMessage: undefined
 };
 
 function updateStateForLoginSuccess(
@@ -41,14 +43,15 @@ function updateStateForLoginSuccess(
   document.cookie = cookie.serialize('profilePhotoUrl', _profilePhotoUrl, { path: '/', maxAge: 900000 });
   document.cookie = cookie.serialize('email', email, { path: '/', maxAge: 900000 });
   document.cookie = cookie.serialize('created', created, { path: '/', maxAge: 900000 });
-  return merge({}, state, {
+  return assign({}, state, {
     isFetching: false,
     isAuthenticated: true,
     userId,
     username,
     profilePhotoUrl: _profilePhotoUrl,
     email,
-    created
+    created,
+    errorMessage: undefined
   });
 }
 
@@ -87,7 +90,8 @@ export default function user(state=DEFAULT_STATE, action) {
         username: undefined,
         profilePhotoUrl: undefined,
         email: undefined,
-        created: undefined
+        created: undefined,
+        errorMessage: undefined
       });
     case LOGIN_USER_FAILURE:
       return merge({}, state, {
@@ -95,6 +99,11 @@ export default function user(state=DEFAULT_STATE, action) {
         isAuthenticated: false,
         errorMessage: action.message
       });
+    case RESET_USER_ERROR_MESSAGE:
+      if(state.errorMessage) {
+        state.errorMessage = undefined;
+      }
+      return state;
     default:
       return state;
   }

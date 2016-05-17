@@ -39,19 +39,19 @@ function handleRender(req, res) {
   if (accessToken) {
     // restore the client state
     initState.user = {
+      isFetching: false,
       isAuthenticated: true,
       userId: req.cookies.userId,
       username: req.cookies.username,
-      created: req.cookies.created,
       profilePhotoUrl: req.cookies.profilePhotoUrl,
-      email: req.cookies.email
+      email: req.cookies.email,
+      created: req.cookies.created
     };
   } else {
     // it's not allow to access pages other than Home without authentication
     if (!req.url.match(/^\/$/ig)) {
       return res.redirect(302, '/');
     }
-    initState.user = { isAuthenticated: false }
   }
 
   const store = configureStore(initState);

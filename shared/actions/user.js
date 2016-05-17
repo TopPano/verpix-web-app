@@ -44,12 +44,15 @@ export function loginUser(creds, successRedirectUrl='/') {
     dispatch(requestLogin());
     fetch(`${config.apiRoot}/users/login?include=user`, init).then((res) => {
       if (res.status >= 400) {
-        return dispatch(loginError(res.statusText));
+        dispatch(loginError(res.statusText));
+        return null;
       }
       return res.json();
     }).then((data) => {
-      dispatch(loginSuccess(LOGIN_USER_SUCCESS, data));
-      dispatch(push(successRedirectUrl));
+      if(data) {
+        dispatch(loginSuccess(LOGIN_USER_SUCCESS, data));
+        dispatch(push(successRedirectUrl));
+      }
     }).catch((err) => {
       dispatch(loginError(err));
     });
@@ -73,14 +76,27 @@ export function facebookTokenLogin(token, successRedirectUrl='/') {
     dispatch(requestLogin());
     fetch(`${config.apiRoot}/users/auth/facebook/token?include=user`, init).then((res) => {
       if (res.status >= 400) {
-        return dispatch(loginError(res.statusText));
+        dispatch(loginError(res.statusText));
+        return null;
       }
       return res.json();
     }).then((data) => {
-      dispatch(loginSuccess(FACEBOOK_TOKEN_LOGIN_SUCCESS, data));
-      dispatch(push(successRedirectUrl));
+      if(data) {
+        dispatch(loginSuccess(FACEBOOK_TOKEN_LOGIN_SUCCESS, data));
+        dispatch(push(successRedirectUrl));
+      }
     }).catch((err) => {
       dispatch(loginError(err));
+    });
+  }
+}
+
+export const RESET_USER_ERROR_MESSAGE = 'RESET_USER_ERROR_MESSAGE';
+
+export function resetErrMsg() {
+  return (dispatch) => {
+    dispatch({
+      type: RESET_USER_ERROR_MESSAGE
     });
   }
 }
