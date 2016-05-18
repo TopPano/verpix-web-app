@@ -1,6 +1,10 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Base64 } from 'js-base64';
+import queryString from 'query-string';
+
+import { DEFAULT_VIEWER_OPTIONS } from '../lib/const';
 import startViewer from '../lib/viewer.js';
 
 if (process.env.BROWSER) {
@@ -9,7 +13,8 @@ if (process.env.BROWSER) {
 
 export default class Viewer extends Component {
   static propTyes = {
-    postId: PropTypes.string.isRequired
+    postId: PropTypes.string.isRequired,
+    options: PropTypes.object.isRequird
   }
 
   constructor(props) {
@@ -20,13 +25,16 @@ export default class Viewer extends Component {
 
   componentDidMount() {
     if (process.env.BROWSER) {
-      let params = {
+      const queryStr = Base64.decode(location.search.substr(1));
+      const querys = queryString.parse(queryStr);
+      const { options } = this.props;
+      const params = {
         modelId: this.props.postId,
-        center: {
-          lat: 0,
-          lng: 30
+        cam: {
+          lat: querys.lat ? querys.lat : (options.lat ? options.lat : DEFAULT_VIEWER_OPTIONS.LAT),
+          lng: querys.lng ? querys.lng : (options.lng ? options.lng : DEFAULT_VIEWER_OPTIONS.LNG),
+          fov: querys.fov ? querys.fov : (options.fov ? options.fov : DEFAULT_VIEWER_OPTIONS.FOV)
         },
-        zoom: 70,
         canvas: 'container'
       };
       startViewer(params);

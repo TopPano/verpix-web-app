@@ -1,5 +1,11 @@
 export const DEFAULT_PROFILE_PHOTO_URL = '/static/images/profile-photo-default.png';
 
+export const DEFAULT_VIEWER_OPTIONS = {
+  LAT: 0,
+  LNG: 30,
+  FOV: 70
+}
+
 export const LOGIN_ERR_MSG = {
   USERNAME: {
     EMPTY: 'Please enter your name.',

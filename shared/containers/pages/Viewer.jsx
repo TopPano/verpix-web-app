@@ -9,7 +9,7 @@ class ViewerPageContainer extends Component {
   render() {
     const { postId } = this.props.params;
     return (
-      <Viewer postId={postId}/>
+      <Viewer postId={postId} options={{}}/>
     );
   }
 }
