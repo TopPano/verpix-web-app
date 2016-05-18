@@ -12,13 +12,17 @@ if (process.env.BROWSER) {
 
 export default class MainLayout extends Component {
   static propTypes = {
-    children: PropTypes.object
+    children: PropTypes.object,
+    isAuthenticated: PropTypes.bool.isRequired,
+    currentLocation: PropTypes.string.isRequired
   };
 
   render() {
+    const { isAuthenticated, currentLocation } = this.props;
+    const isInLoginPage = !isAuthenticated && (currentLocation === '/');
     return (
       <div>
-        <HeaderContainer />
+        {!isInLoginPage && <HeaderContainer /> }
           <Content>
             {this.props.children}
           </Content>

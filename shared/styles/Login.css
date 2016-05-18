@@ -1,37 +1,36 @@
 @import './common/variables.css';
 
-$inputWidth: 305px;
-$buttonWidth: 272px;
+$input-width: 305px;
+$button-width: 272px;
+$show-main-bg-min-width: 820px;
+$bg-min-height: 600px;
+$bg-min-width: 1062px;
 
 .login-component {
+  margin-top: -$header-height;
   width: 177vh;
   min-width: 100%;
   height: 100vh;
-  @media (height <= 600px) {
-    height: 600px;
-    width: 1072px;
-  }
-  background-image: url('/static/images/login/bg.jpg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  padding-top: $header-height;
-  margin-top: -$header-height;
+  background-image: url('/static/images/login/bg.jpg');
+  @media (height <= $bg-min-height) {
+    height: $bg-min-height;
+    width: $bg-min-width;
+  }
   .login-wrapper {
-    background-color: rgba(0, 0, 0, 0.25);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url('/static/images/login/main-bg-small.png');
+    background-color: rgba(0, 0, 0, 0.5);
+    @media (width >= $show-main-bg-min-width) {
+      background-image: url('/static/images/login/main-bg-big.png');
+    }
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100vw;
     height: 100%;
-    .login-main {
-      background-image: url('/static/images/login/login-caption.png');
-    }
-    .join-main {
-      background-image: url('/static/images/login/join-caption.png');
-    }
-    .err-main {
-      background-image: url('/static/images/login/err-caption.png');
-    }
     .login-main,
     .join-main,
     .err-main {
@@ -40,9 +39,6 @@ $buttonWidth: 272px;
       flex-direction: column;
       align-items: center;
       padding: 40px 15px 15px 15px;
-      background-color: rgba(0, 0, 0, 0.5);
-      background-repeat: no-repeat;
-      /* TODO: RWD for caption. */
 
       .login-form {
         max-width: 100%;
@@ -59,7 +55,7 @@ $buttonWidth: 272px;
         white-space: pre;
       }
       input {
-        width: $inputWidth;
+        width: $input-width;
         max-width: 100%;
         height: 55px;
         background: none;
@@ -70,7 +66,7 @@ $buttonWidth: 272px;
         background-size: 100% 100%;
       }
       button {
-        width: $buttonWidth;
+        width: $button-width;
         max-width: 100%;
         height: 45px;
         background: none;
