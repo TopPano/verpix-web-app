@@ -6,6 +6,7 @@ import queryString from 'query-string';
 
 import { DEFAULT_VIEWER_OPTIONS } from '../lib/const';
 import startViewer from '../lib/viewer.js';
+import Sidebar from './Sidebar';
 
 if (process.env.BROWSER) {
   require('styles/Viewer.css');
@@ -45,6 +46,7 @@ export default class Viewer extends Component {
     return (
       <div className="viewer-component">
         <div id='container' />
+        <Sidebar post={{}}/>
       </div>
     );
   }

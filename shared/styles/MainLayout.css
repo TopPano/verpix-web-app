@@ -30,3 +30,4 @@ select {
   height: 100%;
 }
 
+@import 'common/common.css';
