@@ -17,7 +17,10 @@ let config = Object.assign({}, baseConfig, {
   plugins: [
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"'
+      'process.env.NODE_ENV': '"production"',
+      "process.env": {
+        BROWSER: JSON.stringify(true)
+      }
     }),
     new BowerWebpackPlugin({
       searchResolveModulesDirectories: false
