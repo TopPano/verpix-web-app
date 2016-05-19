@@ -50,8 +50,11 @@ app.use((req, res) => {
       created: req.cookies.created
     };
   } else {
-    // it's not allow to access pages other than Home without authentication
-    if (!req.url.match(/^\/$/ig)) {
+    const matchViewer = req.url.match(/(\/viewer\/@)+/);
+    const isViewerPage = matchViewer && matchViewer.index === 0;
+
+    // it's not allow to access pages other than Login and Viewer without authentication
+    if (!isViewerPage && !req.url.match(/^\/$/ig)) {
       return res.redirect(302, '/');
     }
   }
