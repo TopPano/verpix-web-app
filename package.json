@@ -13,9 +13,9 @@
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
-    "serve": "NODE_ENV=development node server/index.js",
-    "serve:prod": "NODE_ENV=production node server/index.js",
-    "start": "NODE_ENV=development node server/index.js",
+    "serve": "NODE_ENV=development node server/index.js --env=dev",
+    "serve:dist": "NODE_ENV=production node server/index.js --env=dist",
+    "start": "NODE_ENV=development node server/index.js --env=dev",
     "test": "karma start",
     "test:watch": "karma start --autoWatch=true --singleRun=false"
   },
