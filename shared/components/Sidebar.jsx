@@ -1,9 +1,14 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { toInteger, merge } from 'lodash';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import PeopleList from './PeopleList';
 import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';
+import { getCurrentUrl } from '../lib/viewer.js';
+//import shareFacebook from '../lib/shareFacebook.js';
 
 const NON_CLICKED = -1;
 const ICON_LIST = [
@@ -16,6 +21,11 @@ const ICON_CLICKED_LIST = [
   '/static/images/sidebar/icon-map-clicked.png',
   '/static/images/sidebar/icon-share-clicked.png'
 ];
+const URL_UPDATE_RATE = 16;
+const IFRAME_MIN_WIDTH = 240;
+const IFRAME_MIN_HEIGHT = 160;
+
+var urlUpdater;
 
 if (process.env.BROWSER) {
   require('styles/Sidebar.css');
@@ -26,8 +36,38 @@ export default class Sidebar extends Component {
     super(props);
     this.state = {
       clicked: NON_CLICKED,
-      isInTransitioned: false
+      isInTransitioned: false,
+      shareLink: {
+        width: IFRAME_MIN_WIDTH,
+        height: IFRAME_MIN_HEIGHT,
+        output: ''
+      }
     }
+  }
+
+  componentDidMount() {
+    urlUpdater = setInterval(() => {
+      if(this.refs.shareLinkOutput) {
+        const { shareLink } = this.state;
+        const width = toInteger(shareLink.width);
+        const height = toInteger(shareLink.height);
+        const output =
+          '<iframe' +
+          ' width="' + ((isNaN(width) || width < IFRAME_MIN_WIDTH) ? IFRAME_MIN_WIDTH : width) +
+          '" height="' + ((isNaN(height) || height < IFRAME_MIN_HEIGHT) ? IFRAME_MIN_HEIGHT : height) +
+          '" src="' + getCurrentUrl() +
+          '" style="border: none" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+        this.setState(merge({}, this.state, {
+          shareLink: {
+            output: output
+          }
+        }));
+      }
+    }, 1000 / URL_UPDATE_RATE );
+  }
+
+  componentWillUnmount() {
+    clearInterval(urlUpdater);
   }
 
   handleChangeClicked = (index) => {
@@ -61,6 +101,20 @@ export default class Sidebar extends Component {
         clicked: newClicked
       });
     }
+  }
+
+  handleShareLinkChange = () => {
+    const { shareLinkWidth, shareLinkHeight } = this.refs;
+    this.setState(merge({}, this.state, {
+      shareLink: {
+        width: shareLinkWidth.value,
+        height: shareLinkHeight.value
+      }
+    }));
+  }
+
+  handleCopiedLink = () => {
+    this.refs.copiedOverlayTrigger.show();
   }
 
   genLikelist = () => {
@@ -97,7 +151,7 @@ export default class Sidebar extends Component {
 
   render() {
     const { post, userId, likePost, unlikePost, followUser, unfollowUser } = this.props;
-    const { clicked, isInTransitioned } = this.state;
+    const { clicked, isInTransitioned, shareLink } = this.state;
     const showContent = (clicked !== NON_CLICKED) && (clicked !== 1);
     let icons = [], contents = [];
 
@@ -113,6 +167,7 @@ export default class Sidebar extends Component {
       );
     });
 
+    const copiedTooltip = <Tooltip>{'Copied!'}</Tooltip>
     contents.push(
       <div className={'sidebar-content sidebar-info' + (clicked === 0 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-info-upper'>
@@ -133,14 +188,18 @@ export default class Sidebar extends Component {
         <div className='sidebar-share-btnlist'>
           <div className='sidebar-share-btn sidebar-share-facebook' />
           <div className='sidebar-share-btn sidebar-share-twitter' />
-          <div className='sidebar-share-btn sidebar-share-copy' />
+          <OverlayTrigger ref='copiedOverlayTrigger' rootClose trigger={'click'} placement={'top'} overlay={copiedTooltip}>
+            <CopyToClipboard text={shareLink.output} onCopy={this.handleCopiedLink}>
+              <div className='sidebar-share-btn sidebar-share-copy' />
+            </CopyToClipboard>
+          </OverlayTrigger>
         </div>
         <div className='sidebar-share-inputs'>
-          <input type='text' value='240' placeholder='width' />
+          <input ref='shareLinkWidth' type='text' value={shareLink.width} onChange={this.handleShareLinkChange} placeholder='width' />
           <span className='sidebar-share-multiply'>{'X'}</span>
-          <input type='text' value='160' placeholder='height' />
+          <input ref='shareLinkHeight' type='text' value={shareLink.height} onChange={this.handleShareLinkChange} placeholder='height' />
         </div>
-        <textarea className='sidebar-share-link' readOnly defaultValue={'kerkerker'} />
+        <textarea ref='shareLinkOutput' className='sidebar-share-link' disabled value={shareLink.output} />
       </div>
     );
 

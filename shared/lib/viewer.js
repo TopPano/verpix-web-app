@@ -1,5 +1,6 @@
 import THREE from 'three';
 import $ from 'jquery';
+import { Base64 } from 'js-base64';
 
 var TOPPANO = TOPPANO || {};
 
@@ -127,7 +128,7 @@ TOPPANO.gyro = {
 };
 
 // Entry function
-export default function startViewer(params) {
+export function startViewer(params) {
   // Optimization for mobile devices.
   TOPPANO.optimizeMobile();
 
@@ -138,6 +139,14 @@ export default function startViewer(params) {
   TOPPANO.modelInit(params.modelId);
 
   TOPPANO.update();
+}
+
+export function getCurrentUrl() {
+  const queryStr =
+    'fov=' + parseInt(TOPPANO.gv.cam.camera.fov) +
+    '&lat=' + parseInt(TOPPANO.gv.cam.lat) +
+    '&lng=' + parseInt(TOPPANO.gv.cam.lng);
+  return window.location.href.split('?')[0] + '?' + Base64.encode(queryStr);
 }
 
 TOPPANO.modelInit = function(modelId) {
@@ -416,18 +425,6 @@ TOPPANO.update = function() {
     TOPPANO.gv.cam.camera.updateProjectionMatrix();
 
     TOPPANO.renderScene();
-    TOPPANO.updateCurrentUrl();
-};
-
-TOPPANO.updateCurrentUrl = function() {
-    /*
-    var queryStr =
-        'post=' + TOPPANO.gv.modelId +
-        '&fov=' + parseInt(TOPPANO.gv.cam.camera.fov) +
-        '&lat=' + parseInt(TOPPANO.gv.cam.lat) +
-        '&lng=' + parseInt(TOPPANO.gv.cam.lng);
-    TOPPANO.gv.currentUrl = window.location.origin + '/?' + base64Convert(queryStr, 'encode');
-    */
 };
 
 function clamp(number, min, max) {
