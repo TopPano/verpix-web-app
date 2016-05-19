@@ -8,7 +8,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import PeopleList from './PeopleList';
 import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';
 import { getCurrentUrl } from '../lib/viewer.js';
-//import shareFacebook from '../lib/shareFacebook.js';
+import { shareTwitter } from '../lib/share.js';
 
 const NON_CLICKED = -1;
 const ICON_LIST = [
@@ -117,6 +117,10 @@ export default class Sidebar extends Component {
     this.refs.copiedOverlayTrigger.show();
   }
 
+  handleShareTwitter = () => {
+    shareTwitter(getCurrentUrl());
+  }
+
   genLikelist = () => {
     const { users, userIds } = this.props.likelist.list;
     let list = [];
@@ -187,7 +191,7 @@ export default class Sidebar extends Component {
       <div className={'sidebar-content sidebar-share' + (clicked === 2 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-share-btnlist'>
           <div className='sidebar-share-btn sidebar-share-facebook' />
-          <div className='sidebar-share-btn sidebar-share-twitter' />
+          <div className='sidebar-share-btn sidebar-share-twitter' onClick={this.handleShareTwitter} />
           <OverlayTrigger ref='copiedOverlayTrigger' rootClose trigger={'click'} placement={'top'} overlay={copiedTooltip}>
             <CopyToClipboard text={shareLink.output} onCopy={this.handleCopiedLink}>
               <div className='sidebar-share-btn sidebar-share-copy' />
