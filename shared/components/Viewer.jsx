@@ -14,8 +14,15 @@ if (process.env.BROWSER) {
 
 export default class Viewer extends Component {
   static propTyes = {
-    postId: PropTypes.string.isRequired,
-    options: PropTypes.object.isRequird
+    post: PropTypes.object.isRequired,
+    likelist: PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
+    options: PropTypes.object.isRequird,
+    likePost: PropTypes.func.isRequired,
+    unlikePost: PropTypes.func.isRequired,
+    getLikelist: PropTypes.func.isRequired,
+    followUser: PropTypes.func.isRequired,
+    unfollowUser: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -30,7 +37,7 @@ export default class Viewer extends Component {
       const querys = queryString.parse(queryStr);
       const { options } = this.props;
       const params = {
-        modelId: this.props.postId,
+        modelId: this.props.post.postId,
         cam: {
           lat: querys.lat ? querys.lat : (options.lat ? options.lat : DEFAULT_VIEWER_OPTIONS.LAT),
           lng: querys.lng ? querys.lng : (options.lng ? options.lng : DEFAULT_VIEWER_OPTIONS.LNG),
@@ -46,7 +53,7 @@ export default class Viewer extends Component {
     return (
       <div className="viewer-component">
         <div id='container' />
-        <Sidebar post={{}}/>
+        <Sidebar {...this.props} />
       </div>
     );
   }

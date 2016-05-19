@@ -2,6 +2,9 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import PeopleList from './PeopleList';
+import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';
+
 const NON_CLICKED = -1;
 const ICON_LIST = [
   '/static/images/sidebar/icon-info.png',
@@ -60,10 +63,40 @@ export default class Sidebar extends Component {
     }
   }
 
-  likePost = () => {}
-  showLikelist = () => {}
+  genLikelist = () => {
+    const { users, userIds } = this.props.likelist.list;
+    let list = [];
+    userIds.map((id) => {
+      const user = users[id].user;
+      const username = parseUsername(user);
+      const profilePhotoUrl = parseProfilePhotoUrl(user);
+      list.push({
+        username,
+        profilePhotoUrl,
+        id: user.sid,
+        isFriend: user.followers.length > 0
+      })
+    });
+    return list;
+  }
+
+  showLikelist = () => {
+    this.props.getLikelist();
+    this.waitUpdateLikelist();
+  }
+
+  waitUpdateLikelist = () => {
+    setTimeout(() => {
+      if(this.props.likelist.isFetching) {
+        this.waitUpdateLikelist();
+      } else {
+        this.refs.peopleList.showList();
+      }
+    }, 50);
+  }
 
   render() {
+    const { post, userId, likePost, unlikePost, followUser, unfollowUser } = this.props;
     const { clicked, isInTransitioned } = this.state;
     const showContent = (clicked !== NON_CLICKED) && (clicked !== 1);
     let icons = [], contents = [];
@@ -114,8 +147,15 @@ export default class Sidebar extends Component {
     return (
       <div className='sidebar-component'>
         <div className='sidebar-like'>
-          <span className='sidebar-like-count' onClick={this.showLikelist}>9999</span>
-          <img className='sidebar-icon' src='/static/images/view/likebtn.png' onClick={this.likePost}/>
+          {post.likes.count > 0 ?
+            <span className='sidebar-like-count sidebar-like-count-clickable' onClick={this.showLikelist}>{post.likes.count}</span> :
+            <span className='sidebar-like-count'>{post.likes.count}</span>
+          }
+          <img
+            className='sidebar-icon'
+            src={post.likes.isLiked ? '/static/images/view/likebtn-clicked.png' : '/static/images/view/likebtn.png'}
+            onClick={post.likes.isLiked ? unlikePost : likePost}
+          />
         </div>
         <div className='sidebar-main'>
           <div className={'sidebar-content-wrapper' + (showContent ? ' sidebar-shown' : '')}>
@@ -126,6 +166,13 @@ export default class Sidebar extends Component {
           </div>
         </div>
         <img className='sidebar-icon sidebar-help' src='/static/images/sidebar/icon-help.png'/>
+        <PeopleList
+          ref='peopleList'
+          list={this.genLikelist()}
+          userId={userId}
+          followUser={followUser}
+          unfollowUser={unfollowUser}
+        />
       </div>
     );
   }
@@ -134,7 +181,15 @@ export default class Sidebar extends Component {
 Sidebar.displayName = 'Sidebar';
 
 Sidebar.propTypes = {
-  post: PropTypes.object.isRequired
+  post: PropTypes.object.isRequired,
+  likelist: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
+  likePost: PropTypes.func.isRequired,
+  unlikePost: PropTypes.func.isRequired,
+  getLikelist: PropTypes.func.isRequired,
+  getLikelist: PropTypes.func.isRequired,
+  followUser: PropTypes.func.isRequired,
+  unfollowUser: PropTypes.func.isRequired
 };
 Sidebar.defaultProps = {
 };

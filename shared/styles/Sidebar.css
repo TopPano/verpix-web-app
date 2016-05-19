@@ -42,7 +42,10 @@ $share-input-bg: rgba(0, 0, 0, 0.25);
       left: 0;
       transform: translateY(-100%);
       text-align: center;
-      cursor: pointer;
+      cursor: default;
+      &.sidebar-like-count-clickable {
+        cursor: pointer;
+      }
     }
   }
 
