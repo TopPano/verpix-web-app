@@ -2,6 +2,7 @@
 
 import path from 'path';
 import Express from 'express';
+import cookieParser from 'cookie-parser';
 import qs from 'qs';
 
 import webpack from 'webpack';
@@ -24,6 +25,7 @@ import clientConfig from '../etc/client-config.json';
 const app = new Express();
 
 app.use('/static', Express.static('public/static'));
+app.use(cookieParser());
 
 // Use this middleware to set up hot module reloading via webpack
 const compiler = webpack(config);
@@ -31,9 +33,7 @@ app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output
 app.use(webpackHotMiddleware(compiler));
 
 // This is fired every time the server side receives a request
-app.use(handleRender);
-
-function handleRender(req, res) {
+app.use((req, res) => {
   let initState = {};
   const accessToken = req.cookies.accessToken || null;
   if (accessToken) {
@@ -96,7 +96,7 @@ function handleRender(req, res) {
       });
     }
   });
-}
+});
 
 function renderHTML(html, initialState, config) {
   return `
@@ -105,8 +105,9 @@ function renderHTML(html, initialState, config) {
     <head>
       <meta charset="utf8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" conten"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
       <title>Verpix</title>
+      <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
       <link rel="stylesheet" href="${config.staticUrl}/static/build/app.css">
     </head>

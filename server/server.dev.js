@@ -19,7 +19,6 @@ import { fetchComponentsData } from './utils';
 
 import routes from '../shared/routes';
 import configureStore from '../shared/store/configureStore';
-//import auth from '../shared/lib/auth';
 import DevTools from '../shared/containers/DevTools';
 
 import clientConfig from '../etc/client-config.json';
