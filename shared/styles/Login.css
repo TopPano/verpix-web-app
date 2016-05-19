@@ -3,8 +3,8 @@
 $input-width: 305px;
 $button-width: 272px;
 $show-main-bg-min-width: 820px;
-$bg-min-height: 600px;
-$bg-min-width: 1062px;
+$bg-min-height: 675px;
+$bg-min-width: 1194px;
 
 .login-component {
   margin-top: -$header-height;
