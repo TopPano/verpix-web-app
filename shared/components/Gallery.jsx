@@ -95,7 +95,7 @@ export default class Gallery extends Component{
     let previews = [];
 
     postIds.map((id, k) => {
-      const { sid, thumbnailUrl, likes, ownerInfo } = posts[id];
+      const { sid, thumbnail, likes, ownerInfo } = posts[id];
       const authorName = parseUsername(ownerInfo);
       const authorPhotoUrl = parseProfilePhotoUrl(ownerInfo);
 
@@ -103,7 +103,7 @@ export default class Gallery extends Component{
         <View
           key={k}
           postId={sid}
-          imgUrl={thumbnailUrl}
+          imgUrl={thumbnail.downloadUrl}
           count={likes.count}
           isLiked={likes.isLiked}
           width={postWidth}
