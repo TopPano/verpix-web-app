@@ -1,6 +1,33 @@
 import api from '../api';
 import { push } from 'react-router-redux';
 
+export const GET_POST_REQUEST = 'GET_POST_REQUEST';
+export const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
+export const GET_POST_FAILURE = 'GET_POST_FAILURE';
+
+export function getPost(postId, authToken) {
+  return (dispatch) => {
+    dispatch({
+      type: GET_POST_REQUEST
+    });
+
+    return api.posts.getPost(postId, authToken).then((response) => {
+      dispatch({
+        type: GET_POST_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: GET_POST_FAILURE,
+        error
+      });
+      if (error.status === 401) {
+        dispatch(push('/'));
+      }
+    });
+  };
+}
+
 export const LOAD_USER_POSTS_REQUEST = 'LOAD_USER_POSTS_REQUEST';
 export const LOAD_USER_POSTS_SUCCESS = 'LOAD_USER_POSTS_SUCCESS';
 export const LOAD_USER_POSTS_FAILURE = 'LOAD_USER_POSTS_FAILURE';

@@ -6,14 +6,20 @@ import { browserHistory } from 'react-router'
 
 import Viewer from '../../components/Viewer';
 import { followUser, unfollowUser } from '../../actions/user';
-import { likePost, unlikePost } from '../../actions/post';
-import { showLikeList } from '../../actions/post';
+import { getPost, likePost, unlikePost, showLikeList } from '../../actions/post';
 
 class ViewerPageContainer extends Component {
   static propTyes = {
     user: PropTypes.object.isRequired,
     like: PropTypes.object.isRequired
   };
+
+  componentDidMount() {
+    let { postId } = this.props.params;
+    if (postId) {
+      this.props.dispatch(getPost(postId));
+    }
+  }
 
   like = () => {
     const { dispatch } = this.props;
