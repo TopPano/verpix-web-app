@@ -4,11 +4,12 @@ import React, { Component, PropTypes } from 'react';
 import { toInteger, merge } from 'lodash';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from './PeopleList';
 import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';
 import { getCurrentUrl } from '../lib/viewer.js';
-import { shareTwitter } from '../lib/share.js';
+import { shareTwitter, shareFacebook } from '../lib/share.js';
 
 const NON_CLICKED = -1;
 const ICON_LIST = [
@@ -121,6 +122,13 @@ export default class Sidebar extends Component {
     shareTwitter(getCurrentUrl());
   }
 
+  handleShareFacebook = (response) => {
+    shareFacebook(response.accessToken, {
+      link: getCurrentUrl(),
+      caption: this.props.post.caption
+    });
+  }
+
   genLikelist = () => {
     const { users, userIds } = this.props.likelist.list;
     let list = [];
@@ -181,7 +189,7 @@ export default class Sidebar extends Component {
             <div className='sidebar-info-date text-single-line'>{'2015/6/3 6:6'}</div>
           </div>
         </div>
-        <textarea className='sidebar-info-caption' readOnly value={'hahaha hahaha'} />
+        <textarea className='sidebar-info-caption' readOnly value={post.caption} />
       </div>
     );
     contents.push(
@@ -190,7 +198,14 @@ export default class Sidebar extends Component {
     contents.push(
       <div className={'sidebar-content sidebar-share' + (clicked === 2 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-share-btnlist'>
-          <div className='sidebar-share-btn sidebar-share-facebook' />
+          <FacebookLogin
+            appId='589634317860022'
+            version={'2.6'}
+            scope={'publish_actions'}
+            callback={this.handleShareFacebook}
+            cssClass='sidebar-share-btn sidebar-share-facebook'
+            textButton=''
+          />
           <div className='sidebar-share-btn sidebar-share-twitter' onClick={this.handleShareTwitter} />
           <OverlayTrigger ref='copiedOverlayTrigger' rootClose trigger={'click'} placement={'top'} overlay={copiedTooltip}>
             <CopyToClipboard text={shareLink.output} onCopy={this.handleCopiedLink}>

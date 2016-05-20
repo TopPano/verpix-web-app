@@ -149,6 +149,17 @@ export function getCurrentUrl() {
   return window.location.href.split('?')[0] + '?' + Base64.encode(queryStr);
 }
 
+export function getSnapshot (width, height) {
+  let canvasMini = $('<canvas width="' + width + '" height="' + height + '"></canvas>').attr('type', 'hidden').append('#container');
+  let snapshot = '';
+
+  canvasMini[0].getContext('2d').drawImage(TOPPANO.gv.renderer.domElement, 0, 0, width, height);
+  snapshot= canvasMini[0].toDataURL('image/jpeg', 0.8);
+  canvasMini.remove();
+
+  return snapshot;
+}
+
 TOPPANO.modelInit = function(modelId) {
     TOPPANO.gv.modelId = modelId;
     var model = {};
@@ -370,19 +381,6 @@ TOPPANO.rendererSetting = function() {
         TOPPANO.gv.container.bound.bottom = TOPPANO.gv.container.offsetTop + TOPPANO.gv.container.Height,
         TOPPANO.gv.container.bound.left = TOPPANO.gv.container.offsetLeft,
         TOPPANO.gv.container.bound.right = TOPPANO.gv.container.offsetLeft + TOPPANO.gv.container.Width;
-};
-
-// snapshot function
-TOPPANO.getSnapshot = function(width, height) {
-    var canvasMini = $('<canvas width="' + width + '" height="' + height + '"></canvas>')
-            .attr('type', 'hidden').append('#container');
-    var snapshot = '';
-
-    canvasMini[0].getContext('2d').drawImage(TOPPANO.gv.renderer.domElement, 0, 0, width, height);
-    snapshot= canvasMini[0].toDataURL('image/jpeg', 0.8);
-    canvasMini.remove();
-
-    return snapshot;
 };
 
 // render scene

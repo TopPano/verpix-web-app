@@ -69,6 +69,7 @@ class ViewerPageContainer extends Component {
     const { user, like} = this.props;
     const post = {
       postId,
+      caption: 'uccu',
       likes: {
         count: 0,
         isLiked: true

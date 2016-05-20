@@ -145,6 +145,9 @@ $share-input-bg: rgba(0, 0, 0, 0.25);
         cursor: pointer;
         &.sidebar-share-facebook {
           background-image: url('/static/images/sidebar/btn-facebook.png');
+          border: none;
+          padding: none;
+          background-color: transparent;
         }
         &.sidebar-share-twitter {
           background-image: url('/static/images/sidebar/btn-twitter.png');
