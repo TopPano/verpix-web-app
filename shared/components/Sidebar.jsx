@@ -161,6 +161,16 @@ export default class Sidebar extends Component {
     }, 50);
   }
 
+  // Transfrom the date to our format.
+  transDateFormat(dateRaw) {
+    let date = new Date(dateRaw);
+    return date.getUTCFullYear() + '/' +
+        (date.getUTCMonth() + 1) + '/' +
+        date.getUTCDate() + ' ' +
+        date.getUTCHours() + ':' +
+        date.getUTCMinutes();
+  }
+
   render() {
     const { post, userId, likePost, unlikePost, followUser, unfollowUser } = this.props;
     const { clicked, isInTransitioned, shareLink } = this.state;
@@ -179,14 +189,16 @@ export default class Sidebar extends Component {
       );
     });
 
-    const copiedTooltip = <Tooltip>{'Copied!'}</Tooltip>
+    const name = parseUsername(post.owner),
+          profilePhotoUrl = parseProfilePhotoUrl(post.owner),
+          date = this.transDateFormat(post.created);
     contents.push(
       <div className={'sidebar-content sidebar-info' + (clicked === 0 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-info-upper'>
-          <img className='sidebar-info-photo' src='https://upload.wikimedia.org/wikipedia/commons/0/02/Fried_egg,_sunny_side_up.jpg' />
+          <img className='sidebar-info-photo' src={profilePhotoUrl} />
           <div className='sidebar-info-title'>
-            <div className='sidebar-info-name text-single-line'>{'hawk lin'}</div>
-            <div className='sidebar-info-date text-single-line'>{'2015/6/3 6:6'}</div>
+            <div className='sidebar-info-name text-single-line'>{name}</div>
+            <div className='sidebar-info-date text-single-line'>{date}</div>
           </div>
         </div>
         <textarea className='sidebar-info-caption' readOnly value={post.caption} />
@@ -195,6 +207,7 @@ export default class Sidebar extends Component {
     contents.push(
       <div />
     );
+    const copiedTooltip = <Tooltip>{'Copied!'}</Tooltip>
     contents.push(
       <div className={'sidebar-content sidebar-share' + (clicked === 2 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-share-btnlist'>

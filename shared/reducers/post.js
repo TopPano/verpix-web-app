@@ -2,7 +2,13 @@ import { merge, assign } from 'lodash';
 import {
   GET_POST_REQUSET,
   GET_POST_SUCCESS,
-  GET_POST_FAILURE
+  GET_POST_FAILURE,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE
 } from '../actions/post';
 
 const DEFAULT_STATE = {
@@ -16,13 +22,18 @@ const DEFAULT_STATE = {
   likes: {},
   created: undefined,
   modified: undefined,
-  owner: {},
+  owner: {
+    identities: []
+  },
   location: {}
 };
 
 export default function post(state=DEFAULT_STATE, action) {
+  let nextState = {};
   switch (action.type) {
     case GET_POST_REQUSET:
+    case LIKE_POST_REQUEST:
+    case UNLIKE_POST_REQUEST:
       return merge({}, state, {
         isFetching: true
       });
@@ -42,7 +53,31 @@ export default function post(state=DEFAULT_STATE, action) {
         owner,
         location
       });
+    case LIKE_POST_SUCCESS:
+      nextState = { isFetching: false };
+      if (state.id === action.id) {
+        nextState = merge(nextState, {
+          likes: {
+            count: state.likes.count + 1,
+            isLiked: true
+          }
+        });
+      }
+      return merge({}, state, nextState);
+    case UNLIKE_POST_SUCCESS:
+      nextState = { isFetching: false };
+      if (state.id === action.id) {
+        nextState = merge(nextState, {
+          likes: {
+            count: state.likes.count - 1,
+            isLiked: false
+          }
+        });
+      }
+      return merge({}, state, nextState);
     case GET_POST_FAILURE:
+    case LIKE_POST_FAILURE:
+    case UNLIKE_POST_FAILURE:
       return merge({}, state, {
         isFetching: false
       });
