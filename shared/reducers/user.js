@@ -1,6 +1,8 @@
 import { merge, assign } from 'lodash';
 import cookie from 'cookie';
 import {
+  REGISTER_USER_REQUEST,
+  REGISTER_USER_FAILURE,
   LOGIN_USER_REQUEST,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
@@ -57,6 +59,7 @@ function updateStateForLoginSuccess(
 
 export default function user(state=DEFAULT_STATE, action) {
   switch (action.type) {
+    case REGISTER_USER_REQUEST:
     case LOGIN_USER_REQUEST:
     case LOGOUT_USER_REQUEST:
       return merge({}, state, {
@@ -93,6 +96,7 @@ export default function user(state=DEFAULT_STATE, action) {
         created: undefined,
         errorMessage: undefined
       });
+    case REGISTER_USER_FAILURE:
     case LOGIN_USER_FAILURE:
       return merge({}, state, {
         isFetching: false,
