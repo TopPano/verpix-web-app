@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Base64 } from 'js-base64';
 import queryString from 'query-string';
+import urlencode from 'urlencode';
 
 import { DEFAULT_VIEWER_OPTIONS } from '../lib/const';
 import { startViewer } from '../lib/viewer.js';
@@ -38,7 +39,7 @@ export default class Viewer extends Component {
         this.setState({
           isViewerStarted: true
         });
-        const queryStr = Base64.decode(location.search.substr(1));
+        const queryStr = Base64.decode(urlencode.decode(location.search.substr(1), 'gbk'));
         const querys = queryString.parse(queryStr);
         const params = {
           imgs: post.media.srcTiledImages,
