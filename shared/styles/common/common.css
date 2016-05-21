@@ -3,3 +3,31 @@
   text-overflow: ellipsis;
   cursor: default;
 }
+
+/* Customized styles for Bootstrap Modal Dialog. */
+.modal-backdrop.in {
+  opacity: 0.25;
+}
+.modal {
+  text-align: center;
+  &:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: ' ';
+    height: 100%;
+  }
+
+  .modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    width: 90%;
+    max-width: 600px;
+    .modal-content {
+      background-color: rgba(0, 0, 0, 0.5);
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+}
