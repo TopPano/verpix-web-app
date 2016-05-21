@@ -39,7 +39,8 @@ export default class Viewer extends Component {
         this.setState({
           isViewerStarted: true
         });
-        const queryStr = Base64.decode(urlencode.decode(location.search.substr(1), 'gbk'));
+        const search = location.search.substr(1);
+        const queryStr = Base64.decode(urlencode.decode(search.substr(0, search.indexOf('&')), 'gbk'));
         const querys = queryString.parse(queryStr);
         const params = {
           imgs: post.media.srcTiledImages,
