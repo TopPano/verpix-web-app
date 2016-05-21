@@ -1,9 +1,10 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { toInteger, merge } from 'lodash';
+import { toInteger, merge, replace } from 'lodash';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
+import MobileDetect from 'mobile-detect';
 import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from './PeopleList';
@@ -22,21 +23,21 @@ const ICON_CLICKED_LIST = [
   '/static/images/sidebar/icon-map-clicked.png',
   '/static/images/sidebar/icon-share-clicked.png'
 ];
-const HELP_DESKTOP_LIST = [
+const HELP_LIST = [
   {
-    img: '/static/images/sidebar/help-look-desktop.svg',
+    img: '/static/images/sidebar/help-look-{$device}.svg',
     desc: 'Look Around'
   },
   {
-    img: '/static/images/sidebar/help-zoom-desktop.svg',
+    img: '/static/images/sidebar/help-zoom-{$device}.svg',
     desc: 'Zoom In/Out'
   },
   {
-    img: '/static/images/sidebar/help-click-desktop.svg',
+    img: '/static/images/sidebar/help-click-{$device}.svg',
     desc: '(X1) Hide/Show'
   },
   {
-    img: '/static/images/sidebar/help-click-desktop.svg',
+    img: '/static/images/sidebar/help-click-{$device}.svg',
     desc: '(X2) FullScreen'
   }
 ];
@@ -202,6 +203,10 @@ export default class Sidebar extends Component {
         date.getUTCMinutes();
   }
 
+  isMobile() {
+    return new MobileDetect(window.navigator.userAgent).mobile() ? true :false;
+  }
+
   render() {
     const { post, userId, likePost, unlikePost, followUser, unfollowUser } = this.props;
     const { clicked, isInTransitioned, isHelpShown, shareLink } = this.state;
@@ -266,10 +271,12 @@ export default class Sidebar extends Component {
       </div>
     );
 
-    HELP_DESKTOP_LIST.map((help) => {
+    const device = this.isMobile() ? 'mobile' : 'desktop';
+    HELP_LIST.map((help) => {
+      const imgUrl = replace(help.img, '{$device}', device);
       helpList.push(
         <div className='sidebar-help-item'>
-          <img className='sidebar-help-item-img' src={help.img} alt={help.desc} />
+          <img className='sidebar-help-item-img' src={imgUrl} alt={help.desc} />
           <div className='sidebar-help-item-desc'>{help.desc}</div>
         </div>
       );

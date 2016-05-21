@@ -192,41 +192,50 @@ $share-input-bg: rgba(0, 0, 0, 0.25);
 
 $help-modal-big-length: 400px;
 $help-modal-small-height: 240px;
-$help-modal-boundary: 420px;
+$help-modal-landscape-boundary: 420px;
 
 .modal.sidebar-help-modal {
   .modal-dialog {
-    width: $help-modal-big-length;
-    max-width: 90%;
+    width: 90%;
+    max-width: $help-modal-big-length;
     .modal-content {
-      height: $help-modal-big-length;
-      @media (height <= $help-modal-boundary) {
+      background-color: rgba(0, 0, 0, 0.5);
+      @media (orientation:landscape) {
         height: $help-modal-small-height;
+      }
+      @media (orientation:landscape) and (height >= $help-modal-landscape-boundary) {
+        height: $help-modal-big-length;
+      }
+      @media (orientation:portrait) {
+        height: $help-modal-big-length;
       }
 
       .sidebar-help-item {
-        width: 50%;
-        height: 50%;
-        @media (height <= $help-modal-boundary) {
+        @media (orientation:landscape) {
           width: 25%;
           height: 100%;
         }
-        padding: 10px;
+        @media (orientation:landscape) and (height >= $help-modal-landscape-boundary) {
+          width: 50%;
+          height: 50%;
+        }
+        @media (orientation:portrait) {
+          width: 50%;
+          height: 50%;
+        }
+
         float: left;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
 
         .sidebar-help-item-img {
-          display: block;
-          max-width: 100%;
-          max-height: 80%;
-          margin: 0 auto;
+          width: 80%;
         }
 
         .sidebar-help-item-desc {
-          max-height: 20%;
-          padding-top: 10px;
+          flex-grow: 1;
           text-align: center;
         }
       }
