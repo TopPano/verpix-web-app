@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { toInteger, merge } from 'lodash';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from './PeopleList';
@@ -22,6 +22,24 @@ const ICON_CLICKED_LIST = [
   '/static/images/sidebar/icon-map-clicked.png',
   '/static/images/sidebar/icon-share-clicked.png'
 ];
+const HELP_DESKTOP_LIST = [
+  {
+    img: '/static/images/sidebar/help-look-desktop.svg',
+    desc: 'Look Around'
+  },
+  {
+    img: '/static/images/sidebar/help-zoom-desktop.svg',
+    desc: 'Zoom In/Out'
+  },
+  {
+    img: '/static/images/sidebar/help-click-desktop.svg',
+    desc: '(X1) Hide/Show'
+  },
+  {
+    img: '/static/images/sidebar/help-click-desktop.svg',
+    desc: '(X2) FullScreen'
+  }
+];
 const URL_UPDATE_RATE = 16;
 const IFRAME_MIN_WIDTH = 240;
 const IFRAME_MIN_HEIGHT = 160;
@@ -38,6 +56,7 @@ export default class Sidebar extends Component {
     this.state = {
       clicked: NON_CLICKED,
       isInTransitioned: false,
+      isHelpShown: false,
       shareLink: {
         width: IFRAME_MIN_WIDTH,
         height: IFRAME_MIN_HEIGHT,
@@ -161,6 +180,18 @@ export default class Sidebar extends Component {
     }, 50);
   }
 
+  showHelp = () => {
+    this.setState({
+      isHelpShown: true
+    });
+  }
+
+  hideHelp = () => {
+    this.setState({
+      isHelpShown: false
+    });
+  }
+
   // Transfrom the date to our format.
   transDateFormat(dateRaw) {
     let date = new Date(dateRaw);
@@ -173,9 +204,9 @@ export default class Sidebar extends Component {
 
   render() {
     const { post, userId, likePost, unlikePost, followUser, unfollowUser } = this.props;
-    const { clicked, isInTransitioned, shareLink } = this.state;
+    const { clicked, isInTransitioned, isHelpShown, shareLink } = this.state;
     const showContent = (clicked !== NON_CLICKED) && (clicked !== 1);
-    let icons = [], contents = [];
+    let icons = [], contents = [], helpList = [];
 
     ICON_LIST.map((icon, k) => {
       const iconClicked = ICON_CLICKED_LIST[k];
@@ -235,6 +266,15 @@ export default class Sidebar extends Component {
       </div>
     );
 
+    HELP_DESKTOP_LIST.map((help) => {
+      helpList.push(
+        <div className='sidebar-help-item'>
+          <img className='sidebar-help-item-img' src={help.img} alt={help.desc} />
+          <div className='sidebar-help-item-desc'>{help.desc}</div>
+        </div>
+      );
+    });
+
     return (
       <div className='sidebar-component'>
         <div className='sidebar-like'>
@@ -256,7 +296,7 @@ export default class Sidebar extends Component {
             {icons}
           </div>
         </div>
-        <img className='sidebar-icon sidebar-help' src='/static/images/sidebar/icon-help.png'/>
+        <img className='sidebar-icon sidebar-help' src='/static/images/sidebar/icon-help.png' onClick={this.showHelp}/>
         <PeopleList
           ref='peopleList'
           list={this.genLikelist()}
@@ -264,6 +304,11 @@ export default class Sidebar extends Component {
           followUser={followUser}
           unfollowUser={unfollowUser}
         />
+        <Modal className='sidebar-help-modal' show={isHelpShown} onHide={this.hideHelp}>
+          <Modal.Body>
+            {helpList}
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
