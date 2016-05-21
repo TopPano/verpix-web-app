@@ -14,11 +14,9 @@ function genQuery(lastPostId) {
 }
 
 export default class PostsAPI extends Base {
-  getPost(postId, authToken) {
-    if (authToken) { this.apiClient.setAuthToken(authToken); }
+  getPost(postId) {
     return this.apiClient.get({
-      url: `posts/${postId}`,
-      authenticated: true
+      url: `posts/${postId}`
     });
   }
 
