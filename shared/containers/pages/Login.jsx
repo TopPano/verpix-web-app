@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Login from '../../components/Login';
-import { loginUser, facebookTokenLogin, resetErrMsg } from '../../actions/user';
+import { loginUser, facebookTokenLogin, registerUser, resetErrMsg } from '../../actions/user';
 
 class LoginPageContainer extends Component {
   static propTyes = {
@@ -20,6 +20,9 @@ class LoginPageContainer extends Component {
     this.props.dispatch(facebookTokenLogin(token));
   }
 
+  join = (username, email, password) => {
+    this.props.dispatch(registerUser({username, email, password}));
+  }
   cleanErrMsg = () => {
     this.props.dispatch(resetErrMsg());
   }
@@ -30,6 +33,7 @@ class LoginPageContainer extends Component {
         user={this.props.user}
         loginUser={this.login}
         facebookLogin={this.facebookLogin}
+        joinUser={this.join}
         cleanErrMsg={this.cleanErrMsg}
       />
     );

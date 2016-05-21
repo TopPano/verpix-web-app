@@ -17,6 +17,7 @@ export const LOGIN_ERR_MSG = {
   },
   PASSWORD: {
     EMPTY: 'Please enter your password.',
+    EMPTY_AGAIN: 'Please enter your password again.',
     NOT_MATCHED: 'These passwords don\'t match.'
   },
   AJAX: {

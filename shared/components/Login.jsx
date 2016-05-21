@@ -34,19 +34,20 @@ export default class Login extends Component {
     user: PropTypes.object.isRequired,
     loginUser: PropTypes.func.isRequired,
     facebookLogin: PropTypes.func.isRequired,
+    joinUser: PropTypes.func.isRequired,
     cleanErrMsg: PropTypes.func.isRequired
   };
 
   componentDidUpdate() {
     const { errorMessage } = this.props.user;
-    const { cleanErrMsg } = this.props;
     if(!this.state.isInErr && errorMessage) {
-      cleanErrMsg();
+      // TODO: Handle for more error message.
       if(errorMessage === 'Unauthorized') {
-        this.showErrMsg(LOGIN_ERR_MSG.AJAX.UNAUTHORIZD);
+        this.showErrMsg(LOGIN_ERR_MSG.AJAX.UNAUTHORIZED);
       } else {
         this.showErrMsg(LOGIN_ERR_MSG.AJAX.OTHERS);
       }
+      this.props.cleanErrMsg();
     }
   }
 
@@ -78,6 +79,7 @@ export default class Login extends Component {
     }
     if(isEmpty(passwd)) {
       this.showErrMsg(LOGIN_ERR_MSG.PASSWORD.EMPTY);
+
       return;
     }
     this.props.loginUser(email, passwd);
@@ -107,15 +109,19 @@ export default class Login extends Component {
       this.showErrMsg(LOGIN_ERR_MSG.EMAIL.INVALID);
       return;
     }
-    if(isEmpty(passwd) || isEmpty(passwdAgain)) {
+    if(isEmpty(passwd)) {
       this.showErrMsg(LOGIN_ERR_MSG.PASSWORD.EMPTY);
+      return;
+    }
+    if(isEmpty(passwdAgain)) {
+      this.showErrMsg(LOGIN_ERR_MSG.PASSWORD.EMPTY_AGAIN);
       return;
     }
     if(passwd !== passwdAgain) {
       this.showErrMsg(LOGIN_ERR_MSG.PASSWORD.NOT_MATCHED);
       return;
     }
-    // TODO: this.props.signupUser(name, email, passwd);
+    this.props.joinUser(name, email, passwd);
   }
 
   handleExitErr = (e) => {
