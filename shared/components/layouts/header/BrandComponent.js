@@ -11,7 +11,7 @@ class BrandComponent extends React.Component {
   render() {
     return (
       <div className="header-brand-component">
-        <Link to={'/'}><img src="/static/images/layout/header/logo.png" alt="Verpix"></img></Link>
+        <Link to={'/'}><img src="/static/images/logo.png" alt="Verpix"></img></Link>
       </div>
     );
   }
