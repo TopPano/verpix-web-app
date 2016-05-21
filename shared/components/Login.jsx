@@ -6,7 +6,7 @@ import { merge, trim } from 'lodash';
 import { isEmail } from 'validator';
 import isEmpty from 'is-empty';
 
-import { LOGIN_ERR_MSG } from '../lib/const';
+import { LOGIN_ERR_MSG, EXTERNAL_LINKS } from '../lib/const';
 
 if (process.env.BROWSER) {
   require('styles/Login.css');
@@ -138,6 +138,13 @@ export default class Login extends Component {
     });
   }
 
+  gotoLogin = (e) => {
+    e.preventDefault();
+    this.setState({
+      isInLogin: true
+    });
+  }
+
   showErrMsg = (msg) => {
     this.setState({
       isInErr: true,
@@ -171,7 +178,10 @@ export default class Login extends Component {
           <input type='password' ref='loginPasswd' placeholder='Password' onChange={this.handleInputChange.bind(this, 'loginPasswd')} value={inputs.loginPasswd} />
           <button type='submit'>LOG IN</button>
         </form>
-        <button className='login-goto-join' onClick={this.gotoJoin}>JOIN NOW</button>
+        <div className='login-goto'>
+          <div className='login-text'>{'Don\'t have an account? '}</div>
+          <div className='login-text login-text-link' onClick={this.gotoJoin}>{'JOIN NOW'}</div>
+        </div>
       </div>;
     const join =
       <div className='join-main'>
@@ -184,6 +194,16 @@ export default class Login extends Component {
           <input type='password' ref='joinPasswdAgain' placeholder='Confirm password' onChange={this.handleInputChange.bind(this, 'joinPasswdAgain')} value={inputs.joinPasswdAgain} />
           <button type='submit'>JOIN</button>
         </form>
+        <div className='login-agree'>
+          <div className='login-text'>{'By joining, you agree to our '}</div>
+          <a href={EXTERNAL_LINKS.TERMS_OF_USE} target='_blank' className='login-text login-text-link'>{'Terms'}</a>
+          <div className='login-text'>{' and '}</div>
+          <a href={EXTERNAL_LINKS.PRIVACY_POLICY} target='_blank' className='login-text login-text-link'>{'Privacy Policy'}</a>
+        </div>
+        <div className='login-goto'>
+          <div className='login-text'>{'Have an account? '}</div>
+          <div className='login-text login-text-link' onClick={this.gotoLogin}>{'LOG IN'}</div>
+        </div>
       </div>;
     const err =
       <div className='err-main'>

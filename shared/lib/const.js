@@ -26,3 +26,8 @@ export const LOGIN_ERR_MSG = {
     OTHERS: 'Something wrong with server.\nPlease try again later.'
   }
 }
+
+export const EXTERNAL_LINKS = {
+  TERMS_OF_USE: 'http://toppano.in/termofuse/',
+  PRIVACY_POLICY: 'http://toppano.in/privacy-policy/'
+}
