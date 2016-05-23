@@ -1,9 +1,11 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { toInteger, merge } from 'lodash';
+import toInteger from 'lodash/toInteger';
+import merge from 'lodash/merge';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import PeopleList from './PeopleList';
 import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';

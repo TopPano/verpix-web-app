@@ -1,4 +1,5 @@
-import { merge, assign } from 'lodash';
+import merge from 'lodash/merge';
+import assign from 'lodash/assign';
 import cookie from 'cookie';
 import {
   REGISTER_USER_REQUEST,

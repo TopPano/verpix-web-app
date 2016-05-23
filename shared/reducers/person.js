@@ -1,4 +1,5 @@
-import { assign, merge } from 'lodash';
+import merge from 'lodash/merge';
+import assign from 'lodash/assign';
 import {
   LOAD_USER_SUMMARY_REQUEST,
   LOAD_USER_SUMMARY_SUCCESS,

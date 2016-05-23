@@ -1,4 +1,5 @@
-import { merge, assign } from 'lodash';
+import merge from 'lodash/merge';
+import assign from 'lodash/assign';
 
 export function handleLoadPostsSuccess(state, action) {
   let { entities: { posts }, result: { result: { page, feed }, firstQuery } } = action.response;
