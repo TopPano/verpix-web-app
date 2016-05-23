@@ -1,7 +1,7 @@
 import THREE from 'three';
 import $ from 'jquery';
 import { Base64 } from 'js-base64';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 var TOPPANO = TOPPANO || {};
 
@@ -14,14 +14,14 @@ TOPPANO.gv = {
     canvasID: 'pano-container',
     isFullScreen: false,
     headingOffset: 0,
-    
+
     cursor:{
         state: 'default',
         element: null,
         position_array: [],
         slide_func_array:[]
     },
-    
+
     // camera parameter
     cam: {
         camera: null,
@@ -42,7 +42,7 @@ TOPPANO.gv = {
         onMouseDownMouseY: 0,
         onMouseDownLon: 0,
         onMouseDownLat: 0,
-        
+
         // they are initialized in TOPPANO.controlInit()
         bound:{
             top:0,
@@ -323,21 +323,21 @@ function update() {
     TOPPANO.gv.cam.camera.target.y = Math.cos(TOPPANO.gv.cam.phi);
     TOPPANO.gv.cam.camera.target.z = Math.sin(TOPPANO.gv.cam.phi) * Math.sin(TOPPANO.gv.cam.theta);
     TOPPANO.gv.cam.camera.lookAt(TOPPANO.gv.cam.camera.target);
-    
-   
+
+
     var vect_target_onXZ = new THREE.Vector3(TOPPANO.gv.cam.camera.target.x, 0, TOPPANO.gv.cam.camera.target.z);
     var vect_cam_up = new THREE.Vector3(0, 1, 0);
     var normal_vect = new THREE.Vector3();
     normal_vect.crossVectors(vect_target_onXZ, vect_cam_up);
     normal_vect = normal_vect.normalize();
     vect_cam_up.applyAxisAngle(normal_vect, (Math.PI/180)*(TOPPANO.gv.cam.lat));
-    
+
 
     vect_cam_up.applyAxisAngle(TOPPANO.gv.cam.camera.target, (Math.PI/180)*TOPPANO.gyro.screen_rot_angle);
     TOPPANO.gv.cam.camera.up.x = vect_cam_up.x;
     TOPPANO.gv.cam.camera.up.y = vect_cam_up.y;
     TOPPANO.gv.cam.camera.up.z = vect_cam_up.z;
-    
+
     // mainly for changing TOPPANO.gv.cam.camera.fov
     TOPPANO.gv.cam.camera.updateProjectionMatrix();
 
@@ -412,7 +412,7 @@ function set_on_rotating_scene(){
                                 TOPPANO.gv.cursor.position_array.push(position);
                             }
     });
-    
+
     $('#container').on(end_event,
                        function(event){
                            if(TOPPANO.gv.cursor.state == 'rotating-scene'){
@@ -424,10 +424,10 @@ function set_on_rotating_scene(){
                                 }
                                 var last_position = TOPPANO.gv.cursor.position_array.pop(),
                                     last_sec_position = TOPPANO.gv.cursor.position_array.pop();
-                                
+
                                 var deltaX = (last_position.clientX+last_sec_position.clientX)/2 - event.clientX ,
                                     deltaY = event.clientY - (last_position.clientY+last_sec_position.clientY)/2;
-                              
+
                                 var count;
                                 for (count=0; count<200; count++){
                                     var id = setTimeout(function(count){
@@ -479,7 +479,7 @@ function set_on_scrolling_scene(){
             clearTimeout(TOPPANO.gv.interact.timer);
         }
     }
-    
+
     // for IE & chrome
     $('#container').on('mousewheel', function(event){onMouseWheel(event.originalEvent);});
     // for firefox
@@ -525,7 +525,7 @@ TOPPANO.onDeviceOrientation = function(event){
 
     longitude = longitude * ( 180 / Math.PI );
     latitude = ((-1)*latitude+Math.PI/2) * ( 180 / Math.PI );
-    
+
     if(TOPPANO.gyro.setup == false)
     {
         TOPPANO.gv.cam.lng = longitude;
@@ -552,17 +552,17 @@ TOPPANO.onDeviceOrientation = function(event){
     var V_Z =  new THREE.Vector3(0, 0, 1);
     var V_rot_axis = new THREE.Vector3();
     V_rot_axis.crossVectors(V_heading_negZ, V_Z);
-      
+
     V_rot_axis = V_rot_axis.normalize();
     V_Z.applyAxisAngle(V_rot_axis, (Math.PI/180)*TOPPANO.gv.cam.virtual_lat);
-    
+
     var angle = V_Z.angleTo(V_heading_Y);
     angle = angle*(180/Math.PI);
 
     var side = V_heading_Y.dot(V_rot_axis) ;
     if(side<0)
     {angle = -angle;}
-    
+
     angle = Math.round(1000*angle)/1000;
     TOPPANO.gyro.screen_rot_angle = angle + window.orientation;
 }

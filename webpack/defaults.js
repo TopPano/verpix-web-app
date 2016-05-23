@@ -3,7 +3,6 @@ let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const path = require('path');
 const srcPath = path.join(__dirname, '/../shared');
-const dfltPort = 8000;
 
 function getDefaultModules() {
   return {
@@ -48,7 +47,6 @@ function getDefaultModules() {
 module.exports = {
   srcPath: srcPath,
   publicPath: '/static/build/',
-  port: dfltPort,
   getDefaultModules: getDefaultModules,
   postcss: function () {
     return [];

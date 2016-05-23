@@ -11,7 +11,6 @@ let additionalPaths = [];
 
 module.exports = {
   additionalPaths: additionalPaths,
-  port: defaultSettings.port,
   debug: true,
   devtool: 'eval',
   output: {
@@ -19,19 +18,6 @@ module.exports = {
     filename: 'app.js',
     publicPath: defaultSettings.publicPath
   },
-  /*
-  devServer: {
-    contentBase: './src/',
-    historyApiFallback: true,
-    hot: true,
-    port: defaultSettings.port,
-    publicPath: defaultSettings.publicPath,
-    noInfo: false,
-    watchOptions: {
-      poll: 1000
-    }
-  },
-  */
   postcss: () => {
     return [
       require('postcss-cssnext')(),
