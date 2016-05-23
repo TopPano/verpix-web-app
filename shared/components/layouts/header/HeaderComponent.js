@@ -1,9 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Grid from 'react-bootstrap/lib/Grid';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
 import Brand from './BrandComponent.js';
 import List from './ListComponent.js';
 
@@ -13,20 +10,13 @@ if (process.env.BROWSER) {
 
 class HeaderComponent extends Component {
   render() {
+    const isLogin = this.props.username ? true : false;
     return (
       <div className="header-component navbar-fixed-top">
-        <Grid fluid>
-          <Row>
-            <Col xs={4} xsOffset={4}>
-              <Brand />
-            </Col>
-            <Col xs={4}>
-              {this.props.username &&
-                <List {...this.props} />
-              }
-            </Col>
-          </Row>
-        </Grid>
+        <Brand alwaysShow={!isLogin} />
+        {isLogin &&
+          <List {...this.props} />
+        }
       </div>
     );
   }

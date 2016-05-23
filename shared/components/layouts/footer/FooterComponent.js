@@ -1,11 +1,7 @@
 'use strict';
 
 import React from 'react';
-import Grid from 'react-bootstrap/lib/Grid';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
-import List from './ListComponent';
-import Right from './RightComponent';
+import { EXTERNAL_LINKS } from '../../../lib/const.js';
 
 if (process.env.BROWSER) {
   require('styles/layout/footer/Footer.css');
@@ -14,17 +10,19 @@ if (process.env.BROWSER) {
 class FooterComponent extends React.Component {
   render() {
     return (
-      <div className="footer-component navbar-fixed-bottom">
-        <Grid fluid>
-          <Row>
-            <Col xs={12} sm={8}>
-              <List />
-            </Col>
-            <Col xs={0} sm={4}>
-              <Right right={'Toppano.In All rights reserved.'} />
-            </Col>
-          </Row>
-        </Grid>
+      <div className='footer-component navbar-fixed-bottom'>
+        <a className='footer-item' href={EXTERNAL_LINKS.FAQ} target='_blank'>{'FAQ'}</a>
+        <a className='footer-item' href={EXTERNAL_LINKS.TERMS_OF_USE} target='_blank'>{'Terms of Use'}</a>
+        <a className='footer-item' href={EXTERNAL_LINKS.PRIVACY_POLICY} target='_blank'>{'Privacy Policy'}</a>
+        <a className='footer-item' href={EXTERNAL_LINKS.FACEBOOK} target='_blank'>
+          <img src='/static/images/footer/link-facebook.png' />
+        </a>
+        <a className='footer-item' href={EXTERNAL_LINKS.TWITTER} target='_blank'>
+          <img src='/static/images/footer/link-twitter.png' />
+        </a>
+        <a className='footer-item' href={EXTERNAL_LINKS.INSTAGRAM} target='_blank'>
+          <img src='/static/images/footer/link-instagram.png' />
+        </a>
       </div>
     );
   }

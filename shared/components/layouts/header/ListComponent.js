@@ -10,13 +10,26 @@ if (process.env.BROWSER) {
 
 class ListComponent extends Component {
   render() {
-    const { username } = this.props;
+    const isLogin = this.props.username ? true : false;
     return (
-      <div className="header-list-component">
-        {username &&
-          <UserMenu {...this.props}>
-            <div className="header-list-username">{username}</div>
-          </UserMenu>
+      <div className='list-component'>
+        {isLogin &&
+          <div className='list-wrapper'>
+            <div className='list-item-wrapper list-item-may-hide'>
+              <img src='/static/images/header/home-small.png' className='list-item list-item-home' />
+            </div>
+            <div className='list-item-wrapper'>
+              <img src='/static/images/header/follower.png' className='list-item' />
+            </div>
+            <div className='list-item-wrapper'>
+              <img src='/static/images/header/explorer.png' className='list-item' />
+            </div>
+            <div className='list-item-wrapper'>
+              <UserMenu {...this.props}>
+                <img src='/static/images/header/account.png' className='list-item' />
+              </UserMenu>
+            </div>
+          </div>
         }
       </div>
     );

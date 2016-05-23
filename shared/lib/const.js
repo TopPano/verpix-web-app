@@ -28,6 +28,10 @@ export const LOGIN_ERR_MSG = {
 }
 
 export const EXTERNAL_LINKS = {
+  FAQ: 'https://www.facebook.com/verpix/notes',
   TERMS_OF_USE: 'http://toppano.in/termofuse/',
-  PRIVACY_POLICY: 'http://toppano.in/privacy-policy/'
+  PRIVACY_POLICY: 'http://toppano.in/privacy-policy/',
+  FACEBOOK: 'https://www.facebook.com/verpix/',
+  TWITTER: 'https://twitter.com/verpix',
+  INSTAGRAM: 'https://www.instagram.com/verpix_me/'
 }

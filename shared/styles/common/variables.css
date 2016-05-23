@@ -6,8 +6,11 @@ $text-font-family: Helvetica;
 $text-font-rootsz: 16px;
 
 /* Variables for layout. */
-$header-height: 60px;
-$footer-height: 30px;
+$layout-padding: 15px;
+$header-height: 50px;
+$header-bg-color: black;
+$footer-height: 25px;
+$footer-bg-color: $header-bg-color;
 
 /* Variables for counter component. */
 $counter-icon-length: 32px;
