@@ -91,6 +91,7 @@ function post(title, linkUrl, imgUrl) {
     window.FB.ui({
       method: 'share',
       display: 'iframe',
+      mobile_iframe: true,
       href: linkUrl,
       title: title,
       picture: imgUrl

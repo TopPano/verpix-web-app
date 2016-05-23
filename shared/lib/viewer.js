@@ -3,6 +3,9 @@ import $ from 'jquery';
 import { Base64 } from 'js-base64';
 import sortBy from 'lodash/sortBy';
 
+import { isMobile } from '../lib/devices.js';
+
+var requestAnimationFrameId;
 var TOPPANO = TOPPANO || {};
 
 // global variables initialization
@@ -133,6 +136,17 @@ export function startViewer(params) {
   update();
 }
 
+export function stopViewer() {
+  window.removeEventListener('resize', TOPPANO.onWindowResize);
+  if(requestAnimationFrameId) {
+    window.cancelAnimationFrame(requestAnimationFrameId);
+    requestAnimationFrameId = undefined;
+  }
+  if(TOPPANO.gv.mobile.isMobile) {
+    document.removeEventListener('touchmove', preventPageScrolling);
+  }
+}
+
 export function getCurrentUrl() {
   const queryStr =
     'fov=' + parseInt(TOPPANO.gv.cam.camera.fov) +
@@ -224,22 +238,22 @@ function addMesh(texture, index) {
 
 // Optimization function for mobile devices.
 function optimizeMobile() {
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        TOPPANO.gv.mobile.isMobile = true;
-        //TOPPANO.gyro.isOn = (getUrlParam('gyro') === 'on');
+  if(isMobile()) {
+    TOPPANO.gv.mobile.isMobile = true;
+    document.addEventListener('touchmove', preventPageScrolling);
+  }
+}
 
-        // Prevent scrolling the entire page.
-        $(document).on('touchmove', function(event) {
-            event.preventDefault();
-        });
-    }
+// Prevent scrolling the entire page.
+function preventPageScrolling(e) {
+  e.preventDefault();
 }
 
 // add listeners
 TOPPANO.addListener = function() {
-    TOPPANO.setCursorHandler();
-    TOPPANO.handleClick();
-    window.addEventListener('resize', TOPPANO.onWindowResize, false);
+  TOPPANO.setCursorHandler();
+  TOPPANO.handleClick();
+  window.addEventListener('resize', TOPPANO.onWindowResize);
 };
 
 // setting global variables for initialization
@@ -304,7 +318,7 @@ TOPPANO.rendererSetting = function() {
 
 // render scene
 TOPPANO.renderScene = function() {
-  requestAnimationFrame(update);
+  requestAnimationFrameId = window.requestAnimationFrame(update);
   TOPPANO.gv.renderer.clear();
   TOPPANO.gv.renderer.render(TOPPANO.gv.scene, TOPPANO.gv.cam.camera);
   TOPPANO.gv.renderer.clearDepth();

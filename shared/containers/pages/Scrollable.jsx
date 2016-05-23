@@ -6,6 +6,8 @@ import { followUser, unfollowUser } from '../../actions/user';
 import { likePost, unlikePost } from '../../actions/post';
 import { showLikeList } from '../../actions/post';
 
+const REMAINED_SCROLL_OFFSET = 100;
+
 export default class ScrollablePageContainer extends Component {
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
@@ -36,10 +38,10 @@ export default class ScrollablePageContainer extends Component {
     // Determine: need to read more content or not.
     if(this.hasMoreContent() && !this.isFetchingContent()) {
       var offset = window.scrollY + window.innerHeight;
-      var height = document.documentElement.offsetHeight;
+      var height = document.documentElement.offsetHeight - REMAINED_SCROLL_OFFSET;
 
       // Scroll to the bottom?
-      if(offset === height) {
+      if(offset >= height) {
         this.requestMoreContent();
       }
     }
