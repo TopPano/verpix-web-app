@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import urlencode from 'urlencode';
 
 import { DEFAULT_VIEWER_OPTIONS } from '../lib/const';
-import { startViewer } from '../lib/viewer.js';
+import { startViewer, stopViewer } from '../lib/viewer.js';
 import Sidebar from './Sidebar';
 
 if (process.env.BROWSER) {
@@ -56,6 +56,11 @@ export default class Viewer extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if(process.env.BROWSER) {
+      stopViewer();
+    }
+  }
   render() {
     return (
       <div className="viewer-component">

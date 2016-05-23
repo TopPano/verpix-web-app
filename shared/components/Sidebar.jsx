@@ -4,13 +4,13 @@ import React, { Component, PropTypes } from 'react';
 import { toInteger, merge, replace } from 'lodash';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
-import MobileDetect from 'mobile-detect';
 import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from './PeopleList';
 import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';
 import { getCurrentUrl } from '../lib/viewer.js';
 import { shareTwitter, shareFacebook } from '../lib/share.js';
+import { isMobile } from '../lib/devices.js';
 
 const NON_CLICKED = -1;
 const ICON_LIST = [
@@ -203,14 +203,6 @@ export default class Sidebar extends Component {
         date.getUTCMinutes();
   }
 
-  isMobile() {
-    if (process.env.BROWSER) {
-      return new MobileDetect(window.navigator.userAgent).mobile() ? true :false;
-    } else {
-      return false;
-    }
-  }
-
   render() {
     const { post, userId, likePost, unlikePost, followUser, unfollowUser } = this.props;
     const { clicked, isInTransitioned, isHelpShown, shareLink } = this.state;
@@ -275,7 +267,7 @@ export default class Sidebar extends Component {
       </div>
     );
 
-    const device = this.isMobile() ? 'mobile' : 'desktop';
+    const device = isMobile() ? 'mobile' : 'desktop';
     HELP_LIST.map((help) => {
       const imgUrl = replace(help.img, '{$device}', device);
       helpList.push(

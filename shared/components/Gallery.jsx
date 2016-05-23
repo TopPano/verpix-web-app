@@ -153,7 +153,7 @@ Gallery.propTypes = {
   likePost: PropTypes.func.isRequired,
   unlikePost: PropTypes.func.isRequired,
   getLikelist: PropTypes.func.isRequired,
-    loadMorePosts: PropTypes.func.isRequired,
+  loadMorePosts: PropTypes.func.isRequired,
   showAuthor: PropTypes.bool
 };
 Gallery.defaultProps = {
