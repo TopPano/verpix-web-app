@@ -1,7 +1,9 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 import Brand from './BrandComponent.js';
 import List from './ListComponent.js';
 

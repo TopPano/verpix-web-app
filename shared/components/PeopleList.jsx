@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/lib/Modal';
 
 import Button from './Button';
 

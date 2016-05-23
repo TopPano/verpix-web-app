@@ -1,4 +1,5 @@
-import { merge, assign } from 'lodash';
+import merge from 'lodash/merge';
+import assign from 'lodash/assign';
 import {
   SHOW_LIKE_LIST_REQUEST,
   SHOW_LIKE_LIST_SUCCESS,

@@ -2,8 +2,9 @@
 
 import React, { Component, PropTypes } from 'react';
 import FacebookLogin from 'react-facebook-login';
-import { merge, trim } from 'lodash';
-import { isEmail } from 'validator';
+import merge from 'lodash/merge';
+import trim from 'lodash/trim';
+import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'is-empty';
 
 import { LOGIN_ERR_MSG, EXTERNAL_LINKS } from '../lib/const';

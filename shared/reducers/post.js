@@ -1,4 +1,5 @@
-import { merge, assign } from 'lodash';
+import merge from 'lodash/merge';
+import assign from 'lodash/assign';
 import {
   GET_POST_REQUSET,
   GET_POST_SUCCESS,

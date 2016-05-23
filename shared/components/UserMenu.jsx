@@ -1,8 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
-
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Popover from 'react-bootstrap/lib/Popover';
 import { Link } from 'react-router';
 
 if (process.env.BROWSER) {

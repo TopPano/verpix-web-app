@@ -1,9 +1,13 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { toInteger, merge, replace } from 'lodash';
+import toInteger from 'lodash/toInteger';
+import merge from 'lodash/merge';
+import replace from 'lodash/replace';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
+import Modal from 'react-bootstrap/lib/Modal';
 import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from './PeopleList';

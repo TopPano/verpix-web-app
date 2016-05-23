@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import Viewer from '../../components/Viewer';
