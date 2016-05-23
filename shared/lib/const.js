@@ -17,6 +17,7 @@ export const LOGIN_ERR_MSG = {
   },
   PASSWORD: {
     EMPTY: 'Please enter your password.',
+    EMPTY_AGAIN: 'Please enter your password again.',
     NOT_MATCHED: 'These passwords don\'t match.'
   },
   AJAX: {
@@ -24,4 +25,9 @@ export const LOGIN_ERR_MSG = {
     UNAUTHORIZED: 'The email and password don\'t match.',
     OTHERS: 'Something wrong with server.\nPlease try again later.'
   }
+}
+
+export const EXTERNAL_LINKS = {
+  TERMS_OF_USE: 'http://toppano.in/termofuse/',
+  PRIVACY_POLICY: 'http://toppano.in/privacy-policy/'
 }

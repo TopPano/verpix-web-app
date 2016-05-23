@@ -145,6 +145,9 @@ $share-input-bg: rgba(0, 0, 0, 0.25);
         cursor: pointer;
         &.sidebar-share-facebook {
           background-image: url('/static/images/sidebar/btn-facebook.png');
+          border: none;
+          padding: none;
+          background-color: transparent;
         }
         &.sidebar-share-twitter {
           background-image: url('/static/images/sidebar/btn-twitter.png');
@@ -183,6 +186,59 @@ $share-input-bg: rgba(0, 0, 0, 0.25);
       padding: 5px;
       font-size: 0.9rem;
       color: white;
+    }
+  }
+}
+
+$help-modal-big-length: 400px;
+$help-modal-small-height: 240px;
+$help-modal-landscape-boundary: 420px;
+
+.modal.sidebar-help-modal {
+  .modal-dialog {
+    width: 90%;
+    max-width: $help-modal-big-length;
+    .modal-content {
+      background-color: rgba(0, 0, 0, 0.5);
+      @media (orientation:landscape) {
+        height: $help-modal-small-height;
+      }
+      @media (orientation:landscape) and (height >= $help-modal-landscape-boundary) {
+        height: $help-modal-big-length;
+      }
+      @media (orientation:portrait) {
+        height: $help-modal-big-length;
+      }
+
+      .sidebar-help-item {
+        @media (orientation:landscape) {
+          width: 25%;
+          height: 100%;
+        }
+        @media (orientation:landscape) and (height >= $help-modal-landscape-boundary) {
+          width: 50%;
+          height: 50%;
+        }
+        @media (orientation:portrait) {
+          width: 50%;
+          height: 50%;
+        }
+
+        float: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .sidebar-help-item-img {
+          width: 80%;
+        }
+
+        .sidebar-help-item-desc {
+          flex-grow: 1;
+          text-align: center;
+        }
+      }
     }
   }
 }

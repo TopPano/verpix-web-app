@@ -5,13 +5,26 @@ export const GET_POST_REQUEST = 'GET_POST_REQUEST';
 export const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
 export const GET_POST_FAILURE = 'GET_POST_FAILURE';
 
-export function getPost(postId, authToken) {
+export function getPost({postId, params={}}) {
   return (dispatch) => {
     dispatch({
       type: GET_POST_REQUEST
     });
 
-    return api.posts.getPost(postId, authToken).then((response) => {
+    let queryId;
+    if (postId) {
+      queryId = postId;
+    } else {
+      queryId = params.postId;
+    }
+    if (!queryId) {
+
+      return dispatch({
+        type: GET_POST_REQUEST
+      });
+    }
+
+    return api.posts.getPost(queryId).then((response) => {
       dispatch({
         type: GET_POST_SUCCESS,
         response

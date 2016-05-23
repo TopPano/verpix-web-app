@@ -28,15 +28,17 @@ export default class Summary extends Component {
 
     for(let id in people) {
       const who = people[id][type];
-      const { isFriend } = people[id];
-      const username = parseUsername(who);
-      const profilePhotoUrl = parseProfilePhotoUrl(who);
-      list.push({
-        username,
-        profilePhotoUrl,
-        id,
-        isFriend
-      });
+      if(who) {
+        const { isFriend } = people[id];
+        const username = parseUsername(who);
+        const profilePhotoUrl = parseProfilePhotoUrl(who);
+        list.push({
+          username,
+          profilePhotoUrl,
+          id,
+          isFriend
+        });
+      }
     }
 
     return list;

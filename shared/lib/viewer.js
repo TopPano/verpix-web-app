@@ -1,12 +1,12 @@
 import THREE from 'three';
 import $ from 'jquery';
 import { Base64 } from 'js-base64';
+import { sortBy } from 'lodash';
 
 var TOPPANO = TOPPANO || {};
 
 // global variables initialization
 TOPPANO.gv = {
-    modelId: '',
     scene: null,
     objScene: null,
     renderer: null,
@@ -21,9 +21,6 @@ TOPPANO.gv = {
         position_array: [],
         slide_func_array:[]
     },
-
-    nodes_meta: null,
-    current_node_ID:'',
     
     // camera parameter
     cam: {
@@ -114,9 +111,7 @@ TOPPANO.gv = {
       startPos: { x: 0, y: 0 },
       endPos: { x: 0, y: 0 }
     },
-    currentLink: '',
-    defaultMap: './image/tile/0-0.jpeg',
-    apiUrl: 'http://dev.verpix.net:3000/api'
+    currentLink: ''
  };
 
 TOPPANO.gyro = {
@@ -130,15 +125,12 @@ TOPPANO.gyro = {
 // Entry function
 export function startViewer(params) {
   // Optimization for mobile devices.
-  TOPPANO.optimizeMobile();
+  optimizeMobile();
 
   // init threejs scene and camera
-  TOPPANO.threeInit(params);
+  initThree(params);
 
-  // request metadata, load all img files and build the first scene
-  TOPPANO.modelInit(params.modelId);
-
-  TOPPANO.update();
+  update();
 }
 
 export function getCurrentUrl() {
@@ -149,64 +141,89 @@ export function getCurrentUrl() {
   return window.location.href.split('?')[0] + '?' + Base64.encode(queryStr);
 }
 
-TOPPANO.modelInit = function(modelId) {
-    TOPPANO.gv.modelId = modelId;
-    var model = {};
-    var url = (TOPPANO.gv.apiUrl + '/posts/' + modelId);
+export function getSnapshot (width, height) {
+  let canvasMini = $('<canvas width="' + width + '" height="' + height + '"></canvas>').attr('type', 'hidden').append('#container');
+  let snapshot = '';
 
-    $.get(url).then(
-        function(modelMeta) {
-            model['summary'] = {
-                'name': modelMeta['name'],
-                'presentedBy': modelMeta['presentedBy'],
-                'description': modelMeta['description'],
-                'address': modelMeta['address']
-            };
+  canvasMini[0].getContext('2d').drawImage(TOPPANO.gv.renderer.domElement, 0, 0, width, height);
+  snapshot= canvasMini[0].toDataURL('image/jpeg', 0.8);
+  canvasMini.remove();
 
-            TOPPANO.gv.nodes_meta = $.extend({}, modelMeta.nodes);
-            // load all imgs and build the first scene
-            TOPPANO.loadAllImg(TOPPANO.gv.nodes_meta)
-                 .pipe(function(){
-                     var first_node_ID = Object.keys(TOPPANO.gv.nodes_meta)[0];
-                     TOPPANO.gv.current_node_ID = first_node_ID;
-                     TOPPANO.buildScene(first_node_ID);
-                 });
-    }).done(function() {
-        // add listener
-        TOPPANO.addListener();
-    });
-
+  return snapshot;
 }
 
-TOPPANO.threeInit = function(map) {
-    TOPPANO.initGV(map);
+function initThree(params) {
+  TOPPANO.initGV(params);
 
-    TOPPANO.gv.cam.camera = new THREE.PerspectiveCamera(
-        TOPPANO.gv.cam.defaultCamFOV, // field of view (vertical)
-        // 80,
-        window.innerWidth / window.innerHeight, // aspect ratio
-        1, // near plane
-        1100 // far plane
-    );
+  TOPPANO.gv.cam.camera = new THREE.PerspectiveCamera(
+    TOPPANO.gv.cam.defaultCamFOV, // field of view (vertical)
+    window.innerWidth / window.innerHeight, // aspect ratio
+    1, // near plane
+    1100 // far plane
+  );
 
-    // change position of the cam
-    var sphereSize = TOPPANO.gv.para.sphereSize;
-    TOPPANO.gv.cam.camera.target = new THREE.Vector3(sphereSize, sphereSize, sphereSize);
+  // change position of the cam
+  var sphereSize = TOPPANO.gv.para.sphereSize;
+  TOPPANO.gv.cam.camera.target = new THREE.Vector3(sphereSize, sphereSize, sphereSize);
 
-    // scene for bg, objScene for transition objects
-    TOPPANO.gv.scene = new THREE.Scene();
-    TOPPANO.gv.objScene = new THREE.Scene();
+  // scene for bg, objScene for transition objects
+  TOPPANO.gv.scene = new THREE.Scene();
+  TOPPANO.gv.objScene = new THREE.Scene();
 
-    // renderer setting
-    TOPPANO.rendererSetting();
-    
-   /* increase progress bar */
-   var current_progress = $('#progress-div progress').val();
-   $('#progress-div progress').val(current_progress+8);
-};
+  // renderer setting
+  TOPPANO.rendererSetting();
+
+  // build the scene
+  buildScene(params.imgs);
+
+  // add DOM event handlers
+  TOPPANO.addListener();
+}
+
+// Generate textrues from images.
+//function genTextures(imgs) {
+function buildScene(imgs) {
+  let loader = new THREE.TextureLoader();
+  loader.crossOrigin = '';
+  let sortedImgs = sortBy(imgs, (img) => {
+    const subIndex = img.srcUrl.indexOf('equirectangular');
+    return img.srcUrl.slice(subIndex);
+  });
+
+  sortedImgs.map((img, index) => {
+    loader.load(img.srcUrl, (texture) => {
+      texture.minFilter = THREE.LinearFilter;
+      addMesh(texture, index);
+    }, () => {
+      // function called when download progresses
+    }, () => {
+      // TODO: Error handling.
+    });
+  });
+}
+
+function addMesh(texture, index) {
+  const sphereSize = TOPPANO.gv.para.sphereSize;
+  const opacity = 1;
+  const j = parseInt(index / 4);
+
+  TOPPANO.gv.headingOffset = 0;
+
+  let geometry = new THREE.SphereGeometry(sphereSize, 20, 20, Math.PI/2 * index - TOPPANO.gv.headingOffset * Math.PI / 180, Math.PI/2, Math.PI/2 * j, Math.PI/2);
+  geometry.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
+  let material = new THREE.MeshBasicMaterial({
+    map: texture,
+    overdraw: true,
+    transparent: true,
+    opacity
+  });
+  let mesh = new THREE.Mesh(geometry, material);
+
+  TOPPANO.gv.scene.add(mesh);
+}
 
 // Optimization function for mobile devices.
-TOPPANO.optimizeMobile = function() {
+function optimizeMobile() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         TOPPANO.gv.mobile.isMobile = true;
         //TOPPANO.gyro.isOn = (getUrlParam('gyro') === 'on');
@@ -215,93 +232,6 @@ TOPPANO.optimizeMobile = function() {
         $(document).on('touchmove', function(event) {
             event.preventDefault();
         });
-    }
-};
-
-function loadImg(node_ID, file_url){
-    var _dfr = $.Deferred();
-      
-    var file_name = file_url.substr(file_url.lastIndexOf('/')+1);
-    var texture = THREE.ImageUtils.loadTexture(file_url, THREE.UVMapping, function() {
-      texture.minFilter = THREE.LinearFilter;
-      var file_obj = {
-        'name':file_name,
-        'texture':texture
-      };
-      if(!('textures' in TOPPANO.gv.nodes_meta[node_ID])){
-        TOPPANO.gv.nodes_meta[node_ID]['textures'] = new Array();
-      }
-      TOPPANO.gv.nodes_meta[node_ID].textures.push(file_obj);
-      return _dfr.resolve('');
-    }, function() {
-      return _dfr.reject('');
-    });
-    return _dfr.promise();
-}
-
-// loading tiles images
-TOPPANO.loadAllImg = function(nodes_meta) {
-    THREE.ImageUtils.crossOrigin = '';
-    var _dfr = $.Deferred();
-    var deferreds = [];
-
-    for (let node_ID in nodes_meta){
-        var node_files = nodes_meta[node_ID].files;
-        for (let file_index in node_files){
-            if(file_index.search('equirectangular')>0 && file_index.search('low')<0 ){
-                var file_url = node_files[file_index];
-                deferreds.push(loadImg(node_ID, file_url).done(() => {
-                    /* increase progress bar */
-                    var current_progress = $('#progress-div progress').val();
-                    $('#progress-div progress').val(current_progress+10);
-                }));
-            }
-        }
-    }
-
-    $.when.apply($, deferreds).then(
-            function(){
-                // order all files of nodes in TOPPANO.gv.file_sets
-                for (let node_ID in TOPPANO.gv.nodes_meta){
-                    TOPPANO.gv.nodes_meta[node_ID].textures.sort(
-                    function(a,b){
-                        if(a.name>b.name)
-                            return 1;
-                        else if(a.name<b.name)
-                            return -1
-                        return 0});
-                }
-                _dfr.resolve();
-             },
-             function() {
-               _dfr.reject();
-             }
-            );
-    return _dfr.promise();
-};
-
-TOPPANO.buildScene = function(node_ID){
-    var sphereSize = TOPPANO.gv.para.sphereSize;
-    var node_textures = TOPPANO.gv.nodes_meta[node_ID].textures;
-    var i;
-    var opacity;
-    
-    TOPPANO.gv.headingOffset = 0;
-    opacity = 1;
-
-    for(i=0; i<8; i++){
-        var j = parseInt(i/4);
-        var geometry = new THREE.SphereGeometry(sphereSize, 20, 20, Math.PI/2 * i - TOPPANO.gv.headingOffset * Math.PI / 180, Math.PI/2, Math.PI/2 * j, Math.PI/2);
-        geometry.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
-
-        var material = new THREE.MeshBasicMaterial({
-            map:node_textures[i].texture,
-            overdraw: true,
-            transparent: true,
-            opacity: opacity
-        });
-        var mesh = new THREE.Mesh(geometry, material);
-        TOPPANO.gv.scene.add(mesh);
     }
 }
 
@@ -372,22 +302,9 @@ TOPPANO.rendererSetting = function() {
         TOPPANO.gv.container.bound.right = TOPPANO.gv.container.offsetLeft + TOPPANO.gv.container.Width;
 };
 
-// snapshot function
-TOPPANO.getSnapshot = function(width, height) {
-    var canvasMini = $('<canvas width="' + width + '" height="' + height + '"></canvas>')
-            .attr('type', 'hidden').append('#container');
-    var snapshot = '';
-
-    canvasMini[0].getContext('2d').drawImage(TOPPANO.gv.renderer.domElement, 0, 0, width, height);
-    snapshot= canvasMini[0].toDataURL('image/jpeg', 0.8);
-    canvasMini.remove();
-
-    return snapshot;
-};
-
 // render scene
 TOPPANO.renderScene = function() {
-  requestAnimationFrame(TOPPANO.update);
+  requestAnimationFrame(update);
   TOPPANO.gv.renderer.clear();
   TOPPANO.gv.renderer.render(TOPPANO.gv.scene, TOPPANO.gv.cam.camera);
   TOPPANO.gv.renderer.clearDepth();
@@ -395,7 +312,7 @@ TOPPANO.renderScene = function() {
 };
 
 // threejs update
-TOPPANO.update = function() {
+function update() {
     TOPPANO.gv.cam.lat = Math.max(-85, Math.min(85, TOPPANO.gv.cam.lat));
     TOPPANO.gv.cam.lng = (TOPPANO.gv.cam.lng + 360) % 360;
     TOPPANO.gv.cam.phi = THREE.Math.degToRad(90 - TOPPANO.gv.cam.lat);
@@ -425,7 +342,7 @@ TOPPANO.update = function() {
     TOPPANO.gv.cam.camera.updateProjectionMatrix();
 
     TOPPANO.renderScene();
-};
+}
 
 function clamp(number, min, max) {
     return Math.min(Math.max(number, min), max);

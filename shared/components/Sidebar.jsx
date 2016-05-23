@@ -3,14 +3,18 @@
 import React, { Component, PropTypes } from 'react';
 import toInteger from 'lodash/toInteger';
 import merge from 'lodash/merge';
+import replace from 'lodash/replace';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
+import Modal from 'react-bootstrap/lib/Modal';
+import MobileDetect from 'mobile-detect';
+import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from './PeopleList';
 import { parseUsername, parseProfilePhotoUrl } from '../lib/profileParser.js';
 import { getCurrentUrl } from '../lib/viewer.js';
-import { shareTwitter } from '../lib/share.js';
+import { shareTwitter, shareFacebook } from '../lib/share.js';
 
 const NON_CLICKED = -1;
 const ICON_LIST = [
@@ -22,6 +26,24 @@ const ICON_CLICKED_LIST = [
   '/static/images/sidebar/icon-info-clicked.png',
   '/static/images/sidebar/icon-map-clicked.png',
   '/static/images/sidebar/icon-share-clicked.png'
+];
+const HELP_LIST = [
+  {
+    img: '/static/images/sidebar/help-look-{$device}.svg',
+    desc: 'Look Around'
+  },
+  {
+    img: '/static/images/sidebar/help-zoom-{$device}.svg',
+    desc: 'Zoom In/Out'
+  },
+  {
+    img: '/static/images/sidebar/help-click-{$device}.svg',
+    desc: '(X1) Hide/Show'
+  },
+  {
+    img: '/static/images/sidebar/help-click-{$device}.svg',
+    desc: '(X2) FullScreen'
+  }
 ];
 const URL_UPDATE_RATE = 16;
 const IFRAME_MIN_WIDTH = 240;
@@ -39,6 +61,7 @@ export default class Sidebar extends Component {
     this.state = {
       clicked: NON_CLICKED,
       isInTransitioned: false,
+      isHelpShown: false,
       shareLink: {
         width: IFRAME_MIN_WIDTH,
         height: IFRAME_MIN_HEIGHT,
@@ -123,6 +146,13 @@ export default class Sidebar extends Component {
     shareTwitter(getCurrentUrl());
   }
 
+  handleShareFacebook = (response) => {
+    shareFacebook(response.accessToken, {
+      link: getCurrentUrl(),
+      caption: this.props.post.caption
+    });
+  }
+
   genLikelist = () => {
     const { users, userIds } = this.props.likelist.list;
     let list = [];
@@ -155,11 +185,41 @@ export default class Sidebar extends Component {
     }, 50);
   }
 
+  showHelp = () => {
+    this.setState({
+      isHelpShown: true
+    });
+  }
+
+  hideHelp = () => {
+    this.setState({
+      isHelpShown: false
+    });
+  }
+
+  // Transfrom the date to our format.
+  transDateFormat(dateRaw) {
+    let date = new Date(dateRaw);
+    return date.getUTCFullYear() + '/' +
+        (date.getUTCMonth() + 1) + '/' +
+        date.getUTCDate() + ' ' +
+        date.getUTCHours() + ':' +
+        date.getUTCMinutes();
+  }
+
+  isMobile() {
+    if (process.env.BROWSER) {
+      return new MobileDetect(window.navigator.userAgent).mobile() ? true :false;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const { post, userId, likePost, unlikePost, followUser, unfollowUser } = this.props;
-    const { clicked, isInTransitioned, shareLink } = this.state;
+    const { clicked, isInTransitioned, isHelpShown, shareLink } = this.state;
     const showContent = (clicked !== NON_CLICKED) && (clicked !== 1);
-    let icons = [], contents = [];
+    let icons = [], contents = [], helpList = [];
 
     ICON_LIST.map((icon, k) => {
       const iconClicked = ICON_CLICKED_LIST[k];
@@ -173,26 +233,36 @@ export default class Sidebar extends Component {
       );
     });
 
-    const copiedTooltip = <Tooltip>{'Copied!'}</Tooltip>
+    const name = parseUsername(post.owner),
+          profilePhotoUrl = parseProfilePhotoUrl(post.owner),
+          date = this.transDateFormat(post.created);
     contents.push(
       <div className={'sidebar-content sidebar-info' + (clicked === 0 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-info-upper'>
-          <img className='sidebar-info-photo' src='https://upload.wikimedia.org/wikipedia/commons/0/02/Fried_egg,_sunny_side_up.jpg' />
+          <img className='sidebar-info-photo' src={profilePhotoUrl} />
           <div className='sidebar-info-title'>
-            <div className='sidebar-info-name text-single-line'>{'hawk lin'}</div>
-            <div className='sidebar-info-date text-single-line'>{'2015/6/3 6:6'}</div>
+            <div className='sidebar-info-name text-single-line'>{name}</div>
+            <div className='sidebar-info-date text-single-line'>{date}</div>
           </div>
         </div>
-        <textarea className='sidebar-info-caption' readOnly value={'hahaha hahaha'} />
+        <textarea className='sidebar-info-caption' readOnly value={post.caption} />
       </div>
     );
     contents.push(
       <div />
     );
+    const copiedTooltip = <Tooltip>{'Copied!'}</Tooltip>
     contents.push(
       <div className={'sidebar-content sidebar-share' + (clicked === 2 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-share-btnlist'>
-          <div className='sidebar-share-btn sidebar-share-facebook' />
+          <FacebookLogin
+            appId='589634317860022'
+            version={'2.6'}
+            scope={'publish_actions'}
+            callback={this.handleShareFacebook}
+            cssClass='sidebar-share-btn sidebar-share-facebook'
+            textButton=''
+          />
           <div className='sidebar-share-btn sidebar-share-twitter' onClick={this.handleShareTwitter} />
           <OverlayTrigger ref='copiedOverlayTrigger' rootClose trigger={'click'} placement={'top'} overlay={copiedTooltip}>
             <CopyToClipboard text={shareLink.output} onCopy={this.handleCopiedLink}>
@@ -208,6 +278,17 @@ export default class Sidebar extends Component {
         <textarea ref='shareLinkOutput' className='sidebar-share-link' disabled value={shareLink.output} />
       </div>
     );
+
+    const device = this.isMobile() ? 'mobile' : 'desktop';
+    HELP_LIST.map((help) => {
+      const imgUrl = replace(help.img, '{$device}', device);
+      helpList.push(
+        <div className='sidebar-help-item'>
+          <img className='sidebar-help-item-img' src={imgUrl} alt={help.desc} />
+          <div className='sidebar-help-item-desc'>{help.desc}</div>
+        </div>
+      );
+    });
 
     return (
       <div className='sidebar-component'>
@@ -230,7 +311,7 @@ export default class Sidebar extends Component {
             {icons}
           </div>
         </div>
-        <img className='sidebar-icon sidebar-help' src='/static/images/sidebar/icon-help.png'/>
+        <img className='sidebar-icon sidebar-help' src='/static/images/sidebar/icon-help.png' onClick={this.showHelp}/>
         <PeopleList
           ref='peopleList'
           list={this.genLikelist()}
@@ -238,6 +319,11 @@ export default class Sidebar extends Component {
           followUser={followUser}
           unfollowUser={unfollowUser}
         />
+        <Modal className='sidebar-help-modal' show={isHelpShown} onHide={this.hideHelp}>
+          <Modal.Body>
+            {helpList}
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }

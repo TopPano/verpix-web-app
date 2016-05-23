@@ -49,10 +49,27 @@ $bg-min-width: 1194px;
         align-items: center;
       }
       .login-text {
+        display: inline;
         margin-bottom: 15px;
         text-align: center;
         line-height: 20px;
         white-space: pre;
+        &.login-text-link {
+          text-decoration: none;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+      .login-goto {
+        padding-top: 10px;
+      }
+      .login-agree {
+        padding-top: 3px;
+        font-size: 0.875rem;
+        color: #CCC;
+        .login-text-link {
+          color: white;
+        }
       }
       input {
         width: $input-width;

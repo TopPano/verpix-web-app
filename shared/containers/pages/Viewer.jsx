@@ -4,22 +4,17 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 
+import connectDataFetchers from '../../lib/connectDataFetchers';
 import Viewer from '../../components/Viewer';
 import { followUser, unfollowUser } from '../../actions/user';
 import { getPost, likePost, unlikePost, showLikeList } from '../../actions/post';
 
 class ViewerPageContainer extends Component {
   static propTyes = {
+    post: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     like: PropTypes.object.isRequired
   };
-
-  componentDidMount() {
-    let { postId } = this.props.params;
-    if (postId) {
-      this.props.dispatch(getPost(postId));
-    }
-  }
 
   like = () => {
     const { dispatch } = this.props;
@@ -71,21 +66,12 @@ class ViewerPageContainer extends Component {
   }
 
   render() {
-    const { postId } = this.props.params;
-    const { user, like} = this.props;
-    const post = {
-      postId,
-      likes: {
-        count: 0,
-        isLiked: true
-      }
-    }
+    const { post, user, like } = this.props;
     return (
       <Viewer
         post={post}
         likelist={like}
         userId={user.userId}
-        options={{}}
         likePost={this.like}
         unlikePost={this.unlike}
         getLikelist={this.getLikelist}
@@ -97,11 +83,14 @@ class ViewerPageContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user, like } = state;
+  const { post, user, like } = state;
   return {
+    post,
     user,
     like
   }
 }
 
-export default connect(mapStateToProps)(ViewerPageContainer);
+export default connect(mapStateToProps)(
+  connectDataFetchers(ViewerPageContainer, [ getPost ])
+);
