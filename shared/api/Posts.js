@@ -40,7 +40,8 @@ export default class PostsAPI extends Base {
     });
   }
 
-  exploreRecent(lastPostId) {
+  exploreRecent(lastPostId, authToken) {
+    if (authToken) { this.apiClient.setAuthToken(authToken); }
     return this.apiClient.post({
       url: 'search/recent',
       payload: genQuery(lastPostId),

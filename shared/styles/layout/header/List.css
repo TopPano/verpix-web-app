@@ -23,11 +23,6 @@
       &:hover {
         background-color: #b3b3b3;
       }
-      &.list-item-may-hide {
-        @media (width >= $show-brand-boundary) {
-          display: none;
-        }
-      }
 
       .list-item {
         height: 40px;

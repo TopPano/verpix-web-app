@@ -13,7 +13,7 @@ class BrandComponent extends Component {
       <Link to={'/'} className='brand-component'>
         <img
           className={'brand' + (this.props.alwaysShow ? ' brand-always-show' : '')}
-          src='/static/images/header/home-big.png'
+          src='/static/images/header/logo.png'
           alt='Verpix'
         />
       </Link>

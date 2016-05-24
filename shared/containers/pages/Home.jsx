@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import Home from '../../components/Home.jsx';
+import NewsFeedPageContainer from './NewsFeed.jsx';
 import LoginPageContainer from './Login.jsx';
 
 class HomePageContainer extends Component {
@@ -17,9 +17,7 @@ class HomePageContainer extends Component {
     return (
       <div style={{height: '100%'}}>
         {isAuthenticated &&
-          <Home>
-            {this.props.children}
-          </Home>
+          <NewsFeedPageContainer />
         }
         {!isAuthenticated &&
           <LoginPageContainer />

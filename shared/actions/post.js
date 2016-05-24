@@ -124,13 +124,13 @@ export const LOAD_EXPLORE_RECENT_REQUEST = 'LOAD_EXPLORE_RECENT_REQUEST';
 export const LOAD_EXPLORE_RECENT_SUCCESS = 'LOAD_EXPLORE_RECENT_SUCCESS';
 export const LOAD_EXPLORE_RECENT_FAILURE = 'LOAD_EXPLORE_RECENT_FAILURE';
 
-export function loadExploreRecent({lastPostId}) {
+export function loadExploreRecent({lastPostId, authToken}) {
   return (dispatch) => {
     dispatch({
       type: LOAD_EXPLORE_RECENT_REQUEST
     });
 
-    return api.posts.exploreRecent(lastPostId).then((response) => {
+    return api.posts.exploreRecent(lastPostId, authToken).then((response) => {
       response.result.firstQuery = lastPostId ? false : true;
       dispatch({
         type: LOAD_EXPLORE_RECENT_SUCCESS,

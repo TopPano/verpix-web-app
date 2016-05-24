@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 import UserMenu from '../../UserMenu.jsx';
 
@@ -15,15 +16,12 @@ class ListComponent extends Component {
       <div className='list-component'>
         {isLogin &&
           <div className='list-wrapper'>
-            <div className='list-item-wrapper list-item-may-hide'>
-              <img src='/static/images/header/home-small.png' className='list-item list-item-home' />
-            </div>
-            <div className='list-item-wrapper'>
-              <img src='/static/images/header/follower.png' className='list-item' />
-            </div>
-            <div className='list-item-wrapper'>
+            <Link to={'/'} className='list-item-wrapper'>
+              <img src='/static/images/header/home.png' className='list-item' />
+            </Link>
+            <Link to={'/explore'} className='list-item-wrapper'>
               <img src='/static/images/header/explorer.png' className='list-item' />
-            </div>
+            </Link>
             <div className='list-item-wrapper'>
               <UserMenu {...this.props}>
                 <img src='/static/images/header/account.png' className='list-item' />
