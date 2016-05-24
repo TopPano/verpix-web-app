@@ -18,11 +18,12 @@ export default class NewsFeed extends Component {
     likePost: PropTypes.func.isRequired,
     unlikePost: PropTypes.func.isRequired,
     getLikelist: PropTypes.func.isRequired,
+    hasMorePosts: PropTypes.func.isRequired,
     loadMorePosts: PropTypes.func.isRequired
   };
 
   render() {
-    const { newsFeed, like, userId, likePost, unlikePost, followUser, unfollowUser, getLikelist, loadMorePosts } = this.props;
+    const { newsFeed, like, userId, likePost, unlikePost, followUser, unfollowUser, getLikelist, hasMorePosts, loadMorePosts } = this.props;
     return (
       <div className="newsfeed-component">
         <Gallery
@@ -37,6 +38,7 @@ export default class NewsFeed extends Component {
           likePost={likePost}
           unlikePost={unlikePost}
           getLikelist={getLikelist}
+          hasMorePosts={hasMorePosts}
           loadMorePosts={loadMorePosts}
           showAuthor={true}
         />

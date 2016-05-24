@@ -16,7 +16,7 @@ class ExplorerPageContainer extends ScrollablePageContainer {
     userId: PropTypes.string.isRequired
   };
 
-  hasMoreContent() {
+  hasMoreContent = () => {
     return this.props.explorer.recent.posts.hasNext;
   }
 
@@ -44,6 +44,7 @@ class ExplorerPageContainer extends ScrollablePageContainer {
         likePost={this.like}
         unlikePost={this.unlike}
         getLikelist={this.getLikelist}
+        hasMorePosts={this.hasMoreContent}
         loadMorePosts={this.loadMoreContent}
       >
         {this.props.children}

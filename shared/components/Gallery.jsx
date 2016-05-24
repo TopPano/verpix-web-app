@@ -16,7 +16,8 @@ export default class Gallery extends Component{
     super(props);
     this.state = {
       containerWidth: 0,
-      lastClickedPostId: ''
+      lastClickedPostId: '',
+      shouldShowMoreBtn: true
     };
   }
 
@@ -45,6 +46,9 @@ export default class Gallery extends Component{
 
   handleClickMoreBtn = () => {
     this.props.loadMorePosts();
+    this.setState({
+      shouldShowMoreBtn: false
+    });
   }
 
   showLikelist = (postId) => {
@@ -83,7 +87,7 @@ export default class Gallery extends Component{
   }
 
   render() {
-    const { posts, postIds, maxWidth, ratio, showAuthor, likePost, unlikePost, followUser, unfollowUser } = this.props;
+    const { posts, postIds, maxWidth, ratio, showAuthor, likePost, unlikePost, followUser, unfollowUser, hasMorePosts } = this.props;
     let numPerRow = Math.ceil(this.state.containerWidth / maxWidth);
     let paddingLeft = 5, paddingRight = 5;
     let postWidth =
@@ -121,6 +125,7 @@ export default class Gallery extends Component{
 
     const { userId } = this.props;
     const likelist = this.genLikelist();
+    const showMoreBtn = this.state.shouldShowMoreBtn && hasMorePosts();
     return(
       <div className='gallery-component container-fluid'>
         <div style={{ width: wrapperWidth }} className='gallery-wrapper'>
@@ -133,7 +138,9 @@ export default class Gallery extends Component{
           followUser={followUser}
           unfollowUser={unfollowUser}
         />
-        <div className='gallery-more-btn' onClick={this.handleClickMoreBtn}/>
+        {showMoreBtn &&
+          <div className='gallery-more-btn' onClick={this.handleClickMoreBtn}>{'more'}</div>
+        }
       </div>
     );
   }
@@ -153,6 +160,7 @@ Gallery.propTypes = {
   likePost: PropTypes.func.isRequired,
   unlikePost: PropTypes.func.isRequired,
   getLikelist: PropTypes.func.isRequired,
+  hasMorePosts: PropTypes.func.isRequired,
   loadMorePosts: PropTypes.func.isRequired,
   showAuthor: PropTypes.bool
 };

@@ -18,7 +18,7 @@ class PersonalPageContainer extends ScrollablePageContainer {
     children: PropTypes.object
   };
 
-  hasMoreContent() {
+  hasMoreContent = () => {
     return this.props.person.posts.hasNext;
   }
 
@@ -85,6 +85,7 @@ class PersonalPageContainer extends ScrollablePageContainer {
         unlikePost={this.unlike}
         getLikelist={this.getLikelist}
         loadMorePosts={this.loadMoreContent}
+        hasMorePosts={this.hasMoreContent}
       >
         {this.props.children}
       </Personal>
