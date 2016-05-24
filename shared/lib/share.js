@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { trim } from 'lodash';
+import trim from 'lodash/trim';
 import { getSnapshot } from './viewer.js';
 
 const GOOGLE_SHORT_URL_KEY = 'AIzaSyDMWU0bIoW4FS1OvfCT_X8OCBfe6CLOsCw';

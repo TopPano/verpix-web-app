@@ -48,7 +48,7 @@
     top: $personal-fg-top;
     height: $personal-fg-height;
     width: 100%;
-    @mixin fullbg '../../images/personal/personal-fg.png';
+    @mixin fullbg '/static/images/personal/personal-fg.png';
   }
 }
 

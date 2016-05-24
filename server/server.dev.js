@@ -21,6 +21,7 @@ import routes from '../shared/routes';
 import configureStore from '../shared/store/configureStore';
 import DevTools from '../shared/containers/DevTools';
 
+import serverConfig from '../etc/server-config.json';
 import clientConfig from '../etc/client-config.json';
 
 const app = new Express();
@@ -124,10 +125,10 @@ function renderHTML(html, initialState, config) {
   `;
 }
 
-app.listen(config.port, (error) => {
+app.listen(serverConfig.port, (error) => {
   if (error) {
     console.error(error);
   } else {
-    console.info(`==> 🌎  Listening on port ${config.port}. Open up http://localhost:${config.port}/ in your browser.`);
+    console.info(`==> 🌎  Listening on port ${serverConfig.port}. Open up http://localhost:${serverConfig.port}/ in your browser.`);
   }
 });

@@ -5,11 +5,6 @@ import Express from 'express';
 import cookieParser from 'cookie-parser';
 import qs from 'qs';
 
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import config from '../webpack.config';
-
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
@@ -20,17 +15,13 @@ import { fetchComponentsData } from './utils';
 import routes from '../shared/routes';
 import configureStore from '../shared/store/configureStore';
 
+import serverConfig from '../etc/server-config.json';
 import clientConfig from '../etc/client-config.json';
 
 const app = new Express();
 
 app.use('/static', Express.static('public/static'));
 app.use(cookieParser());
-
-// Use this middleware to set up hot module reloading via webpack
-const compiler = webpack(config);
-app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
-app.use(webpackHotMiddleware(compiler));
 
 // This is fired every time the server side receives a request
 app.use((req, res) => {
@@ -122,10 +113,10 @@ function renderHTML(html, initialState, config) {
   `;
 }
 
-app.listen(config.port, (error) => {
+app.listen(serverConfig.port, (error) => {
   if (error) {
     console.error(error);
   } else {
-    console.info(`==> 🌎  Listening on port ${config.port}. Open up http://localhost:${config.port}/ in your browser.`);
+    console.info(`==> 🌎  Listening on port ${serverConfig.port}. Open up http://localhost:${serverConfig.port}/ in your browser.`);
   }
 });
