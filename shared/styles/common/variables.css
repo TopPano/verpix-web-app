@@ -28,3 +28,12 @@ $personal-fg-top: 55px;
 $personal-fg-height: 87px;
 $personal-summary-height: calc($personal-fg-top + $personal-fg-height);
 
+$sm-personal-profile-length: 70px;
+$sm-personal-profilebg-height: 65px;
+$sm-personal-profilebg-margin: calc(($sm-personal-profile-length - $sm-personal-profilebg-height) / 2);
+$sm-personal-summarymain-margin: 10px;
+$personal-fg-top: 55px;
+$sm-personal-fg-top: 55px;
+$sm-personal-fg-height: 50px;
+$sm-personal-summary-height: calc($sm-personal-fg-top + $sm-personal-fg-height);
+

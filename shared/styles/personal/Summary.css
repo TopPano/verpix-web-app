@@ -1,30 +1,42 @@
 @import '../common/mixins.css';
 @import '../common/variables.css';
+@import '../common/rwd.css';
 
 .personal-summary-component {
   position: relative;
-  height: $personal-summary-height;
+  height: $sm-personal-summary-height;
   width: 100%;
+  @media (width >= $summary-boundary) {
+    height: $personal-summary-height;
+  }
+
   .personal-summary-main {
     position: relative;
-    margin-top: $personal-summarymain-margin;
+    margin-top: $sm-personal-summarymain-margin;
+    @media (width >= $summary-boundary) {
+      margin-top: $personal-summarymain-margin;
+    }
     .personal-summary-profilebg {
-      width: $personal-profilebg-width;
-      height: $personal-profilebg-height;
       max-width: 100%;
-      margin: $personal-profilebg-margin auto;
+      width: $sm-personal-profilebg-width;
+      height: $sm-personal-profilebg-height;
+      margin: $sm-personal-profilebg-margin auto;
+      @media (width >= $summary-boundary) {
+        width: $personal-profilebg-width;
+        height: $personal-profilebg-height;
+        margin: $personal-profilebg-margin auto;
+      }
       @mixin fullbg '/static/images/personal/personal-profile-bg.png';
     }
     .personal-summary-profile {
+      width: 100%;
       position: absolute;
       top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      display: table-row;
-      > * {
-        display: table-cell;
-        vertical-align: middle;
-      }
+      left: 0;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
       .personal-summary-profile-left {
       }
       .personal-summary-profile-right {
@@ -45,9 +57,13 @@
   .personal-summary-fg {
     position: absolute;
     left: 0;
-    top: $personal-fg-top;
-    height: $personal-fg-height;
+    top: $sm-personal-fg-top;
+    height: $sm-personal-fg-height;
     width: 100%;
+    @media (width >= $summary-boundary) {
+      top: $personal-fg-top;
+      height: $personal-fg-height;
+    }
     @mixin fullbg '/static/images/personal/personal-fg.png';
   }
 }
