@@ -1,7 +1,9 @@
-import $ from 'jquery';
+import fetch from 'isomorphic-fetch';
 import trim from 'lodash/trim';
 import { getSnapshot } from './viewer.js';
 
+const GRAPH_API_ROOT = 'https://graph.facebook.com';
+const GOOGLE_API_ROOT = 'https://www.googleapis.com';
 const GOOGLE_SHORT_URL_KEY = 'AIzaSyDMWU0bIoW4FS1OvfCT_X8OCBfe6CLOsCw';
 const DEFAULT_CAPTION = 'Verpix';
 
@@ -14,25 +16,33 @@ export function shareTwitter(link) {
 }
 
 export function shareFacebook(accessToken, shareInfo) {
-  const snapshot = base64toBlob(getSnapshot($(window).width(), $(window).height()));
-  uploadPhoto(accessToken, snapshot).done((response) => {
+  const snapshot = base64toBlob(getSnapshot(window.innerWidth, window.innerHeight));
+  uploadPhoto(accessToken, snapshot).then((response) => {
+    if(response.status >= 400) {
+      // TODO: Error handling
+      throw new Error('Bad response from server');
+    }
+    return response.json();
+  }).then((data) => {
     // Get URL of the uploaded photo.
-    const snapshotUrl = 'https://graph.facebook.com/' + response.id + '/picture?access_token=' + accessToken;
+    const snapshotUrl = `${GRAPH_API_ROOT}/${data.id}/picture?access_token=${accessToken}`;
 
-    shortenUrl(snapshotUrl).done((response) => {
+    shortenUrl(snapshotUrl).then((response) => {
+      if(response.status >= 400) {
+        // TODO: Error handling
+        throw new Error('Bad response from server');
+      }
+      return response.json();
+    }).then((data) => {
       // Shorten the URL.
       // We use the shorter URL because the original URL of uploaded snapshot (fb.cdn)
       // is not allowed in Facebook previewe image.
-      const shortUrl = response.id;
+      const shortUrl = data.id;
       // Test whether caption is empty string (whitespaces) or not.
       const caption = trim(shareInfo.caption) ? trim(shareInfo.caption) : DEFAULT_CAPTION;
       // Post to Facebook.
       post(caption, shareInfo.link, shortUrl);
-    }).fail(() => {
-      // TODO: Error handling.
     });
-  }).fail(() => {
-    // TODO: Error handling.
   });
 }
 
@@ -59,30 +69,32 @@ function base64toBlob(dataUrl) {
 // Upload an image to Facebook by using Graph API.
 function uploadPhoto(accessToken, photo) {
   let data = new FormData();
+  let config;
 
   data.append('access_token', accessToken);
   data.append('source', photo);
   data.append('privacy', JSON.stringify({ 'value': 'SELF' }));
+  config = {
+    method: 'POST',
+    body: data
+  }
   // Upload the photo to user's Facebook by using multipart/form-data post.
-  return $.ajax({
-    url: 'https://graph.facebook.com/me/photos?access_token=' + accessToken,
-    type: 'POST',
-    contentType: false,
-    processData: false,
-    data: data
-  });
+  return fetch(`${GRAPH_API_ROOT}/me/photos?access_token=${accessToken}`, config);
 }
 
 // Shorten URL by using Google URL Shortener.
 function shortenUrl(longUrl) {
-  return $.ajax({
-    url : 'https://www.googleapis.com/urlshortener/v1/url?key=' + GOOGLE_SHORT_URL_KEY,
-    type: 'POST',
-    data: JSON.stringify({
+  const config = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
       longUrl: longUrl
-    }),
-    contentType: 'application/json'
-  });
+    })
+  }
+  return fetch(`${GOOGLE_API_ROOT}/urlshortener/v1/url?key=${GOOGLE_SHORT_URL_KEY}`, config);
 }
 
 // Post to Facebook by using Dialog API.
