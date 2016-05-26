@@ -107,6 +107,7 @@ function renderHTML(html, initialState, config) {
 
       <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
       <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
+      <script type="text/javascript" src="${config.staticUrl}/static/build/vendor.bundle.js"></script>
       <script type="text/javascript" src="${config.staticUrl}/static/build/app.js"></script>
     </body>
     </html>

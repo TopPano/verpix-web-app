@@ -7,7 +7,7 @@ require('babel-polyfill');
 // Prevent issues with libraries using this var
 delete process.env.BROWSER;
 
-if (process.env.NODE_ENV === 'prod') {
+if (process.env.NODE_ENV === 'production') {
   require('./server.prod.js');
 } else {
   require('./server.dev.js');

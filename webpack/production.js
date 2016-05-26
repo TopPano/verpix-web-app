@@ -11,21 +11,31 @@ let BowerWebpackPlugin = require('bower-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let config = Object.assign({}, baseConfig, {
-  entry: path.join(__dirname, '../client'),
+  entry: {
+    app: path.join(__dirname, '../client'),
+    vendor: [ 'react', 'react-dom', 'three' ]
+  },
   cache: false,
   devtool: 'sourcemap',
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "vendor",
+      filename: "vendor.bundle.js"
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       "process.env": {
         BROWSER: JSON.stringify(true),
-        NODE_ENV: JSON.stringify('prod')
+        NODE_ENV: JSON.stringify('production')
       }
     }),
     new BowerWebpackPlugin({
       searchResolveModulesDirectories: false
     }),
-    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: { warnings: false },
+      output: { comments: false }
+    }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.NoErrorsPlugin(),
