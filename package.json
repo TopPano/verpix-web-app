@@ -83,7 +83,7 @@
     "normalize.css": "^3.0.3",
     "normalizr": "^2.0.1",
     "query-string": "^4.1.0",
-    "react": "^0.14.0",
+    "react": "^0.14.8",
     "react-bootstrap": "^0.28.5",
     "react-copy-to-clipboard": "^4.1.0",
     "react-dom": "^0.14.0",
