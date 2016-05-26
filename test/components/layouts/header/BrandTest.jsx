@@ -1,6 +1,7 @@
 'use strict';
 
-import createComponent from 'helpers/shallowRenderHelper';
+import React from 'react';
+import { shallow } from 'enzyme';
 
 import Brand from 'components/layouts/header/Brand';
 
@@ -12,16 +13,16 @@ describe('Component: Brand', () => {
       const props = {
         alwaysShow: true
       }
-      component = createComponent(Brand, props);
-      expect(component.props.children.props.className).to.equal('brand brand-always-show');
+      component = shallow(<Brand {...props} />);
+      expect(component.find('img').get(0).props.className).to.equal('brand brand-always-show');
     });
 
     it('img should have className "brand" when the prop "alwaysShow" is false', () => {
       const props = {
         alwaysShow: false
       }
-      component = createComponent(Brand, props);
-      expect(component.props.children.props.className).to.equal('brand');
+      component = shallow(<Brand {...props} />);
+      expect(component.find('img').get(0).props.className).to.equal('brand');
     });
   });
 });

@@ -9,7 +9,7 @@ module.exports = function(config) {
     ],
     port: 8080,
     captureTimeout: 60000,
-    frameworks: [ 'mocha', 'chai' ],
+    frameworks: [ 'mocha', 'chai', 'sinon' ],
     client: {
       mocha: {}
     },
