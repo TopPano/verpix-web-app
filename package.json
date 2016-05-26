@@ -15,8 +15,8 @@
     "dev": "NODE_ENV='dev' node server/index.js",
     "start": "NODE_ENV='prod' pm2 start server/index.js --name verpix-web-app",
     "stop": "NODE_ENV='prod' pm2 delete verpix-web-app -s &> /dev/null",
-    "test": "karma start",
-    "test:watch": "karma start --autoWatch=true --singleRun=false"
+    "test": "NODE_ENV='test' karma start",
+    "test:watch": "NODE_ENV='test' karma start --autoWatch=true --singleRun=false"
   },
   "repository": "",
   "keywords": [],

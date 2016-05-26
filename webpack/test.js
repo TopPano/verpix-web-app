@@ -1,7 +1,8 @@
 'use strict';
 
 let path = require('path');
-let srcPath = path.join(__dirname, '/../src/');
+let webpack = require('webpack');
+let srcPath = path.join(__dirname, '/../shared/');
 
 let baseConfig = require('./base');
 
@@ -16,7 +17,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         loader: 'isparta-instrumenter-loader',
         include: [
-          path.join(__dirname, '/../src')
+          path.join(__dirname, '/../shared')
         ]
       }
     ],
@@ -31,7 +32,7 @@ module.exports = {
         include: [].concat(
           baseConfig.additionalPaths,
           [
-            path.join(__dirname, '/../src'),
+            path.join(__dirname, '/../shared'),
             path.join(__dirname, '/../test')
           ]
         )
@@ -51,6 +52,11 @@ module.exports = {
     }
   },
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env": {
+        BROWSER: JSON.stringify(true)
+      }
+    }),
     new BowerWebpackPlugin({
       searchResolveModulesDirectories: false
     })
