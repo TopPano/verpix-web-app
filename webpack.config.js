@@ -3,7 +3,7 @@
 const path = require('path');
 
 // List of allowed environments
-const allowedEnvs = ['dev', 'prod', 'test'];
+const allowedEnvs = ['development', 'production', 'test'];
 
 // Select environment
 var env = process.env.NODE_ENV;
@@ -11,8 +11,8 @@ var env = process.env.NODE_ENV;
 // Get available configurations
 const configs = {
   base: require(path.join(__dirname, 'webpack/base')),
-  dev: require(path.join(__dirname, 'webpack/dev')),
-  prod: require(path.join(__dirname, 'webpack/prod')),
+  development: require(path.join(__dirname, 'webpack/development')),
+  production: require(path.join(__dirname, 'webpack/production')),
   test: require(path.join(__dirname, 'webpack/test'))
 };
 
@@ -23,7 +23,7 @@ const configs = {
  */
 function buildConfig(wantedEnv) {
   let isValid = wantedEnv && wantedEnv.length > 0 && allowedEnvs.indexOf(wantedEnv) !== -1;
-  let validEnv = isValid ? wantedEnv : 'dev';
+  let validEnv = isValid ? wantedEnv : 'development';
   process.env.REACT_WEBPACK_ENV = validEnv;
   return configs[validEnv];
 }
