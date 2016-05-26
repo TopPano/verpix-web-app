@@ -7,7 +7,7 @@ if (process.env.BROWSER) {
   require('styles/layout/header/Brand.css');
 }
 
-class BrandComponent extends Component {
+export default class Brand extends Component {
   render() {
     return (
       <Link to={'/'} className='brand-component'>
@@ -21,11 +21,8 @@ class BrandComponent extends Component {
   }
 }
 
-BrandComponent.displayName = 'LayoutHeaderBrandComponent';
+Brand.displayName = 'Brand';
 
-BrandComponent.propTypes = {
+Brand.propTypes = {
   alwaysShow: PropTypes.bool.isRequired
 };
-// BrandComponent.defaultProps = {};
-
-export default BrandComponent;

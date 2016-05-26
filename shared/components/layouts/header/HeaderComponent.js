@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Brand from './BrandComponent.js';
+import Brand from './Brand';
 import List from './ListComponent.js';
 
 if (process.env.BROWSER) {
