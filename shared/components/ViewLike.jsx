@@ -26,12 +26,12 @@ export default class ViewLike extends Component {
       <div className='view-like-component'>
         {count > 0 ?
           <div onClick={showLikelist} className='view-like-count view-like-count-clickable'>{count}</div> :
-          <div className='view-like-count'>{count}</div>
+          <div className='view-like-count'>{'0'}</div>
         }
         <img
           onClick={this.handleClick}
           className='view-like-btn'
-          src={isLiked ? '/static/images/view/likebtn-clicked.png' : '/static/images/view/likebtn.png'}
+          src={`/static/images/view/likebtn${isLiked ? '-clicked' : ''}.png`}
         />
       </div>
     );
