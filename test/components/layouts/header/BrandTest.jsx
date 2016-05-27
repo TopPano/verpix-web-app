@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 
 import Brand from 'components/layouts/header/Brand';
 
-describe('Component: Brand', () => {
+describe('component: Brand', () => {
   describe('#render()', () => {
     let component;
 
@@ -14,7 +14,7 @@ describe('Component: Brand', () => {
         alwaysShow: true
       }
       component = shallow(<Brand {...props} />);
-      expect(component.find('img').get(0).props.className).to.equal('brand brand-always-show');
+      assert(component.find('img').is('.brand.brand-always-show'));
     });
 
     it('img should have className "brand" when the prop "alwaysShow" is false', () => {
@@ -22,7 +22,7 @@ describe('Component: Brand', () => {
         alwaysShow: false
       }
       component = shallow(<Brand {...props} />);
-      expect(component.find('img').get(0).props.className).to.equal('brand');
+      assert(component.find('img').is('.brand'));
     });
   });
 });

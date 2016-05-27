@@ -30,6 +30,7 @@ ViewAuthor.propTypes = {
   authorName: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired
 };
+
 ViewAuthor.defaultProps = {
 };
 

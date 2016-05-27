@@ -44,8 +44,8 @@ Button.propTypes = {
   // Handle click when isClicked is true.
   handleWhenIsClicked: PropTypes.func
 };
+
 Button.defaultProps = {
   handleWhenIsUnclicked: () => {},
-  handleWhenIsclicked: () => {}
+  handleWhenIsClicked: () => {}
 };
-
