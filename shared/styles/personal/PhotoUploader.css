@@ -1,3 +1,4 @@
 .photo-uploader-component {
+  visibility: hidden;
   cursor: pointer
 }

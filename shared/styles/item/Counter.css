@@ -11,6 +11,9 @@
     height: $counter-icon-length;
     .counter-icon {
       margin: 0 auto;
+      &.counter-icon-clickable {
+        cursor: pointer;
+      }
     }
   }
   .counter-count {

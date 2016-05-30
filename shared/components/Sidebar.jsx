@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import toInteger from 'lodash/toInteger';
 import merge from 'lodash/merge';
 import replace from 'lodash/replace';
@@ -227,13 +228,14 @@ export default class Sidebar extends Component {
 
     const name = parseUsername(post.owner),
           profilePhotoUrl = parseProfilePhotoUrl(post.owner),
-          date = this.transDateFormat(post.created);
+          date = this.transDateFormat(post.created),
+          ownerId = post.owner.sid;
     contents.push(
       <div className={'sidebar-content sidebar-info' + (clicked === 0 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-info-upper'>
-          <img className='sidebar-info-photo' src={profilePhotoUrl} />
+          <Link to={'@' + ownerId}><img className='sidebar-info-photo' src={profilePhotoUrl} /></Link>
           <div className='sidebar-info-title'>
-            <div className='sidebar-info-name text-single-line'>{name}</div>
+            <Link to={'@' + ownerId} className='sidebar-info-name text-single-line'>{name}</Link>
             <div className='sidebar-info-date text-single-line'>{date}</div>
           </div>
         </div>

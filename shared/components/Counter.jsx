@@ -14,9 +14,6 @@ export default class Counter extends Component {
 
     return (
       <div className={ 'counter-component' + (iconPosition === 'counter-right' ? ' counter-right' : '') }>
-        <div className='counter-icon-wrapper'>
-          <img className='counter-icon' src={icon}/>
-        </div>
         {(showList && count > 0) ?
           <PeopleList
             list={list}
@@ -24,9 +21,17 @@ export default class Counter extends Component {
             followUser={followUser}
             unfollowUser={unfollowUser}
           >
+            <div className='counter-icon-wrapper'>
+              <img className='counter-icon counter-icon-clickable' src={icon}/>
+            </div>
             <div className='counter-count counter-count-clickable'>{count}</div>
           </PeopleList> :
+          <div>
+            <div className='counter-icon-wrapper'>
+              <img className='counter-icon' src={icon}/>
+            </div>
             <div className='counter-count'>{count}</div>
+          </div>
         }
       </div>
     );

@@ -119,6 +119,12 @@ $share-input-bg: rgba(0, 0, 0, 0.25);
         }
         .sidebar-info-name {
           font-weight: bold;
+          cursor: pointer;
+          text-decoration: none;
+          color: inherit;
+        }
+        .sidebar-info-date {
+          font-size: 1.2rem;
         }
       }
     }
@@ -181,9 +187,10 @@ $share-input-bg: rgba(0, 0, 0, 0.25);
     .sidebar-share-link {
       flex-grow: 1;
       width: 90%;
+      background-clip: padding-box;
       background-color: $share-input-bg;
       margin: 10px auto 0 auto;
-      padding: 5px;
+      border: 5px solid $share-input-bg;
       font-size: 0.9rem;
       color: white;
     }
