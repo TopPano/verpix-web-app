@@ -1,6 +1,9 @@
 import api from '../api';
 import { push } from 'react-router-redux';
 
+import { DEFAULT_FOLLOWING_USER } from '../lib/const';
+import { followUser } from './user';
+
 export const GET_POST_REQUEST = 'GET_POST_REQUEST';
 export const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
 export const GET_POST_FAILURE = 'GET_POST_FAILURE';
@@ -103,11 +106,20 @@ export function loadNewsFeed({lastPostId, authToken}) {
     });
 
     return api.posts.getNewsFeed(userId, lastPostId, authToken).then((response) => {
-      response.result.firstQuery = lastPostId ? false : true;
+      const firstQuery = lastPostId ? false : true;
+
+      response.result.firstQuery = firstQuery;
       dispatch({
         type: LOAD_NEWSFEED_SUCCESS,
         response
       });
+
+      if(firstQuery && response.result.result.feed.length === 0) {
+        dispatch(followUser(userId, DEFAULT_FOLLOWING_USER, () => {
+          dispatch(loadNewsFeed({}))
+        }));
+      }
+
     }).catch((error) => {
       dispatch({
         type: LOAD_NEWSFEED_FAILURE,

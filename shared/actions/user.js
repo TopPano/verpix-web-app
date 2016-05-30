@@ -2,6 +2,7 @@ import api from '../api';
 import fetch from 'isomorphic-fetch';
 import config from '../../etc/client-config.json';
 import { push } from 'react-router-redux';
+import isFunction from 'lodash/isFunction';
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
@@ -230,7 +231,7 @@ export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST';
 export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS';
 export const FOLLOW_USER_FAILURE = 'FOLLOW_USER_FAILURE';
 
-export function followUser(followerId, followeeId) {
+export function followUser(followerId, followeeId, callback) {
   return (dispatch) => {
     dispatch({
       type: FOLLOW_USER_REQUEST
@@ -241,6 +242,9 @@ export function followUser(followerId, followeeId) {
         followerId,
         followeeId
       });
+      if(isFunction(callback)) {
+        callback();
+      }
     }).catch((error) => {
       dispatch({
         type: FOLLOW_USER_FAILURE,

@@ -35,3 +35,5 @@ export const EXTERNAL_LINKS = {
   TWITTER: 'https://twitter.com/verpix',
   INSTAGRAM: 'https://www.instagram.com/verpix_me/'
 }
+
+export const DEFAULT_FOLLOWING_USER = 'ddc23b40-222f-11e6-b846-69babe89ef41'
