@@ -36,7 +36,12 @@ module.exports = {
             path.join(__dirname, '/../test')
           ]
         )
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       }
+
     ]
   },
   resolve: {

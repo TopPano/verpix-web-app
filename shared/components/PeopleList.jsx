@@ -68,7 +68,7 @@ export default class PeopleList extends Component {
             {peopleList}
           </Modal.Body>
         </Modal>
-        <div onClick={this.showList}>
+        <div className='people-list-content' onClick={this.showList}>
           {this.props.children}
         </div>
       </div>
@@ -84,6 +84,6 @@ PeopleList.propTypes = {
   followUser: PropTypes.func.isRequired,
   unfollowUser: PropTypes.func.isRequired
 };
+
 PeopleList.defaultProps = {
 };
-
