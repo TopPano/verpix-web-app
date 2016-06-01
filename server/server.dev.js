@@ -23,6 +23,7 @@ import DevTools from '../shared/containers/DevTools';
 
 import serverConfig from '../etc/server-config.json';
 import clientConfig from '../etc/client-config.json';
+import externalApiConfig from '../etc/external-api-config.json';
 
 const app = new Express();
 
@@ -38,6 +39,9 @@ app.use(webpackHotMiddleware(compiler));
 app.use((req, res) => {
   let initState = {};
   const accessToken = req.cookies.accessToken || null;
+  const matchViewer = req.url.match(/(\/viewer\/@)+/);
+  const isViewerPage = matchViewer && matchViewer.index === 0;
+
   if (accessToken) {
     // restore the client state
     initState.user = {
@@ -50,13 +54,22 @@ app.use((req, res) => {
       created: req.cookies.created
     };
   } else {
-    const matchViewer = req.url.match(/(\/viewer\/@)+/);
-    const isViewerPage = matchViewer && matchViewer.index === 0;
-
     // it's not allow to access pages other than Login and Viewer without authentication
     if (!isViewerPage && !req.url.match(/^\/$/ig)) {
       return res.redirect(302, '/');
     }
+  }
+
+  let ogProps = {};
+
+  ogProps = {
+    appId: `${externalApiConfig.fbAppId}`,
+    type: 'website',
+    siteName: 'Verpix',
+    image: `${clientConfig.staticUrl}/static/images/fb-share-default.jpg`,
+    title: 'LOOK it\'s my awesome 360 photo!!',
+    description: 'Register ＆ add your friends in Verpix to join more activities.',
+    url: `${req.protocol}://${req.get('Host')}${req.url}`
   }
 
   const store = configureStore(initState);
@@ -87,7 +100,7 @@ app.use((req, res) => {
         // Grab the inital state from the store
         const initialState = store.getState();
 
-        return renderHTML(html, initialState, clientConfig);
+        return renderHTML(html, initialState, clientConfig, ogProps);
       })
       .then(html => {
         // Send the rendered page back to the client
@@ -101,7 +114,7 @@ app.use((req, res) => {
   });
 });
 
-function renderHTML(html, initialState, config) {
+function renderHTML(html, initialState, config, ogProps) {
   return `
     <!doctype html>
     <html>
@@ -109,8 +122,14 @@ function renderHTML(html, initialState, config) {
       <meta charset="utf8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <meta property="fb:app_id" content="${ogProps.appId}">
+      <meta property="og:site_name" content="${ogProps.siteName}">
+      <meta property="og:image" content="${ogProps.image}">
+      <meta property="og:title" content="${ogProps.title}">
+      <meta property="og:description" content="${ogProps.description}">
+      <meta property="og:url" content="${ogProps.url}">
       <title>Verpix</title>
-      <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
+      <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
       <link rel="stylesheet" href="${config.staticUrl}/static/build/app.css">
     </head>
@@ -129,6 +148,6 @@ app.listen(serverConfig.port, (error) => {
   if (error) {
     console.error(error);
   } else {
-    console.info(`==> 🌎  Listening on port ${serverConfig.port}. Open up http://localhost:${serverConfig.port}/ in your browser.`);
+    console.info(`==> Listening on port ${serverConfig.port}.`);
   }
 });
