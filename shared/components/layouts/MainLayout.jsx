@@ -1,6 +1,7 @@
 /* eslint react/no-did-mount-set-state: 0 */
 import React, { Component, PropTypes } from 'react';
 
+import { isIframe } from '../../lib/devices';
 import HeaderContainer from '../../containers/layouts/Header.jsx';
 import Content from './content/ContentComponent';
 import Footer from './footer/FooterComponent';
@@ -20,13 +21,21 @@ export default class MainLayout extends Component {
   render() {
     const { isAuthenticated, currentLocation } = this.props;
     const isInLoginPage = !isAuthenticated && (currentLocation === '/');
+    const matchViewer = currentLocation.match(/(\/viewer\/@)+/);
+    const isInViewerPage = matchViewer && matchViewer.index === 0;
+    const isInEmbeddedViewer = isInViewerPage && isIframe();
+
+    if(isInEmbeddedViewer) {
+      document.body.style.overflow = 'hidden';
+    }
+
     return (
       <div>
-        {!isInLoginPage && <HeaderContainer /> }
+        {!isInLoginPage && !isInEmbeddedViewer && <HeaderContainer /> }
           <Content>
             {this.props.children}
           </Content>
-        <Footer />
+        { !isInEmbeddedViewer && <Footer /> }
       </div>
     );
   }
