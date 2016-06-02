@@ -9,7 +9,6 @@
     "build": "NODE_ENV='production' webpack -p --progress",
     "lint": "eslint ./shared",
     "posttest": "npm run lint",
-    "preinstall": "npm install -g pm2",
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
