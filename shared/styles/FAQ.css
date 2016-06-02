@@ -1,0 +1,26 @@
+.faq-component {
+  .faq-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .faq-langs {
+      padding-bottom: 10px;
+      font-size: 1.2rem;
+      .faq-lang {
+        padding-right: 10px;
+        &.faq-lang-clicked {
+          color: yellow;
+        }
+      }
+    }
+  }
+
+  .faq-questions {
+    .faq-question {
+      list-style-type: square;
+      margin: 3px 0;
+    }
+  }
+}

@@ -1,6 +1,8 @@
 'use strict';
 
 import React from 'react';
+import { Link } from 'react-router';
+
 import { EXTERNAL_LINKS } from '../../../lib/const.js';
 
 if (process.env.BROWSER) {
@@ -11,7 +13,7 @@ class FooterComponent extends React.Component {
   render() {
     return (
       <div className='footer-component navbar-fixed-bottom'>
-        <a className='footer-item' href={EXTERNAL_LINKS.FAQ} target='_blank'>{'FAQ'}</a>
+        <Link to='/faq' className='footer-item' href={EXTERNAL_LINKS.FAQ} target='_blank'>{'FAQ'}</Link>
         <a className='footer-item' href={EXTERNAL_LINKS.TERMS_OF_USE} target='_blank'>{'Terms of Use'}</a>
         <a className='footer-item' href={EXTERNAL_LINKS.PRIVACY_POLICY} target='_blank'>{'Privacy Policy'}</a>
         <a className='footer-item' href={EXTERNAL_LINKS.FACEBOOK} target='_blank'>

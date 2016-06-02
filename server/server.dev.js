@@ -41,6 +41,7 @@ app.use((req, res) => {
   const accessToken = req.cookies.accessToken || null;
   const matchViewer = req.url.match(/(\/viewer\/@)+/);
   const isViewerPage = matchViewer && matchViewer.index === 0;
+  const isFAQPage = (req.url === '/faq');
 
   if (accessToken) {
     // restore the client state
@@ -55,7 +56,7 @@ app.use((req, res) => {
     };
   } else {
     // it's not allow to access pages other than Login and Viewer without authentication
-    if (!isViewerPage && !req.url.match(/^\/$/ig)) {
+    if (!isViewerPage && !isFAQPage && !req.url.match(/^\/$/ig)) {
       return res.redirect(302, '/');
     }
   }
