@@ -8,7 +8,6 @@ Web application for Verpix.
 Install dependent npm modules.
 ```
 $ npm install
-$ npm install pm2 -g
 ```
 
 Install dependent libraries for running tests.
