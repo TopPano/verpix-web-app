@@ -5,6 +5,7 @@ import { Base64 } from 'js-base64';
 import queryString from 'query-string';
 import urlencode from 'urlencode';
 
+import { isIframe } from '../lib/devices';
 import { DEFAULT_VIEWER_OPTIONS } from '../lib/const';
 import { startViewer, stopViewer } from '../lib/viewer.js';
 import Sidebar from './Sidebar';
@@ -61,11 +62,12 @@ export default class Viewer extends Component {
       stopViewer();
     }
   }
+
   render() {
     return (
       <div className="viewer-component">
         <div id='container' />
-        <Sidebar {...this.props} />
+        { !isIframe() && <Sidebar {...this.props} /> }
       </div>
     );
   }

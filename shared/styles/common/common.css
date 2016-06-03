@@ -1,7 +1,21 @@
+@import './variables.css';
+
 .text-single-line {
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: default;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.text-link {
+  &:link, &:visited, &:hover, &:active {
+    cursor: pointer;
+    color: $text-color-primary;
+    text-decoration: none;
+  }
 }
 
 /* Customized styles for Bootstrap Modal Dialog. */
