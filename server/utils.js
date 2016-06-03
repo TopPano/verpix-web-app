@@ -11,3 +11,10 @@ export function fetchComponentsData(dispatch, components, params, query, authTok
 
   return Promise.all(promises);
 }
+
+export function getViewerPostId(url) {
+  const startIndex = url.indexOf('@') + 1;
+  const endIndex = url.indexOf('?');
+
+  return (endIndex === -1) ? url.slice(startIndex) : url.slice(startIndex, endIndex);
+}

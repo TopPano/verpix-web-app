@@ -9,9 +9,11 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
+import merge from 'lodash/merge';
 
-import { fetchComponentsData } from './utils';
+import { fetchComponentsData, getViewerPostId } from './utils';
 
+import api from '../shared/api';
 import routes from '../shared/routes';
 import configureStore from '../shared/store/configureStore';
 
@@ -50,55 +52,75 @@ app.use((req, res) => {
   }
 
   let ogProps = {};
+  let requestPostInfo;
 
   ogProps = {
     appId: `${externalApiConfig.fbAppId}`,
     type: 'website',
     siteName: 'Verpix',
     image: `${clientConfig.staticUrl}/static/images/fb-share-default.jpg`,
+    imgWidth: 600,
+    imgHeight: 315,
     title: 'LOOK it\'s my awesome 360 photo!!',
     description: 'Register ＆ add your friends in Verpix to join more activities.',
     url: `${req.protocol}://${req.get('Host')}${req.url}`
   }
-
-  const store = configureStore(initState);
-
-  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-    if (error) {
-      res.send(500, error.message);
-    } else if (!renderProps) {
-      res.send(404, 'Not found')
-    } else {
-      fetchComponentsData(
-        store.dispatch,
-        renderProps.components,
-        renderProps.params,
-        renderProps.location.query,
-        accessToken
-      )
-      .then(() => {
-        const html = renderToString(
-          <Provider store={store}>
-            <div>
-              <RouterContext {...renderProps} />
-            </div>
-          </Provider>
-        );
-
-        // Grab the inital state from the store
-        const initialState = store.getState();
-
-        return renderHTML(html, initialState, clientConfig, ogProps);
-      })
-      .then(html => {
-        // Send the rendered page back to the client
-        res.end(html);
-      })
-      .catch(err => {
-        console.log(err.stack);
-        res.end(err.message);
+  if(isViewerPage) {
+    const postId = getViewerPostId(req.url);
+    requestPostInfo = api.posts.getPost(postId).then((response) => {
+      const newImage = response.result.thumbnail.srcUrl,
+            newTitle = response.result.caption;
+      ogProps = merge({}, ogProps, {
+        image: newImage ? newImage : ogProps.image,
+        title: newTitle ? newTitle : ogProps.title
       });
-    }
+    }).catch((error) => {
+      console.log(error);
+    });
+  } else {
+    requestPostInfo = Promise.resolve();
+  }
+
+  requestPostInfo.then(() => {
+    const store = configureStore(initState);
+
+    match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+      if (error) {
+        res.send(500, error.message);
+      } else if (!renderProps) {
+        res.send(404, 'Not found')
+      } else {
+        fetchComponentsData(
+          store.dispatch,
+          renderProps.components,
+          renderProps.params,
+          renderProps.location.query,
+          accessToken
+        )
+        .then(() => {
+          const html = renderToString(
+            <Provider store={store}>
+              <div>
+                <RouterContext {...renderProps} />
+              </div>
+            </Provider>
+          );
+
+          // Grab the inital state from the store
+          const initialState = store.getState();
+
+          return renderHTML(html, initialState, clientConfig, ogProps);
+        })
+        .then(html => {
+          // Send the rendered page back to the client
+          res.end(html);
+        })
+        .catch(err => {
+          console.log(err.stack);
+          res.end(err.message);
+        });
+      }
+    });
   });
 });
 
@@ -113,6 +135,8 @@ function renderHTML(html, initialState, config, ogProps) {
       <meta property="fb:app_id" content="${ogProps.appId}">
       <meta property="og:site_name" content="${ogProps.siteName}">
       <meta property="og:image" content="${ogProps.image}">
+      <meta property="og:image:width" content="${ogProps.imgWidth}">
+      <meta property="og:image:height" content="${ogProps.imgHeight}">
       <meta property="og:title" content="${ogProps.title}">
       <meta property="og:description" content="${ogProps.description}">
       <meta property="og:url" content="${ogProps.url}">
