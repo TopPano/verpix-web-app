@@ -5,17 +5,22 @@ import isFunction from 'lodash/fill';
 
 export default class LivePhotoPlayer {
   constructor(params) {
+    // Read only member variables
     this.container = params.container;
     this.srcRoot = params.srcRoot;
     this.numPhotos = params.numPhotos;
+
+    // Writable member variables
     this.photos = fill(Array(this.numPhotos), null);
+    this.curPhoto = Math.round(this.numPhotos / 2);
+    this.lastPosition = {};
   }
 
   start() {
-    const midIndex = Math.round(this.numPhotos / 2);
-    this.loadPhoto(midIndex, this.startAnimation.bind(this, midIndex));
-    this.loadPhotos(midIndex - 1, -1, -5);
-    this.loadPhotos(midIndex + 1, this.numPhotos, 5);
+    const startIndex = this.curPhoto;
+    this.loadPhoto(startIndex, this.startAnimation.bind(this, startIndex));
+    this.loadPhotos(startIndex - 1, -1, -5);
+    this.loadPhotos(startIndex + 1, this.numPhotos, 5);
   }
 
   loadPhoto(index, callback) {
@@ -56,33 +61,48 @@ export default class LivePhotoPlayer {
   }
 
   startAnimation(startIndex) {
-    let index = startIndex;
-    let direction = 'left';
-    setInterval(() => {
-      if(this.photos[index]) {
-        this.renderPhoto(index);
-        if(direction === 'left') {
-          if(index === 0) {
-            direction = 'right';
-            index++;
-          } else {
-            index--;
-          }
-        } else {
-          if(index === (this.numPhotos - 1)) {
-            direction = 'left';
-            index--;
-          } else {
-            index++;
-          }
-        }
-      }
-    }, 20);
+    this.renderPhoto(startIndex);
+    this.container.addEventListener('mousedown', this.handleTransitionStart);
+    this.container.addEventListener('mousemove', this.handleTransitionMove);
   }
 
   renderPhoto(index) {
     const ctx = this.container.getContext('2d');
     const img = this.photos[index];
     ctx.drawImage(img, 0, 0, this.container.width, this.container.height);
+  }
+
+  handleTransitionStart = (e) => {
+    if(this.isLeftBtnPressed(e)) {
+      this.lastPosition = { x: e.clientX, y: e.clientY };
+    }
+  }
+
+  handleTransitionMove = (e) => {
+    // Left button is clicked.
+    if(this.isLeftBtnPressed(e)) {
+      const lastX = this.lastPosition.x;
+      const curX = e.clientX, curY = e.clientY;
+      if(lastX) {
+        const deltaX = curX - lastX;
+        let newCurPhoto = this.curPhoto + deltaX;
+
+        if(deltaX < 0 && newCurPhoto < 0) {
+          newCurPhoto = 0;
+        } else if(deltaX > 0 && newCurPhoto >= this.numPhotos) {
+          newCurPhoto = this.numPhotos - 1;
+        }
+        if(this.photos[newCurPhoto]) {
+          this.curPhoto = newCurPhoto;
+          this.renderPhoto(newCurPhoto);
+          console.log(newCurPhoto);
+        }
+      }
+      this.lastPosition = { x: curX, y: curY };
+    }
+  }
+
+  isLeftBtnPressed(e) {
+    return (e.which && e.button === 0) || (e.button && e.button === 0);
   }
 }

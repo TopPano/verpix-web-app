@@ -26,7 +26,7 @@ export default class LivePhoto extends Component {
   render() {
     return (
       <div className='live-photo-component'>
-        <canvas ref='container' width={144} height={256} />
+        <canvas ref='container' width={288} height={512} />
       </div>
     );
   }
