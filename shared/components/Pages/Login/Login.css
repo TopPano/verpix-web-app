@@ -1,0 +1,109 @@
+@import '../../Common/Styles/Variables.css';
+
+$input-width: 305px;
+$button-width: 272px;
+$show-main-bg-min-width: 820px;
+$bg-min-height: 675px;
+$bg-min-width: 1194px;
+
+.login-component {
+  margin-top: -$header-height;
+  width: 177vh;
+  min-width: 100%;
+  height: 100vh;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url('/static/images/login/bg.jpg');
+  @media (height <= $bg-min-height) {
+    height: $bg-min-height;
+    width: $bg-min-width;
+  }
+  .login-wrapper {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url('/static/images/login/main-bg-small.png');
+    background-color: rgba(0, 0, 0, 0.5);
+    @media (width >= $show-main-bg-min-width) {
+      background-image: url('/static/images/login/main-bg-big.png');
+    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100%;
+    .login-main,
+    .join-main,
+    .err-main {
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 15px 15px 15px;
+
+      .login-form {
+        max-width: 100%;
+        display: flex;
+        padding: 20px 10px;
+        background-color: rgba(255, 255, 255, 0.5);
+        flex-direction: column;
+        align-items: center;
+      }
+      .login-text {
+        display: inline;
+        margin-bottom: 15px;
+        text-align: center;
+        line-height: 20px;
+        white-space: pre;
+        &.login-text-link {
+          text-decoration: none;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+      .login-goto {
+        padding-top: 10px;
+      }
+      .login-agree {
+        padding-top: 3px;
+        font-size: 0.875rem;
+        color: #CCC;
+        .login-text-link {
+          color: white;
+        }
+      }
+      input {
+        width: $input-width;
+        max-width: 100%;
+        height: 55px;
+        background: none;
+        border: none;
+        padding: 0 25px;
+        color: white;
+        background-image: url('/static/images/login/input.png');
+        background-size: 100% 100%;
+      }
+      button {
+        width: $button-width;
+        max-width: 100%;
+        height: 45px;
+        background: none;
+        border: none;
+        margin-top: 10px;
+        line-height: 45px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #E93F3F;
+        &.login-facebook {
+          height: 66px;
+          line-height: 66px;
+          margin-bottom: 10px;
+          background-image: url('/static/images/login/facebook.png');
+          background-size: 100% 100%;
+        }
+        &.login-goto-join {
+          background-color: #A96F3D;
+        }
+      }
+    }
+  }
+}

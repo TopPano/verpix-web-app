@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
-import Viewer from '../../components/Viewer';
+import Viewer from '../../components/Pages/Viewer';
 import { followUser, unfollowUser } from '../../actions/user';
 import { getPost, likePost, unlikePost, showLikeList } from '../../actions/post';
 

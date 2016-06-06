@@ -1,0 +1,16 @@
+@import '../../Common/Styles/Variables.css';
+@import '../../Common/Styles/RWD.css';
+
+.personal-profile-component {
+  position: relative;
+  .personal-profile-picture {
+    border-radius: 50%;
+    width: $sm-personal-profile-length;
+    height: $sm-personal-profile-length;
+    @media (width >= $summary-boundary) {
+      width: $personal-profile-length;
+      height: $personal-profile-length;
+    }
+  }
+}
+

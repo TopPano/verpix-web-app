@@ -1,0 +1,26 @@
+@import '../../Common/Styles/Variables.css';
+
+$img-length: 18px;
+
+.footer-component {
+  width: 100%;
+  height: $footer-height;
+  line-height: $footer-height;
+  background-color: $footer-bg-color;
+  padding: 0 $layout-padding;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .footer-item {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.875rem;
+    padding: 0 5px;
+    img {
+      width: $img-length;
+    }
+  }
+}
+

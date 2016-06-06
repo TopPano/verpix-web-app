@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadNewsFeed } from '../../actions/post';
-import ScrollablePageContainer from './Scrollable.jsx';
-import NewsFeed from '../../components/NewsFeed.jsx';
+import ScrollablePageContainer from './Scrollable';
+import NewsFeed from '../../components/Pages/NewsFeed';
 
 class NewsFeedPageContainer extends ScrollablePageContainer {
   static propTyes = {

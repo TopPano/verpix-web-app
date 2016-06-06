@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import Header from '../../components/layouts/header/HeaderComponent';
+import Header from '../../components/Layouts/Header';
 import { logoutUser } from '../../actions/user';
 
 class HeaderContainer extends Component {

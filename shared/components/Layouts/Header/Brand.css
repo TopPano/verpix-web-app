@@ -1,0 +1,15 @@
+@import '../../Common/Styles/Variables.css';
+@import '../../Common/Styles/RWD.css';
+
+.brand-component {
+  .brand {
+    height: 0;
+    @media (width >= $show-brand-boundary) {
+      height: $header-height;
+    }
+    &.brand-always-show {
+      height: $header-height !important;
+    }
+  }
+}
+

@@ -1,0 +1,40 @@
+@import '../Styles/Variables.css';
+@import '../Styles/Mixins.css';
+
+.counter-component {
+  * {
+    display: inline-block;
+  }
+  line-height: $counter-icon-length;
+  .counter-icon-wrapper {
+    width: $counter-icon-length;
+    height: $counter-icon-length;
+    .counter-icon {
+      margin: 0 auto;
+      &.counter-icon-clickable {
+        cursor: pointer;
+      }
+    }
+  }
+  .counter-count {
+    cursor: default;
+    width: $counter-count-width;
+    text-align: left;
+    padding: 0 0 0 $counter-count-padding;
+    &.counter-count-clickable {
+      cursor: pointer;
+    }
+  }
+  &.counter-right {
+    transform: rotate(180deg);
+    .counter-icon-wrapper {
+      transform: rotate(-180deg);
+    }
+    .counter-count {
+      transform: rotate(-180deg);
+      text-align: right;
+      padding: 0 $counter-count-padding 0 0;
+    }
+  }
+}
+

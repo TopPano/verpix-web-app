@@ -3,8 +3,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import NewsFeedPageContainer from './NewsFeed.jsx';
-import LoginPageContainer from './Login.jsx';
+import NewsFeedPageContainer from './NewsFeed';
+import LoginPageContainer from './Login';
 
 class HomePageContainer extends Component {
   static propTyes = {

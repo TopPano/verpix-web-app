@@ -1,0 +1,251 @@
+@import '../../Common/Styles/Variables.css';
+
+$header-height: 60px;
+$footer-height: 30px;
+
+$sidebar-length: 60px;
+$sidebar-padding: 10px;
+$icon-padding: 5px;
+$main-bg-color: rgba(0, 0, 0, 0.5);
+$main-padding: 15px;
+$content-width-landscape: 220px;
+
+$profile-photo-length: 50px;
+$share-btn-length: 40px;
+$share-input-bg: rgba(0, 0, 0, 0.25);
+
+.sidebar-component {
+  height: 100%;
+  width: $sidebar-length;
+  padding-top: $header-height;
+  padding-bottom: $footer-height;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .sidebar-icon {
+    width: 100%;
+    cursor: pointer;
+    padding: $icon-padding 0;
+  }
+  
+  .sidebar-like {
+    padding: 0 $sidebar-padding;
+    position: relative;
+    .sidebar-like-count {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateY(-100%);
+      text-align: center;
+      cursor: default;
+      &.sidebar-like-count-clickable {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .sidebar-main {
+    width: 100%;
+    padding: $main-padding $sidebar-padding;
+    background-color: $main-bg-color;
+    position: relative;
+
+    .sidebar-content-wrapper {
+      width: 0;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: $sidebar-length;
+      background-color: $main-bg-color;
+      transition: width 300ms ease;
+      &.sidebar-shown {
+        width: $content-width-landscape;
+      }
+
+      .sidebar-content {
+        padding: $main-padding;
+        padding-right: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .sidebar-help {
+    padding-left: $sidebar-padding;
+    padding-right: $sidebar-padding;
+  }
+
+  textarea,
+  input {
+    border: none;
+    background: none;
+    resize: none;
+    overflow: hidden;
+  }
+}
+
+.sidebar-content {
+  opacity: 0;
+  transition: opacity 300ms ease;
+  &.sidebar-shown {
+    opacity: 1;
+  }
+
+  &.sidebar-info {
+    display: flex;
+    flex-direction: column;
+    .sidebar-info-upper {
+      display: flex;
+      flex-direction: row;
+      .sidebar-info-photo {
+        width: $profile-photo-length;
+        height: $profile-photo-length;
+        border-radius: 50%;
+      }
+      .sidebar-info-title {
+        flex: 1;
+        height: $profile-photo-length;
+        padding-left: 10px;
+        * {
+          width: 100%;
+          height: 50%;
+          text-align: left;
+        }
+        .sidebar-info-name {
+          font-weight: bold;
+          cursor: pointer;
+          text-decoration: none;
+          color: inherit;
+        }
+        .sidebar-info-date {
+          font-size: 1.2rem;
+        }
+      }
+    }
+    .sidebar-info-caption {
+      flex-grow: 1;
+      margin-top: 10px;
+      width: 100%;
+      color: #ccc;
+    }
+  }
+
+  &.sidebar-share {
+    display: flex;
+    flex-direction: column;
+
+    .sidebar-share-btnlist {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      .sidebar-share-btn {
+        width: $share-btn-length;
+        height: $share-btn-length;
+        background-size: 100% 100%;
+        cursor: pointer;
+        &.sidebar-share-facebook {
+          background-image: url('/static/images/sidebar/btn-facebook.png');
+          border: none;
+          padding: none;
+          background-color: transparent;
+        }
+        &.sidebar-share-twitter {
+          background-image: url('/static/images/sidebar/btn-twitter.png');
+        }
+        &.sidebar-share-copy {
+          background-image: url('/static/images/sidebar/btn-copy.png');
+        }
+      }
+    }
+
+    .sidebar-share-inputs {
+      padding-top: 10px;
+      display: flex;
+      flex-direction: row;
+      font-size: 1.25rem;
+      input {
+        flex-grow: 4;
+        background-color: $share-input-bg;
+        border: 5px solid transparent;
+        margin: 0 10px;
+        color: white;
+      }
+      .sidebar-share-multiply {
+        flex-grow: 2;
+        text-align: center;
+        padding: 5px 0;
+        cursor: default;
+      }
+    }
+
+    .sidebar-share-link {
+      flex-grow: 1;
+      width: 90%;
+      background-clip: padding-box;
+      background-color: $share-input-bg;
+      margin: 10px auto 0 auto;
+      border: 5px solid $share-input-bg;
+      font-size: 0.9rem;
+      color: white;
+    }
+  }
+}
+
+$help-modal-big-length: 400px;
+$help-modal-small-height: 240px;
+$help-modal-landscape-boundary: 420px;
+
+.modal.sidebar-help-modal {
+  .modal-dialog {
+    width: 90%;
+    max-width: $help-modal-big-length;
+    .modal-content {
+      background-color: rgba(0, 0, 0, 0.5);
+      @media (orientation:landscape) {
+        height: $help-modal-small-height;
+      }
+      @media (orientation:landscape) and (height >= $help-modal-landscape-boundary) {
+        height: $help-modal-big-length;
+      }
+      @media (orientation:portrait) {
+        height: $help-modal-big-length;
+      }
+
+      .sidebar-help-item {
+        @media (orientation:landscape) {
+          width: 25%;
+          height: 100%;
+        }
+        @media (orientation:landscape) and (height >= $help-modal-landscape-boundary) {
+          width: 50%;
+          height: 50%;
+        }
+        @media (orientation:portrait) {
+          width: 50%;
+          height: 50%;
+        }
+
+        float: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .sidebar-help-item-img {
+          width: 80%;
+        }
+
+        .sidebar-help-item-desc {
+          flex-grow: 1;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

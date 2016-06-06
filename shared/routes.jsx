@@ -8,7 +8,7 @@ import HomePageContainer from './containers/pages/Home.jsx';
 import ExplorerPageContainer from './containers/pages/Explorer.jsx';
 import ViewerPageContainer from './containers/pages/Viewer.jsx';
 import PersonalPageContainer from './containers/pages/Personal.jsx';
-import FAQPageComponent from './components/FAQ';
+import FAQPageComponent from './components/Pages/FAQ';
 
 export default (
   <Route component={App}>

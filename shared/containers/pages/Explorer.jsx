@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadExploreRecent } from '../../actions/post';
-import ScrollablePageContainer from './Scrollable.jsx';
-import Explorer from '../../components/Explorer.jsx';
+import ScrollablePageContainer from './Scrollable';
+import Explorer from '../../components/Pages/Explorer';
 
 class ExplorerPageContainer extends ScrollablePageContainer {
   static propTyes = {

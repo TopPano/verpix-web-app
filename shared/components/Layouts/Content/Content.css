@@ -1,0 +1,10 @@
+@import '../../Common/Styles/Variables.css';
+
+.content-component {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding-top: $header-height;
+  padding-bottom: $footer-height;
+}
+

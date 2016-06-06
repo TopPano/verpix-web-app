@@ -7,8 +7,8 @@ import connectDataFetchers from '../../lib/connectDataFetchers';
 import { loadUserSummary } from '../../actions/user';
 import { loadUserPosts } from '../../actions/post';
 import { listFollowers, listFollowing } from '../../actions/user';
-import ScrollablePageContainer from './Scrollable.jsx';
-import Personal from '../../components/Personal.jsx';
+import ScrollablePageContainer from './Scrollable';
+import Personal from '../../components/Pages/Personal';
 
 class PersonalPageContainer extends ScrollablePageContainer {
   static propTyes = {
