@@ -1,6 +1,6 @@
 import api from '../api';
 import fetch from 'isomorphic-fetch';
-import config from '../../etc/client-config.json';
+import config from '../../etc/client';
 import { push } from 'react-router-redux';
 import isFunction from 'lodash/isFunction';
 

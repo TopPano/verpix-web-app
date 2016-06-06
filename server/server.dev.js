@@ -23,9 +23,9 @@ import routes from '../shared/routes';
 import configureStore from '../shared/store/configureStore';
 import DevTools from '../shared/containers/DevTools';
 
-import serverConfig from '../etc/server-config.json';
-import clientConfig from '../etc/client-config.json';
-import externalApiConfig from '../etc/external-api-config.json';
+import serverConfig from '../etc/server';
+import clientConfig from '../etc/client';
+import externalApiConfig from '../etc/external-api';
 
 const app = new Express();
 
