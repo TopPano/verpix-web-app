@@ -1,6 +1,6 @@
-import api from '../api';
 import { push } from 'react-router-redux';
 
+import api from 'lib/api';
 import { DEFAULT_FOLLOWING_USER } from '../lib/const';
 import { followUser } from './user';
 

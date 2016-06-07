@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import cookie from 'cookie';
 import { normalize } from 'normalizr';
 
-import config from '../../etc/client';
+import config from 'etc/client';
 
 export default class ApiClient {
   constructor() {

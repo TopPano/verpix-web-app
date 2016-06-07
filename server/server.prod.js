@@ -13,13 +13,13 @@ import merge from 'lodash/merge';
 
 import { fetchComponentsData, getViewerPostId } from './utils';
 
-import api from '../shared/api';
-import routes from '../shared/routes';
-import configureStore from '../shared/store/configureStore';
+import api from 'lib/api';
+import routes from 'shared/routes';
+import configureStore from 'store/configureStore';
 
-import serverConfig from '../etc/server';
-import clientConfig from '../etc/client';
-import externalApiConfig from '../etc/external-api';
+import serverConfig from 'etc/server';
+import clientConfig from 'etc/client';
+import externalApiConfig from 'etc/external-api';
 
 const app = new Express();
 

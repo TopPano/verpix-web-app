@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import { Router, match, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import routes from '../shared/routes.jsx';
-import configureStore from '../shared/store/configureStore';
-import DevTools from '../shared/containers/DevTools';
+import routes from 'shared/routes.jsx';
+import configureStore from 'store/configureStore';
+import DevTools from 'containers/DevTools';
 
 
 const initialState = window.__INITIAL_STATE__ || {};

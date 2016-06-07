@@ -1,8 +1,9 @@
-import api from '../api';
 import fetch from 'isomorphic-fetch';
-import config from '../../etc/client';
 import { push } from 'react-router-redux';
 import isFunction from 'lodash/isFunction';
+
+import api from 'lib/api';
+import config from 'etc/client';
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';

@@ -6,8 +6,8 @@ import { Provider } from 'react-redux'
 import { Router, match, browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
-import routes from '../shared/routes'
-import configureStore from '../shared/store/configureStore'
+import routes from 'shared/routes'
+import configureStore from 'store/configureStore'
 
 
 const initialState = window.__INITIAL_STATE__ || {}
