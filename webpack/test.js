@@ -18,6 +18,10 @@ module.exports = {
         loader: 'isparta-instrumenter-loader',
         include: [
           path.join(__dirname, '/../shared')
+        ],
+        exclude: [
+          /(\.spec\.js$)|(\.spec\.jsx$)/,
+          path.join(__dirname, '/../shared/test-runner.js')
         ]
       }
     ],
@@ -30,10 +34,8 @@ module.exports = {
         test: /\.(js|jsx)$/,
         loader: 'babel-loader',
         include: [].concat(
-          baseConfig.additionalPaths,
-          [
-            path.join(__dirname, '/../shared'),
-            path.join(__dirname, '/../test')
+          baseConfig.additionalPaths, [
+            path.join(__dirname, '/../shared')
           ]
         )
       },

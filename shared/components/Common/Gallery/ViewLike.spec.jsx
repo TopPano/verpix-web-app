@@ -4,7 +4,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { toString, forEach, range, merge } from 'lodash';
 
-import ViewLike from 'components/ViewLike';
+import ViewLike from './ViewLike';
 
 describe('component: ViewLike', () => {
   let component, props;

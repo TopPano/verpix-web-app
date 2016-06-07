@@ -3,7 +3,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ViewAuthor from 'components/ViewAuthor';
+import ViewAuthor from './ViewAuthor';
 
 const DEFAULT_PROPS = {
   authorPhotoUrl: '/static/images/profile-photo-default.png',

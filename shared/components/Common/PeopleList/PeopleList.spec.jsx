@@ -3,8 +3,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import PeopleList from 'components/PeopleList';
-import INPUT_DATA from '../data/components/PeopleList.json';
+import PeopleList from './';
+import INPUT_DATA from './__testdata__/PeopleList.json';
 
 describe('component: PeopleList', () => {
   let props, component

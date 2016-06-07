@@ -4,7 +4,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { merge, mount } from 'lodash';
 
-import Button from 'components/Button';
+import Button from './';
 
 describe('component: Button', () => {
   const DEFAULT_PROPS = {

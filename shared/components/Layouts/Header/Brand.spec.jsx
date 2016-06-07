@@ -3,7 +3,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Brand from 'components/layouts/header/Brand';
+import Brand from './Brand';
 
 describe('component: Brand', () => {
   describe('#render()', () => {

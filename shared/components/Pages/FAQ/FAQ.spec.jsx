@@ -4,7 +4,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { range } from 'lodash';
 
-import FAQ from 'components/FAQ';
+import FAQ from './';
 
 describe('component: FAQ', () => {
   let component;
