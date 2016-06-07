@@ -18,22 +18,31 @@ module.exports = {
     filename: 'app.js',
     publicPath: defaultSettings.publicPath
   },
-  postcss: () => {
+  postcss: (webpack) => {
     return [
+      require('postcss-import')({
+        addDependencyTo: webpack,
+        path: [
+          path.resolve(__dirname + "/../shared/components/Common/Styles")
+        ]
+      }),
       require('postcss-cssnext')(),
       require('precss')()
     ];
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
+    root: path.resolve(__dirname),
     alias: {
-      actions: `${defaultSettings.srcPath}/actions/`,
-      containers: `${defaultSettings.srcPath}/containers/`,
-      components: `${defaultSettings.srcPath}/components/`,
-      sources: `${defaultSettings.srcPath}/sources/`,
-      stores: `${defaultSettings.srcPath}/stores/`,
-      styles: `${defaultSettings.srcPath}/styles/`,
-      config: `${defaultSettings.srcPath}/config/` + process.env.REACT_WEBPACK_ENV
+      actions: 'shared/actions/',
+      components: 'shared/components/',
+      config: 'shared/config/',
+      containers: 'shared/containers/',
+      etc: 'etc',
+      lib: 'shared/lib',
+      reducers: 'shared/reducers',
+      shared: 'shared',
+      store: 'shared/store'
     }
   },
   module: {}

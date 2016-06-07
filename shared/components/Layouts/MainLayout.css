@@ -1,4 +1,5 @@
-@import '../Common/Styles/Variables.css';
+@import 'Variables.css';
+@import 'Common.css';
 
 body {
   font-family: $text-font-family;
@@ -28,5 +29,3 @@ select {
 [class*="col-"] > :first-child {
   height: 100%;
 }
-
-@import '../Common/Styles/Common.css';
