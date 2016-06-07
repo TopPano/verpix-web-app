@@ -12,10 +12,10 @@ import Modal from 'react-bootstrap/lib/Modal';
 import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from '../../Common/PeopleList';
-import { parseUsername, parseProfilePhotoUrl } from '../../../lib/profileParser.js';
-import { getCurrentUrl } from '../../../lib/viewer.js';
-import { shareTwitter, shareFacebook } from '../../../lib/share.js';
-import { isMobile } from '../../../lib/devices.js';
+import { parseUsername, parseProfilePhotoUrl } from '../../../lib/utils';
+import { getCurrentUrl } from './viewer';
+import { shareTwitter, shareFacebook } from './share';
+import { isMobile } from '../../../lib/devices';
 
 const NON_CLICKED = -1;
 const ICON_LIST = [

@@ -1,4 +1,4 @@
-import { DEFAULT_PROFILE_PHOTO_URL } from './const.js';
+import { DEFAULT_PROFILE_PHOTO_URL } from '../const.js';
 
 export function parseUsername(user) {
   return user.identities.length > 0 ?

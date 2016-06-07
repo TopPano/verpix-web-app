@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
-import { parseUsername, parseProfilePhotoUrl } from '../../../lib/profileParser.js';
+import { parseUsername, parseProfilePhotoUrl } from '../../../lib/utils';
 import View from './View';
 import PeopleList from '../PeopleList';
 

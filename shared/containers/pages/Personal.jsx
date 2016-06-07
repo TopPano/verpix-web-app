@@ -3,7 +3,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import connectDataFetchers from '../../lib/connectDataFetchers';
+import { connectDataFetchers } from '../../lib/utils';
 import { loadUserSummary } from '../../actions/user';
 import { loadUserPosts } from '../../actions/post';
 import { listFollowers, listFollowing } from '../../actions/user';

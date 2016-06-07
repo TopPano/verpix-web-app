@@ -3,7 +3,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import connectDataFetchers from '../../lib/connectDataFetchers';
+import { connectDataFetchers } from '../../lib/utils';
 import { loadNewsFeed } from '../../actions/post';
 import ScrollablePageContainer from './Scrollable';
 import NewsFeed from '../../components/Pages/NewsFeed';

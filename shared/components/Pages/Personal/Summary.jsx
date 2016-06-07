@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import { parseUsername, parseProfilePhotoUrl } from '../../../lib/profileParser.js';
+import { parseUsername, parseProfilePhotoUrl } from '../../../lib/utils';
 import Counter from '../../Common/Counter';
 import Button from '../../Common/Button';
 import PhotoUploader from './PhotoUploader';

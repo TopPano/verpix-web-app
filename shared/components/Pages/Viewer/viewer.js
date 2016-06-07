@@ -2,7 +2,7 @@ import THREE from 'three';
 import { Base64 } from 'js-base64';
 import sortBy from 'lodash/sortBy';
 
-import { isMobile } from '../lib/devices.js';
+import { isMobile } from '../../../lib/devices';
 
 var requestAnimationFrameId;
 var TOPPANO = TOPPANO || {};

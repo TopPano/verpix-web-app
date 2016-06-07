@@ -7,7 +7,7 @@ import urlencode from 'urlencode';
 
 import { isIframe } from '../../../lib/devices';
 import { DEFAULT_VIEWER_OPTIONS } from '../../../lib/const';
-import { startViewer, stopViewer } from '../../../lib/viewer';
+import { startViewer, stopViewer } from './viewer';
 import Sidebar from './Sidebar';
 
 if (process.env.BROWSER) {
