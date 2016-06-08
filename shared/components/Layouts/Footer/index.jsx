@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import { EXTERNAL_LINKS } from '../../../lib/const.js';
+import { EXTERNAL_LINKS } from 'constants/common';
 
 if (process.env.BROWSER) {
   require('./Footer.css');

@@ -37,6 +37,8 @@ module.exports = {
       actions: 'shared/actions/',
       components: 'shared/components/',
       config: 'shared/config/',
+      content: 'shared/content/',
+      constants: 'shared/constants/',
       containers: 'shared/containers/',
       etc: 'etc',
       lib: 'shared/lib',

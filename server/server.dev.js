@@ -67,7 +67,7 @@ app.use((req, res) => {
   let requestPostInfo;
 
   ogProps = {
-    appId: `${externalApiConfig.fbAppId}`,
+    appId: `${externalApiConfig.facebook.id}`,
     type: 'website',
     siteName: 'Verpix',
     image: `${clientConfig.staticUrl}/static/images/fb-share-default.jpg`,

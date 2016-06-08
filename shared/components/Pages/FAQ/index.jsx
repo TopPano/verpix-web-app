@@ -3,8 +3,8 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
-import faqEnUs from '../../../content/faq/en-us.json';
-import faqZhTw from '../../../content/faq/zh-tw.json';
+import FAQ_EN_US from 'content/faq/en-us.json';
+import FAQ_ZH_TW from 'content/faq/zh-tw.json';
 
 if (process.env.BROWSER) {
   require('./FAQ.css');
@@ -16,7 +16,7 @@ export default class FAQ extends Component {
     this.state = {
       chosenLang: 0
     }
-    this.faqs = [faqEnUs, faqZhTw];
+    this.FAQS = [FAQ_EN_US, FAQ_ZH_TW];
   }
 
   handleClickLang = (index) => {
@@ -29,7 +29,7 @@ export default class FAQ extends Component {
     const { chosenLang } = this.state;
     let langs = [], questions = [];
 
-    this.faqs.map((faq, k) => {
+    this.FAQS.map((FAQ, k) => {
       const langClass = classNames({
         'faq-lang': true,
         'clickable': true,
@@ -41,18 +41,18 @@ export default class FAQ extends Component {
           className={langClass}
           onClick={this.handleClickLang.bind(this, k)}
         >
-          {faq.lang}
+          {FAQ.LANG}
         </span>
       );
     });
 
-    this.faqs[chosenLang].content.map((item, k) => {
+    this.FAQS[chosenLang].CONTENT.map((ITEM, k) => {
       questions.push(
         <li
           key={k}
           className='faq-question'
         >
-          <a href={item.link} target='_blank' className='text-link'>{item.question}</a>
+          <a href={ITEM.LINK} target='_blank' className='text-link'>{ITEM.QUESTION}</a>
         </li>
       );
     });
@@ -60,7 +60,7 @@ export default class FAQ extends Component {
     return (
       <div className='faq-component container-fluid'>
         <div className='faq-header'>
-          <h1>{this.faqs[chosenLang].title}</h1>
+          <h1>{this.FAQS[chosenLang].TITLE}</h1>
           <div className='faq-langs'>
             {langs}
           </div>

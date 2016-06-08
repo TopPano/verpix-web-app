@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import { DEFAULT_PROFILE_PHOTO_URL } from '../../../lib/const.js';
+import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 import ViewAuthor from './ViewAuthor';
 import ViewLike from './ViewLike';
 

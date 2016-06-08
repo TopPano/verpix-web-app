@@ -11,11 +11,12 @@ import Tooltip from 'react-bootstrap/lib/Tooltip';
 import Modal from 'react-bootstrap/lib/Modal';
 import FacebookLogin from 'react-facebook-login';
 
-import PeopleList from '../../Common/PeopleList';
-import { parseUsername, parseProfilePhotoUrl } from '../../../lib/utils';
+import PeopleList from 'components/Common/PeopleList';
+import { parseUsername, parseProfilePhotoUrl } from 'lib/utils';
 import { getCurrentUrl } from './viewer';
 import { shareTwitter, shareFacebook } from './share';
-import { isMobile } from '../../../lib/devices';
+import { isMobile } from 'lib/devices';
+import externalApiConfig from 'etc/external-api'
 
 const NON_CLICKED = -1;
 const ICON_LIST = [
@@ -250,8 +251,8 @@ export default class Sidebar extends Component {
       <div className={'sidebar-content sidebar-share' + (clicked === 2 && !isInTransitioned ? ' sidebar-shown' : '')}>
         <div className='sidebar-share-btnlist'>
           <FacebookLogin
-            appId='589634317860022'
-            version={'2.6'}
+            appId={externalApiConfig.facebook.id}
+            version={externalApiConfig.facebook.version}
             scope={'publish_actions'}
             callback={this.handleShareFacebook}
             cssClass='sidebar-share-btn sidebar-share-facebook'

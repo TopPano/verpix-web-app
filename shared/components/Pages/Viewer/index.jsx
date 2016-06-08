@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import urlencode from 'urlencode';
 
 import { isIframe } from '../../../lib/devices';
-import { DEFAULT_VIEWER_OPTIONS } from '../../../lib/const';
+import { DEFAULT_PANOROMA_OPTIONS } from 'constants/panorama';
 import { startViewer, stopViewer } from './viewer';
 import Sidebar from './Sidebar';
 
@@ -46,9 +46,9 @@ export default class Viewer extends Component {
         const params = {
           imgs: post.media.srcTiledImages,
           cam: {
-            lat: querys.lat ? querys.lat : (post.dimension.lat ? post.dimension.lat : DEFAULT_VIEWER_OPTIONS.LAT),
-            lng: querys.lng ? querys.lng : (post.dimension.lng ? post.dimension.lng : DEFAULT_VIEWER_OPTIONS.LNG),
-            fov: querys.fov ? querys.fov : (post.dimension.fov ? post.dimension.fov : DEFAULT_VIEWER_OPTIONS.FOV)
+            lat: querys.lat ? querys.lat : (post.dimension.lat ? post.dimension.lat : DEFAULT_PANOROMA_OPTIONS.LAT),
+            lng: querys.lng ? querys.lng : (post.dimension.lng ? post.dimension.lng : DEFAULT_PANOROMA_OPTIONS.LNG),
+            fov: querys.fov ? querys.fov : (post.dimension.fov ? post.dimension.fov : DEFAULT_PANOROMA_OPTIONS.FOV)
           },
           canvas: 'container'
         };

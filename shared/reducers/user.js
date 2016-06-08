@@ -12,7 +12,7 @@ import {
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS
 } from '../actions/user';
-import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
+import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 
 const DEFAULT_STATE = {
   isFetching: false,

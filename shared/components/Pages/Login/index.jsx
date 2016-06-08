@@ -7,7 +7,11 @@ import trim from 'lodash/trim';
 import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'is-empty';
 
-import { LOGIN_ERR_MSG, EXTERNAL_LINKS } from '../../../lib/const';
+import { EXTERNAL_LINKS } from 'constants/common';
+import LOGIN_CONTENT from 'content/login/en-us.json';
+import externalApiConfig from 'etc/external-api';
+
+const LOGIN_ERR_MSG = LOGIN_CONTENT.ERR_MSG;
 
 if (process.env.BROWSER) {
   require('./Login.css');
@@ -163,8 +167,8 @@ export default class Login extends Component {
     const { isInErr, isInLogin, inputs } = this.state;
     const fbBtn =
       <FacebookLogin
-        appId='589634317860022'
-        version={'2.6'}
+        appId={externalApiConfig.facebook.id}
+        version={externalApiConfig.facebook.version}
         scope={'publish_actions'}
         callback={this.handleFacebookLogin}
         cssClass='login-facebook'

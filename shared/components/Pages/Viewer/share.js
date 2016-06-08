@@ -2,9 +2,10 @@ import fetch from 'isomorphic-fetch';
 import trim from 'lodash/trim';
 import { getSnapshot } from './viewer.js';
 
+import externalApiConfig from 'etc/external-api';
+
 const GRAPH_API_ROOT = 'https://graph.facebook.com';
 const GOOGLE_API_ROOT = 'https://www.googleapis.com';
-const GOOGLE_SHORT_URL_KEY = 'AIzaSyDMWU0bIoW4FS1OvfCT_X8OCBfe6CLOsCw';
 const DEFAULT_CAPTION = 'Verpix';
 
 export function shareTwitter(link) {
@@ -94,7 +95,7 @@ function shortenUrl(longUrl) {
       longUrl: longUrl
     })
   }
-  return fetch(`${GOOGLE_API_ROOT}/urlshortener/v1/url?key=${GOOGLE_SHORT_URL_KEY}`, config);
+  return fetch(`${GOOGLE_API_ROOT}/urlshortener/v1/url?key=${externalApiConfig.google.shortUrlKey}`, config);
 }
 
 // Post to Facebook by using Dialog API.

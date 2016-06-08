@@ -29,7 +29,7 @@ import {
   UNLIKE_POST_FAILURE
 } from '../actions/post';
 import { handleLoadPostsSuccess } from './common';
-import { DEFAULT_PROFILE_PHOTO_URL } from '../lib/const.js';
+import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 
 const DEFAULT_STATE = {
   isFetching: false,

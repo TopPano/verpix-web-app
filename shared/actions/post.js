@@ -1,7 +1,7 @@
 import { push } from 'react-router-redux';
 
 import api from 'lib/api';
-import { DEFAULT_FOLLOWING_USER } from '../lib/const';
+import { DEFAULT_FOLLOWING_USER } from 'constants/common';
 import { followUser } from './user';
 
 export const GET_POST_REQUEST = 'GET_POST_REQUEST';

@@ -8,16 +8,16 @@ import FAQ from './';
 
 describe('component: FAQ', () => {
   let component;
-  let faqs;
+  let FAQS;
   
   beforeEach(() => {
     component = shallow(<FAQ />);
-    faqs = component.instance().faqs;
+    FAQS = component.instance().FAQS;
   });
 
   describe('#handleClickLang', () => {
     it('should have state that "chosenLang" equals to the parameter after calling handleClickLang', () => {
-      range(0, faqs.length).forEach((index) => {
+      range(0, FAQS.length).forEach((index) => {
         component.instance().handleClickLang(index);
         expect(component.state().chosenLang).to.equal(index);
       });
@@ -26,9 +26,9 @@ describe('component: FAQ', () => {
 
   describe('#render', () => {
     it('should have correct title for different languages', () => {
-      range(0, faqs.length).forEach((index) => {
+      range(0, FAQS.length).forEach((index) => {
         component.setState({ chosenLang: index });
-        expect(component.find('h1').first().text()).to.equal(faqs[index].title);
+        expect(component.find('h1').first().text()).to.equal(FAQS[index].TITLE);
       });
     });
 
@@ -42,7 +42,7 @@ describe('component: FAQ', () => {
         k++;
       });
 
-      range(0, faqs.length).forEach((index) => {
+      range(0, FAQS.length).forEach((index) => {
         k = 0;
         component.setState({ chosenLang: index });
         component.find('.faq-lang').forEach((lang) => {
@@ -52,21 +52,21 @@ describe('component: FAQ', () => {
             assert(!lang.hasClass('faq-lang-clicked'));
           }
           assert(lang.hasClass('clickable'));
-          expect(lang.text()).to.equal(faqs[k].lang);
+          expect(lang.text()).to.equal(FAQS[k].LANG);
           k++;
         });
       });
     });
 
     it('should have questions and corresponding links of answer for different languages', () => {
-      range(0, faqs.length).forEach((index) => {
+      range(0, FAQS.length).forEach((index) => {
         let k = 0;
         component.setState({ chosenLang: index });
         component.find('.faq-question').forEach((question) => {
           const anchor = question.find('a').first();
           assert(anchor.hasClass('text-link'));
-          expect(anchor.props().href).to.equal(faqs[index].content[k].link);
-          expect(anchor.text()).to.equal(faqs[index].content[k].question);
+          expect(anchor.props().href).to.equal(FAQS[index].CONTENT[k].LINK);
+          expect(anchor.text()).to.equal(FAQS[index].CONTENT[k].QUESTION);
           k++;
         });
       });
