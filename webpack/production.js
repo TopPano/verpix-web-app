@@ -16,7 +16,8 @@ let config = Object.assign({}, baseConfig, {
     vendor: [ 'react', 'react-dom', 'three' ]
   },
   cache: false,
-  devtool: 'sourcemap',
+  debug: false,
+  devtool: null,
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendor",
@@ -54,7 +55,12 @@ config.module.loaders.push({
       path.join(__dirname, '/../client'),
       path.join(__dirname, '/../shared')
     ]
-  )
+  ),
+  exclude: [
+    /(\.spec\.js$)|(\.spec\.jsx$)/,
+    path.join(__dirname, '/../shared/test-runner.js')
+  ]
+
 });
 
 module.exports = config;

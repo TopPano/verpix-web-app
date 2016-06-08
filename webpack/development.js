@@ -14,8 +14,6 @@ let config = Object.assign({}, baseConfig, {
     'webpack-hot-middleware/client',
     './client'
   ],
-  cache: true,
-  devtool: 'eval-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
@@ -42,7 +40,12 @@ config.module.loaders.push({
       path.join(__dirname, '/../client'),
       path.join(__dirname, '/../shared')
     ]
-  )
+  ),
+  exclude: [
+    /(\.spec\.js$)|(\.spec\.jsx$)/,
+    path.join(__dirname, '/../shared/test-runner.js')
+  ]
+
 });
 
 module.exports = config;

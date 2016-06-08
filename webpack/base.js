@@ -11,8 +11,9 @@ let additionalPaths = [];
 
 module.exports = {
   additionalPaths: additionalPaths,
+  cache: true,
   debug: true,
-  devtool: 'eval',
+  devtool: 'cheap-module-eval-source-map',
   output: {
     path: path.join(__dirname, '/../public/static/build'),
     filename: 'app.js',

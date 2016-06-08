@@ -30,6 +30,7 @@ let config = Object.assign({}, baseConfig, {
   module: defaultSettings.getDefaultModules()
 });
 
+// Add needed loaders to the defaults here
 config.module.preLoaders = [{
   test: /\.(js|jsx)$/,
   loader: 'isparta-instrumenter-loader',
@@ -41,7 +42,6 @@ config.module.preLoaders = [{
     path.join(__dirname, '/../shared/test-runner.js')
   ]
 }];
-
 config.module.loaders.push({
   test: /\.(js|jsx)$/,
   loader: 'babel-loader',
