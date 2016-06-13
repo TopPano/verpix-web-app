@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import FAQ_EN_US from 'content/faq/en-us.json';
 import FAQ_ZH_TW from 'content/faq/zh-tw.json';
+import FAQ_JA from 'content/faq/ja.json';
 
 if (process.env.BROWSER) {
   require('./FAQ.css');
@@ -16,7 +17,7 @@ export default class FAQ extends Component {
     this.state = {
       chosenLang: 0
     }
-    this.FAQS = [FAQ_EN_US, FAQ_ZH_TW];
+    this.FAQS = [FAQ_EN_US, FAQ_ZH_TW, FAQ_JA];
   }
 
   handleClickLang = (index) => {
