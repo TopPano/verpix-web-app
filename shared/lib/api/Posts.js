@@ -43,7 +43,7 @@ export default class PostsAPI extends Base {
   exploreRecent(lastPostId, authToken) {
     if (authToken) { this.apiClient.setAuthToken(authToken); }
     return this.apiClient.post({
-      url: 'search/recent',
+      url: 'explore/recent',
       payload: genQuery(lastPostId),
       authenticated: true,
       schema: { result: { feed: arrayOf(new Schema('posts', { idAttribute: 'sid' })) }}

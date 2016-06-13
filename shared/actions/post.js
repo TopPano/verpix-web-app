@@ -1,8 +1,6 @@
 import { push } from 'react-router-redux';
 
 import api from 'lib/api';
-import { DEFAULT_FOLLOWING_USER } from 'constants/common';
-import { followUser } from './user';
 
 export const GET_POST_REQUEST = 'GET_POST_REQUEST';
 export const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
@@ -113,12 +111,6 @@ export function loadNewsFeed({lastPostId, authToken}) {
         type: LOAD_NEWSFEED_SUCCESS,
         response
       });
-
-      if(firstQuery && response.result.result.feed.length === 0) {
-        dispatch(followUser(userId, DEFAULT_FOLLOWING_USER, () => {
-          dispatch(loadNewsFeed({}))
-        }));
-      }
 
     }).catch((error) => {
       dispatch({

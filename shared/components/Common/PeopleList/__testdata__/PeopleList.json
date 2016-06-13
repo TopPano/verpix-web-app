@@ -3,49 +3,49 @@
   "list" : [
     {
       "id": "20ac44b0-fa70-11e5-bf3b-6b80db64981c",
-      "isFriend": true,
+      "isFollowing": true,
       "profilePhotoUrl": "https://verpix-img-production.s3.amazonaws.com/users/20ac44b0-fa70-11e5-bf3b-6b80db64981c/photo/20ac44b0-fa70-11e5-bf3b-6b80db64981c_profile_1.jpg",
       "username": "Ponchi Chang"
     },
     {
       "id": "86c80bf0-e079-11e5-9c0e-e744d7fead4a",
-      "isFriend": true,
+      "isFollowing": true,
       "profilePhotoUrl": "https://verpix-img-production.s3.amazonaws.com/users/86c80bf0-e079-11e5-9c0e-e744d7fead4a/photo/86c80bf0-e079-11e5-9c0e-e744d7fead4a_profile_6.jpg",
       "username": "Richard"
     },
     {
       "id": "2ffa2bc0-e4eb-11e5-91bb-fba44f9c37da",
-      "isFriend": true,
+      "isFollowing": true,
       "profilePhotoUrl": "/static/images/profile-photo-default.png",
       "username": "bossliaw"
     },
     {
       "id": "305375b0-1356-11e6-a1d3-afe190f2c7a9",
-      "isFriend": true,
+      "isFollowing": true,
       "profilePhotoUrl": "/static/images/profile-photo-default.png",
       "username": "Small Su"
     },
     {
       "id": "a109b8a0-1c02-11e6-955c-8151be57d8e1",
-      "isFriend": true,
+      "isFollowing": true,
       "profilePhotoUrl": "https://verpix-img-production.s3.amazonaws.com/users/a109b8a0-1c02-11e6-955c-8151be57d8e1/photo/a109b8a0-1c02-11e6-955c-8151be57d8e1_profile_1.jpg",
       "username": "Ex kai"
     },
     {
       "id": "4597be40-fbf5-11e5-a6a6-1d4a02888658",
-      "isFriend": true,
+      "isFollowing": true,
       "profilePhotoUrl": "https://verpix-img-production.s3.amazonaws.com/users/4597be40-fbf5-11e5-a6a6-1d4a02888658/photo/4597be40-fbf5-11e5-a6a6-1d4a02888658_profile_2.jpg",
       "username": "Hsu-Yu Chang"
     },
     {
       "id": "ddc23b40-222f-11e6-b846-69babe89ef41",
-      "isFriend": true,
+      "isFollowing": true,
       "profilePhotoUrl": "/static/images/profile-photo-default.png",
       "username": "verpixer"
     },
     {
       "id": "2e33eb50-ebe9-11e5-9a29-9ba183b46523",
-      "isFriend": true,
+      "isFollowing": true,
       "profilePhotoUrl": "https://verpix-img-production.s3.amazonaws.com/users/2e33eb50-ebe9-11e5-9a29-9ba183b46523/photo/2e33eb50-ebe9-11e5-9a29-9ba183b46523_profile_2.jpg",
       "username": "Papaya Bird"
     }

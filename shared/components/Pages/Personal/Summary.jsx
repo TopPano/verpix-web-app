@@ -2,9 +2,9 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import { parseUsername, parseProfilePhotoUrl } from '../../../lib/utils';
-import Counter from '../../Common/Counter';
-import Button from '../../Common/Button';
+import { parseUsername, parseProfilePhotoUrl } from 'lib/utils';
+import Counter from 'components/Common/Counter';
+import Button from 'components/Common/Button';
 import PhotoUploader from './PhotoUploader';
 import Profile from './Profile';
 
@@ -29,14 +29,14 @@ export default class Summary extends Component {
     for(let id in people) {
       const who = people[id][type];
       if(who) {
-        const { isFriend } = people[id];
+        const { isFollowing } = people[id];
         const username = parseUsername(who);
         const profilePhotoUrl = parseProfilePhotoUrl(who);
         list.push({
           username,
           profilePhotoUrl,
           id,
-          isFriend
+          isFollowing
         });
       }
     }

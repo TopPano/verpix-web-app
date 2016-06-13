@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
-import { parseUsername, parseProfilePhotoUrl } from '../../../lib/utils';
+import { parseUsername, parseProfilePhotoUrl, genLikelist } from 'lib/utils';
 import View from './View';
 import PeopleList from '../PeopleList';
 
@@ -69,25 +69,8 @@ export default class Gallery extends Component{
     }, 50);
   }
 
-  genLikelist = () => {
-    const { users, userIds } = this.props.like.list;
-    let list = [];
-    userIds.map((id) => {
-      const user = users[id].user;
-      const username = parseUsername(user);
-      const profilePhotoUrl = parseProfilePhotoUrl(user);
-      list.push({
-        username,
-        profilePhotoUrl,
-        id: user.sid,
-        isFriend: user.followers.length > 0
-      })
-    });
-    return list;
-  }
-
   render() {
-    const { posts, postIds, maxWidth, ratio, showAuthor, likePost, unlikePost, followUser, unfollowUser, hasMorePosts } = this.props;
+    const { posts, postIds, like, maxWidth, ratio, showAuthor, likePost, unlikePost, followUser, unfollowUser, hasMorePosts } = this.props;
     let numPerRow = Math.ceil(this.state.containerWidth / maxWidth);
     let paddingLeft = 5, paddingRight = 5;
     let postWidth =
@@ -99,9 +82,9 @@ export default class Gallery extends Component{
     let previews = [];
 
     postIds.map((id, k) => {
-      const { sid, thumbnail, likes, ownerInfo } = posts[id];
-      const authorName = parseUsername(ownerInfo);
-      const authorPhotoUrl = parseProfilePhotoUrl(ownerInfo);
+      const { sid, thumbnail, likes, owner } = posts[id];
+      const authorName = parseUsername(owner);
+      const authorPhotoUrl = parseProfilePhotoUrl(owner);
 
       previews.push(
         <View
@@ -115,7 +98,7 @@ export default class Gallery extends Component{
           showAuthor={showAuthor}
           authorPhotoUrl={authorPhotoUrl}
           authorName={authorName}
-          authorId={ownerInfo.sid}
+          authorId={owner.sid}
           likePost={likePost.bind(this, sid)}
           unlikePost={unlikePost.bind(this, sid)}
           showLikelist={this.showLikelist.bind(this, sid)}
@@ -124,7 +107,7 @@ export default class Gallery extends Component{
     });
 
     const { userId } = this.props;
-    const likelist = this.genLikelist();
+    const likelist = genLikelist(like.list);
     const showMoreBtn = this.state.shouldShowMoreBtn && hasMorePosts();
     return(
       <div className='gallery-component container-fluid'>

@@ -12,7 +12,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from 'components/Common/PeopleList';
-import { parseUsername, parseProfilePhotoUrl } from 'lib/utils';
+import { parseUsername, parseProfilePhotoUrl, genLikelist } from 'lib/utils';
 import { getCurrentUrl } from './viewer';
 import { shareTwitter, shareFacebook } from './share';
 import { isMobile } from 'lib/devices';
@@ -155,23 +155,6 @@ export default class Sidebar extends Component {
     });
   }
 
-  genLikelist = () => {
-    const { users, userIds } = this.props.likelist.list;
-    let list = [];
-    userIds.map((id) => {
-      const user = users[id].user;
-      const username = parseUsername(user);
-      const profilePhotoUrl = parseProfilePhotoUrl(user);
-      list.push({
-        username,
-        profilePhotoUrl,
-        id: user.sid,
-        isFriend: user.followers.length > 0
-      })
-    });
-    return list;
-  }
-
   showLikelist = () => {
     this.props.getLikelist();
     this.waitUpdateLikelist();
@@ -210,7 +193,7 @@ export default class Sidebar extends Component {
   }
 
   render() {
-    const { post, userId, likePost, unlikePost, followUser, unfollowUser } = this.props;
+    const { post, userId, likelist, likePost, unlikePost, followUser, unfollowUser } = this.props;
     const { clicked, isInTransitioned, isHelpShown, shareLink } = this.state;
     const showContent = (clicked !== NON_CLICKED) && (clicked !== 1);
     let icons = [], contents = [], helpList = [];
@@ -309,7 +292,7 @@ export default class Sidebar extends Component {
         <img className='sidebar-icon sidebar-help' src='/static/images/sidebar/icon-help.png' onClick={this.showHelp}/>
         <PeopleList
           ref='peopleList'
-          list={this.genLikelist()}
+          list={genLikelist(likelist.list)}
           userId={userId}
           followUser={followUser}
           unfollowUser={unfollowUser}

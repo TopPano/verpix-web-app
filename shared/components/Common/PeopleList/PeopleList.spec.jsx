@@ -50,7 +50,7 @@ describe('component: PeopleList', () => {
         const item = props.list[i];
         if(item.id !== props.userId) {
           expect(button).to.exist;
-          expect(button.props().isClicked).to.equal(item.isFriend);
+          expect(button.props().isClicked).to.equal(item.isFollowing);
         } else {
           expect(button).to.be.empty;
         }

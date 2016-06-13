@@ -24,7 +24,7 @@ export default class PeopleList extends Component {
     let peopleList = [];
 
     list.map((person, k) => {
-      const { id, username, profilePhotoUrl, isFriend } = person;
+      const { id, username, profilePhotoUrl, isFollowing } = person;
       // userId: id of logged-in user, id: id of the person of current page.
       const isMyself = (userId === id);
       peopleList.push(
@@ -33,7 +33,7 @@ export default class PeopleList extends Component {
           <Link to={'/@' + id} onClick={this.hideList} className='people-list-item-name'>{username}</Link>
           {!isMyself &&
             <Button
-              isClicked={isFriend}
+              isClicked={isFollowing}
               textIsUnclicked={'follow'}
               textIsClicked={'unfollow'}
               handleWhenIsUnclicked={followUser.bind(this, id)}

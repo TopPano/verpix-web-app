@@ -84,10 +84,10 @@ export default function person(state=DEFAULT_STATE, action) {
         nextState = merge(nextState, { isFollowing: true });
       }
       if (state.followers[action.followeeId]) {
-        nextState = merge(nextState, { followers: { [action.followeeId]: { isFriend: true } } });
+        nextState = merge(nextState, { followers: { [action.followeeId]: { isFollowing: true } } });
       }
       if (state.following[action.followeeId]) {
-        nextState = merge(nextState, { following: { [action.followeeId]: { isFriend: true } } });
+        nextState = merge(nextState, { following: { [action.followeeId]: { isFollowing: true } } });
       }
       return merge({}, state, nextState);
     case UNFOLLOW_USER_SUCCESS:
@@ -96,10 +96,10 @@ export default function person(state=DEFAULT_STATE, action) {
         nextState = merge(nextState, { isFollowing: false });
       }
       if (state.followers[action.followeeId]) {
-        nextState = merge(nextState, { followers: { [action.followeeId]: { isFriend: false } } });
+        nextState = merge(nextState, { followers: { [action.followeeId]: { isFollowing: false } } });
       }
       if (state.following[action.followeeId]) {
-        nextState = merge(nextState, { following: { [action.followeeId]: { isFriend: false } } });
+        nextState = merge(nextState, { following: { [action.followeeId]: { isFollowing: false } } });
       }
       return merge({}, state, nextState);
     case LIST_FOLLOWERS_SUCCESS:

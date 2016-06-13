@@ -16,7 +16,7 @@ export function handleLoadPostsSuccess(state, action) {
   return genNextState({}, state, {
     isFetching: false,
     posts: {
-      feedPosts: posts,
+      feedPosts: posts ? posts : {},
       feedIds: feed,
       hasNext,
       lastPostId
