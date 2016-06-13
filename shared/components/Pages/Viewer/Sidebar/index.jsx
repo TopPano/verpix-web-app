@@ -13,7 +13,7 @@ import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from 'components/Common/PeopleList';
 import { parseUsername, parseProfilePhotoUrl, genLikelist } from 'lib/utils';
-import { getCurrentUrl } from './viewer';
+import { getCurrentUrl, getSnapshot } from '../Panorama/PanoramaPlayer';
 import { shareTwitter, shareFacebook } from './share';
 import { isMobile } from 'lib/devices';
 import externalApiConfig from 'etc/external-api'
@@ -57,7 +57,22 @@ if (process.env.BROWSER) {
   require('./Sidebar.css');
 }
 
-export default class Sidebar extends Component {
+const propTypes = {
+  post: PropTypes.object.isRequired,
+  likelist: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
+  likePost: PropTypes.func.isRequired,
+  unlikePost: PropTypes.func.isRequired,
+  getLikelist: PropTypes.func.isRequired,
+  getLikelist: PropTypes.func.isRequired,
+  followUser: PropTypes.func.isRequired,
+  unfollowUser: PropTypes.func.isRequired
+};
+
+const defaultProps = {
+};
+
+class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -152,7 +167,7 @@ export default class Sidebar extends Component {
     shareFacebook(response.accessToken, {
       link: getCurrentUrl(),
       caption: this.props.post.caption
-    });
+    }, getSnapshot);
   }
 
   showLikelist = () => {
@@ -307,19 +322,7 @@ export default class Sidebar extends Component {
   }
 }
 
-Sidebar.displayName = 'Sidebar';
+Sidebar.propTypes = propTypes;
+Sidebar.defaultProps = defaultProps;
 
-Sidebar.propTypes = {
-  post: PropTypes.object.isRequired,
-  likelist: PropTypes.object.isRequired,
-  userId: PropTypes.string.isRequired,
-  likePost: PropTypes.func.isRequired,
-  unlikePost: PropTypes.func.isRequired,
-  getLikelist: PropTypes.func.isRequired,
-  getLikelist: PropTypes.func.isRequired,
-  followUser: PropTypes.func.isRequired,
-  unfollowUser: PropTypes.func.isRequired
-};
-Sidebar.defaultProps = {
-};
-
+export default Sidebar;

@@ -1,4 +1,4 @@
-@import '../../Common/Styles/Variables.css';
+@import 'Variables.css';
 
 $header-height: 60px;
 $footer-height: 30px;

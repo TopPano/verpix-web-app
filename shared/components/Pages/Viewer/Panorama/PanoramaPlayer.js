@@ -2,7 +2,7 @@ import THREE from 'three';
 import { Base64 } from 'js-base64';
 import sortBy from 'lodash/sortBy';
 
-import { isMobile } from '../../../lib/devices';
+import { isMobile } from 'lib/devices';
 
 var requestAnimationFrameId;
 var TOPPANO = TOPPANO || {};
@@ -13,7 +13,7 @@ TOPPANO.gv = {
     objScene: null,
     renderer: null,
     stats: null,
-    canvasID: 'pano-container',
+    canvasID: 'container',
     isFullScreen: false,
     headingOffset: 0,
 
@@ -643,14 +643,12 @@ TOPPANO.handleClick = function() {
 };
 
 TOPPANO.onWindowResize = function() {
-    if (TOPPANO.gv.isFullScreen) {
-        TOPPANO.gv.cam.camera.aspect = window.innerWidth / window.innerHeight;
-        TOPPANO.gv.cam.camera.updateProjectionMatrix();
-        TOPPANO.gv.renderer.setSize(window.innerWidth, window.innerHeight);
+  TOPPANO.gv.cam.camera.aspect = window.innerWidth / window.innerHeight;
+  TOPPANO.gv.cam.camera.updateProjectionMatrix();
+  TOPPANO.gv.renderer.setSize(window.innerWidth, window.innerHeight);
 
-        TOPPANO.gv.container.bound.bottom = window.innerHeight;
-        TOPPANO.gv.container.bound.right = window.innerWidth;
-        TOPPANO.gv.control.bound.bottom = TOPPANO.gv.container.bound.bottom;
-        TOPPANO.gv.control.bound.right = TOPPANO.gv.container.bound.right;
-    }
+  TOPPANO.gv.container.bound.bottom = window.innerHeight;
+  TOPPANO.gv.container.bound.right = window.innerWidth;
+  TOPPANO.gv.control.bound.bottom = TOPPANO.gv.container.bound.bottom;
+  TOPPANO.gv.control.bound.right = TOPPANO.gv.container.bound.right;
 };

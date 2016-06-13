@@ -8,7 +8,13 @@ if (process.env.BROWSER) {
   require('./LivePhoto.css');
 }
 
-export default class LivePhoto extends Component {
+const propTypes = {
+};
+
+const defaultProps = {
+};
+
+class LivePhoto extends Component {
   constructor(props) {
     super(props);
   }
@@ -32,11 +38,7 @@ export default class LivePhoto extends Component {
   }
 }
 
-LivePhoto.displayName = 'LivePhoto';
+LivePhoto.propTypes = propTypes;
+LivePhoto.defaultProps = defaultProps;
 
-LivePhoto.propTypes = {
-};
-
-LivePhoto.defaultProps = {
-};
-
+export default LivePhoto;

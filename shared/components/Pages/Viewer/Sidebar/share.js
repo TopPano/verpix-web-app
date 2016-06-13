@@ -1,6 +1,5 @@
 import fetch from 'isomorphic-fetch';
 import trim from 'lodash/trim';
-import { getSnapshot } from './viewer.js';
 
 import externalApiConfig from 'etc/external-api';
 
@@ -16,7 +15,7 @@ export function shareTwitter(link) {
   window.open(url, 'name', spec);
 }
 
-export function shareFacebook(accessToken, shareInfo) {
+export function shareFacebook(accessToken, shareInfo, getSnapshot) {
   const snapshot = base64toBlob(getSnapshot(window.innerWidth, window.innerHeight));
   uploadPhoto(accessToken, snapshot).then((response) => {
     if(response.status >= 400) {
