@@ -95,7 +95,6 @@ export default class LivePhotoPlayer {
         if(this.photos[newCurPhoto]) {
           this.curPhoto = newCurPhoto;
           this.renderPhoto(newCurPhoto);
-          console.log(newCurPhoto);
         }
       }
       this.lastPosition = { x: curX, y: curY };

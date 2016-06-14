@@ -4,9 +4,10 @@ import React, { Component, PropTypes } from 'react';
 
 import { isIframe } from 'lib/devices';
 import Panorama from './Panorama';
+import LivePhoto from './LivePhoto';
 import Sidebar from './Sidebar';
 
-if (process.env.BROWSER) {
+if(process.env.BROWSER) {
   require('./Viewer.css');
 }
 
@@ -30,10 +31,17 @@ export default class Viewer extends Component {
   }
 
   render() {
+    const player =
+        this.props.post.mediaType === 'panoPhoto' ?
+        <Panorama {...this.props} /> :
+        <LivePhoto {...this.props} />;
+
     return (
       <div className="viewer-component">
-        <Panorama {...this.props} />
-        { !isIframe() && <Sidebar {...this.props} /> }
+        <div className='viewer-wrapper'>
+          {player}
+          { !isIframe() && <Sidebar {...this.props} /> }
+        </div>
       </div>
     );
   }

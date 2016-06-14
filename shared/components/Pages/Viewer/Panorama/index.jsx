@@ -8,7 +8,7 @@ import urlencode from 'urlencode';
 import { DEFAULT_PANOROMA_OPTIONS } from 'constants/panorama';
 import { startViewer, stopViewer } from './PanoramaPlayer';
 
-if (process.env.BROWSER) {
+if(process.env.BROWSER) {
   require('./Panorama.css');
 }
 

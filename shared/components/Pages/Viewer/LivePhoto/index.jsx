@@ -31,8 +31,8 @@ class LivePhoto extends Component {
 
   render() {
     return (
-      <div className='live-photo-component'>
-        <canvas ref='container' width={288} height={512} />
+      <div className='live-photo-component live-photo-portrait'>
+        <canvas ref='container' className='live-photo-container' />
       </div>
     );
   }
