@@ -69,6 +69,7 @@ class ViewerPageContainer extends Component {
     const { post, user, like } = this.props;
     return (
       <Viewer
+        readyToPlay={this.props.params.postId === post.id}
         post={post}
         likelist={like}
         userId={user.userId}

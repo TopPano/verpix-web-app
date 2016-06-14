@@ -13,6 +13,7 @@ if(process.env.BROWSER) {
 }
 
 const propTypes = {
+  readyToPlay: PropTypes.bool.isRequired,
   post: PropTypes.object.isRequired,
   likelist: PropTypes.object.isRequired,
   userId: PropTypes.string.isRequired,
@@ -32,7 +33,14 @@ export default class Viewer extends Component {
   }
 
   render() {
-    let player, shareParams;
+    if(!this.props.readyToPlay) {
+      return (
+        <div />
+      );
+    }
+
+    let shareParams, player;
+
     if(this.props.post.mediaType === 'panoPhoto') {
       player = <Panorama ref="player" {...this.props} />;
       shareParams = {

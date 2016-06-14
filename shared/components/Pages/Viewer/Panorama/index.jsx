@@ -30,9 +30,6 @@ const defaultProps = {
 class Panorama extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isViewerStarted: false
-    }
   }
 
   getSnapshot(accessToken) {
@@ -43,27 +40,22 @@ class Panorama extends Component {
     return getCurrentUrl();
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
     if(process.env.BROWSER) {
       const { post } = this.props;
-      if(!this.state.isViewerStarted && post.media.srcTiledImages) {
-        this.setState({
-          isViewerStarted: true
-        });
-        const search = location.search.substr(1);
-        const queryStr = Base64.decode(urlencode.decode(search.substr(0, search.indexOf('&')), 'gbk'));
-        const querys = queryString.parse(queryStr);
-        const params = {
-          imgs: post.media.srcTiledImages,
-          cam: {
-            lat: querys.lat ? querys.lat : (post.dimension.lat ? post.dimension.lat : DEFAULT_PANOROMA_OPTIONS.LAT),
-            lng: querys.lng ? querys.lng : (post.dimension.lng ? post.dimension.lng : DEFAULT_PANOROMA_OPTIONS.LNG),
-            fov: querys.fov ? querys.fov : (post.dimension.fov ? post.dimension.fov : DEFAULT_PANOROMA_OPTIONS.FOV)
-          },
-          canvas: 'container'
-        };
-        startViewer(params);
-      }
+      const search = location.search.substr(1);
+      const queryStr = Base64.decode(urlencode.decode(search.substr(0, search.indexOf('&')), 'gbk'));
+      const querys = queryString.parse(queryStr);
+      const params = {
+        imgs: post.media.srcTiledImages,
+        cam: {
+          lat: querys.lat ? querys.lat : (post.dimension.lat ? post.dimension.lat : DEFAULT_PANOROMA_OPTIONS.LAT),
+          lng: querys.lng ? querys.lng : (post.dimension.lng ? post.dimension.lng : DEFAULT_PANOROMA_OPTIONS.LNG),
+          fov: querys.fov ? querys.fov : (post.dimension.fov ? post.dimension.fov : DEFAULT_PANOROMA_OPTIONS.FOV)
+        },
+        canvas: 'container'
+      };
+      startViewer(params);
     }
   }
 
