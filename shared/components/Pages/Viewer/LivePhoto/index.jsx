@@ -17,15 +17,31 @@ const defaultProps = {
 class LivePhoto extends Component {
   constructor(props) {
     super(props);
+    this.player = null;
+  }
+
+  getSnapshot() {
+    if(this.player) {
+      return this.player.getSnapshot(480, 640);
+    }
+    return null;
+  }
+
+  getCurrentUrl() {
+    if(this.player) {
+      return this.player.getCurrentUrl();
+    }
+    return '';
   }
 
   componentDidMount() {
     if(process.env.BROWSER) {
-      new LivePhotoPlayer({
+      this.player = new LivePhotoPlayer({
         container: this.refs.container,
         srcRoot: 'https://dl.dropboxusercontent.com/u/89923172/live_photos',
         numPhotos: 200
-      }).start();
+      });
+      this.player.start();
     }
   }
 

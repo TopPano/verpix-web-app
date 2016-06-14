@@ -1,9 +1,11 @@
 module.exports = {
   facebook: {
+    apiRoot: 'https://graph.facebook.com',
     id: '630397387117048',
     version: '2.6'
   },
   google: {
-    shortUrlKey: 'AIzaSyDMWU0bIoW4FS1OvfCT_X8OCBfe6CLOsCw'
+    apiRoot: 'https://www.googleapis.com',
+    shortUrlKey: 'AIzaSyAILHIgD61Q8siyb3vTmV_9cITXas643Cc'
   }
 }

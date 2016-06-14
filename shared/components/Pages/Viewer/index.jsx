@@ -6,6 +6,7 @@ import { isIframe } from 'lib/devices';
 import Panorama from './Panorama';
 import LivePhoto from './LivePhoto';
 import Sidebar from './Sidebar';
+import CONTENT from 'content/viewer/en-us.json';
 
 if(process.env.BROWSER) {
   require('./Viewer.css');
@@ -31,16 +32,35 @@ export default class Viewer extends Component {
   }
 
   render() {
-    const player =
-        this.props.post.mediaType === 'panoPhoto' ?
-        <Panorama {...this.props} /> :
-        <LivePhoto {...this.props} />;
+    let player, shareParams;
+    if(this.props.post.mediaType === 'panoPhoto') {
+      player = <Panorama ref="player" {...this.props} />;
+      shareParams = {
+        needFBPermission: true,
+        defaultCaption: CONTENT.SHARE.PANORAMA.DEFAULT_CAPTION,
+        defaultDescription: CONTENT.SHARE.PANORAMA.DEFAULT_DESCRIPTION
+      }
+    } else {
+      player = <LivePhoto ref="player" {...this.props} />;
+      shareParams = {
+        needFBPermission: false,
+        defaultCaption: CONTENT.SHARE.LIVE_PHOTO.DEFAULT_CAPTION,
+        defaultDescription: CONTENT.SHARE.LIVE_PHOTO.DEFAULT_DESCRIPTION
+      }
+    }
 
     return (
       <div className="viewer-component">
         <div className='viewer-wrapper'>
           {player}
-          { !isIframe() && <Sidebar {...this.props} /> }
+          { !isIframe() &&
+            <Sidebar
+              {...this.props}
+              shareParams={shareParams}
+              getSnapshot={(accessToken) => { return this.refs.player.getSnapshot(accessToken)}}
+              getCurrentUrl={() => { return this.refs.player.getCurrentUrl() }}
+            />
+          }
         </div>
       </div>
     );

@@ -7,6 +7,7 @@ import urlencode from 'urlencode';
 
 import { DEFAULT_PANOROMA_OPTIONS } from 'constants/panorama';
 import { startViewer, stopViewer } from './PanoramaPlayer';
+import { getSnapshot, getCurrentUrl } from './PanoramaPlayer';
 
 if(process.env.BROWSER) {
   require('./Panorama.css');
@@ -32,6 +33,14 @@ class Panorama extends Component {
     this.state = {
       isViewerStarted: false
     }
+  }
+
+  getSnapshot(accessToken) {
+    return getSnapshot(window.innerWidth, window.innerHeight, accessToken);
+  }
+
+  getCurrentUrl() {
+    return getCurrentUrl();
   }
 
   componentDidUpdate() {

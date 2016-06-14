@@ -1,7 +1,8 @@
 'use strict';
 
 import fill from 'lodash/fill';
-import isFunction from 'lodash/fill';
+import isFunction from 'lodash/isFunction';
+import inRange from 'lodash/inRange';
 
 export default class LivePhotoPlayer {
   constructor(params) {
@@ -103,5 +104,23 @@ export default class LivePhotoPlayer {
 
   isLeftBtnPressed(e) {
     return (e.which && e.button === 0) || (e.button && e.button === 0);
+  }
+
+  getSnapshot(width, height) {
+    return new Promise((resolve, reject) => {
+      if(inRange(this.curPhoto, this.numPhotos)) {
+        resolve({
+          imgUrl: `${this.srcRoot}/${this.curPhoto}.jpg`,
+          width,
+          height
+        });
+      } else {
+        reject();
+      }
+    });
+  }
+
+  getCurrentUrl() {
+    return window.location.href.split('?')[0];
   }
 }

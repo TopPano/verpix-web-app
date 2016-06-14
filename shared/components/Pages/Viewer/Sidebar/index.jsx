@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import toInteger from 'lodash/toInteger';
 import merge from 'lodash/merge';
+import trim from 'lodash/trim';
 import replace from 'lodash/replace';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
@@ -13,7 +14,6 @@ import FacebookLogin from 'react-facebook-login';
 
 import PeopleList from 'components/Common/PeopleList';
 import { parseUsername, parseProfilePhotoUrl, genLikelist } from 'lib/utils';
-import { getCurrentUrl, getSnapshot } from '../Panorama/PanoramaPlayer';
 import { shareTwitter, shareFacebook } from './share';
 import { isMobile } from 'lib/devices';
 import externalApiConfig from 'etc/external-api'
@@ -66,7 +66,10 @@ const propTypes = {
   getLikelist: PropTypes.func.isRequired,
   getLikelist: PropTypes.func.isRequired,
   followUser: PropTypes.func.isRequired,
-  unfollowUser: PropTypes.func.isRequired
+  unfollowUser: PropTypes.func.isRequired,
+  shareParams: PropTypes.object.isRequired,
+  getSnapshot: PropTypes.func.isRequired,
+  getCurrentUrl: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -97,7 +100,7 @@ class Sidebar extends Component {
           '<iframe' +
           ' width="' + ((isNaN(width) || width < IFRAME_MIN_WIDTH) ? IFRAME_MIN_WIDTH : width) +
           '" height="' + ((isNaN(height) || height < IFRAME_MIN_HEIGHT) ? IFRAME_MIN_HEIGHT : height) +
-          '" src="' + getCurrentUrl() +
+          '" src="' + this.props.getCurrentUrl() +
           '" style="border: none" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
         this.setState(merge({}, this.state, {
           shareLink: {
@@ -160,14 +163,27 @@ class Sidebar extends Component {
   }
 
   handleShareTwitter = () => {
-    shareTwitter(getCurrentUrl());
+    shareTwitter(this.props.getCurrentUrl());
   }
 
-  handleShareFacebook = (response) => {
-    shareFacebook(response.accessToken, {
-      link: getCurrentUrl(),
-      caption: this.props.post.caption
-    }, getSnapshot);
+  handleShareFacebookWithPermission = (response) => {
+    this.shareFacebookCaller(() => {
+      return this.props.getSnapshot(response.accessToken);
+    });
+  }
+
+  handleShareFacebookWithoutPermission = () => {
+    this.shareFacebookCaller(this.props.getSnapshot);
+  }
+
+  shareFacebookCaller = (getSnapshot) => {
+    const { post, shareParams } = this.props;
+    const opts = {
+      linkUrl: this.props.getCurrentUrl(),
+      caption: trim(post.caption) ? trim(post.caption) : shareParams.defaultCaption,
+      description: shareParams.defaultDescription
+    }
+    shareFacebook(opts, getSnapshot);
   }
 
   showLikelist = () => {
@@ -208,7 +224,7 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { post, userId, likelist, likePost, unlikePost, followUser, unfollowUser } = this.props;
+    const { post, userId, likelist, shareParams, likePost, unlikePost, followUser, unfollowUser } = this.props;
     const { clicked, isInTransitioned, isHelpShown, shareLink } = this.state;
     const showContent = (clicked !== NON_CLICKED) && (clicked !== 1);
     let icons = [], contents = [], helpList = [];
@@ -251,8 +267,8 @@ class Sidebar extends Component {
           <FacebookLogin
             appId={externalApiConfig.facebook.id}
             version={externalApiConfig.facebook.version}
-            scope={'publish_actions'}
-            callback={this.handleShareFacebook}
+            scope={shareParams.needFBPermission? 'publish_actions' : ''}
+            callback={shareParams.needFBPermission? this.handleShareFacebookWithPermission : this.handleShareFacebookWithoutPermission}
             cssClass='sidebar-share-btn sidebar-share-facebook'
             textButton=''
           />
