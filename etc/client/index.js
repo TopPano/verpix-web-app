@@ -1,15 +1,12 @@
 var merge = require('lodash/merge');
 
-var customApiRoot = process.env.API_ROOT;
+var customConfig = process.env.CLIENT_CONFIG;
 var config =
   (process.env.NODE_ENV === 'production') ?
   require('./client-config.prod.js') :
   require('./client-config.dev.js');
 
-if(customApiRoot) {
-  config = merge(config, {
-    apiRoot: customApiRoot
-  });
-}
-
-module.exports = config;
+module.exports = merge(config, {
+  apiRoot: process.env.API_ROOT,
+  staticUrl: process.env.STATIC_URL
+});
