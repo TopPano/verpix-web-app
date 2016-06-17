@@ -1,47 +1,42 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 
 import { parseUsername, parseProfilePhotoUrl, genLikelist } from 'lib/utils';
 import View from './View';
 import PeopleList from '../PeopleList';
+import { MEDIA_TYPE, ORIENTATION } from 'constants/common';
 
 if (process.env.BROWSER) {
   require('./Gallery.css');
 }
 
-export default class Gallery extends Component{
+const propTypes = {
+  posts: PropTypes.object.isRequired,
+  postIds: PropTypes.array.isRequired,
+  userId: PropTypes.string.isRequired,
+  like: PropTypes.object.isRequired,
+  followUser: PropTypes.func.isRequired,
+  unfollowUser: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
+  unlikePost: PropTypes.func.isRequired,
+  getLikelist: PropTypes.func.isRequired,
+  hasMorePosts: PropTypes.func.isRequired,
+  loadMorePosts: PropTypes.func.isRequired,
+  showAuthor: PropTypes.bool
+}
+
+const defaultProps = {
+  showAuthor: false
+}
+
+class Gallery extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      containerWidth: 0,
       lastClickedPostId: '',
       shouldShowMoreBtn: true
     };
-  }
-
-  componentDidMount() {
-    this.setState({
-      containerWidth: this.getContainerWidth()
-    });
-    window.addEventListener('resize', this.handleWindowResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowResize, false);
-  }
-
-  handleWindowResize = () => {
-    this.setState({
-      containerWidth: this.getContainerWidth()
-    });
-  }
-
-  getContainerWidth = () => {
-    var el = ReactDOM.findDOMNode(this);
-    var style = window.getComputedStyle(el, null);
-    return Math.floor(el.clientWidth) - parseInt(style.getPropertyValue('padding-left')) - parseInt(style.getPropertyValue('padding-right'));
   }
 
   handleClickMoreBtn = () => {
@@ -70,31 +65,26 @@ export default class Gallery extends Component{
   }
 
   render() {
-    const { posts, postIds, like, maxWidth, ratio, showAuthor, likePost, unlikePost, followUser, unfollowUser, hasMorePosts } = this.props;
-    let numPerRow = Math.ceil(this.state.containerWidth / maxWidth);
-    let paddingLeft = 5, paddingRight = 5;
-    let postWidth =
-        postIds.length >= numPerRow ?
-        Math.floor(this.state.containerWidth / numPerRow) - paddingLeft - paddingRight :
-        maxWidth - paddingLeft - paddingRight;
-    let postHeight = Math.floor(postWidth / ratio);
-    let wrapperWidth = (postWidth + paddingLeft + paddingRight) * numPerRow;
+    const { posts, postIds, like, showAuthor, likePost, unlikePost, followUser, unfollowUser, hasMorePosts } = this.props;
     let previews = [];
 
-    postIds.map((id, k) => {
-      const { sid, thumbnail, likes, owner } = posts[id];
+    postIds.map((id) => {
+      const { sid, mediaType, thumbnail, dimension, likes, owner } = posts[id];
+      const orientation =
+          (mediaType === MEDIA_TYPE.LIVE_PHOTO && dimension.orientation === ORIENTATION.PORTRAIT) ?
+          ORIENTATION.PORTRAIT :
+          ORIENTATION.LANDSCAPE;
       const authorName = parseUsername(owner);
       const authorPhotoUrl = parseProfilePhotoUrl(owner);
 
       previews.push(
         <View
-          key={k}
+          key={sid}
           postId={sid}
           imgUrl={thumbnail.downloadUrl}
+          orientation={orientation}
           count={likes.count}
           isLiked={likes.isLiked}
-          width={postWidth}
-          height={postHeight}
           showAuthor={showAuthor}
           authorPhotoUrl={authorPhotoUrl}
           authorName={authorName}
@@ -110,44 +100,26 @@ export default class Gallery extends Component{
     const likelist = genLikelist(like.list);
     const showMoreBtn = this.state.shouldShowMoreBtn && hasMorePosts();
     return(
-      <div className='gallery-component container-fluid'>
-        <div style={{ width: wrapperWidth }} className='gallery-wrapper'>
+      <div className="gallery-component container-fluid">
+        <div className="gallery-wrapper">
           { previews }
         </div>
         <PeopleList
-          ref='peopleList'
+          ref="peopleList"
           list={likelist}
           userId={userId}
           followUser={followUser}
           unfollowUser={unfollowUser}
         />
         {showMoreBtn &&
-          <div className='gallery-more-btn' onClick={this.handleClickMoreBtn}>{'more'}</div>
+          <div className="gallery-more-btn" onClick={this.handleClickMoreBtn}>{'more'}</div>
         }
       </div>
     );
   }
 }
 
-Gallery.displayName = 'Gallery';
+Gallery.propTypes = propTypes;
+Gallery.defaultProps = defaultProps;
 
-Gallery.propTypes = {
-  posts: PropTypes.object.isRequired,
-  postIds: PropTypes.array.isRequired,
-  maxWidth: PropTypes.number.isRequired,
-  ratio: PropTypes.number.isRequired,
-  userId: PropTypes.string.isRequired,
-  like: PropTypes.object.isRequired,
-  followUser: PropTypes.func.isRequired,
-  unfollowUser: PropTypes.func.isRequired,
-  likePost: PropTypes.func.isRequired,
-  unlikePost: PropTypes.func.isRequired,
-  getLikelist: PropTypes.func.isRequired,
-  hasMorePosts: PropTypes.func.isRequired,
-  loadMorePosts: PropTypes.func.isRequired,
-  showAuthor: PropTypes.bool
-};
-Gallery.defaultProps = {
-  showAuthor: false
-}
-
+export default Gallery;

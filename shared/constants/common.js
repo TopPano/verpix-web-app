@@ -10,3 +10,13 @@ export const EXTERNAL_LINKS = {
   TWITTER: 'https://twitter.com/verpix',
   INSTAGRAM: 'https://www.instagram.com/verpix_me/'
 }
+
+export const MEDIA_TYPE = {
+  PANO_PHOTO: 'panoPhoto',
+  LIVE_PHOTO: 'livePhoto'
+}
+
+export const ORIENTATION = {
+  PORTRAIT: 'portrait',
+  LANDSCAPE: 'landscape'
+}
