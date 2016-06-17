@@ -13,7 +13,8 @@ let config = Object.assign({}, baseConfig, {
   plugins: [
     new webpack.DefinePlugin({
       "process.env": {
-        BROWSER: JSON.stringify(true)
+        BROWSER: JSON.stringify(true),
+        API_ROOT: JSON.stringify(process.env.API_ROOT)
       }
     }),
     new BowerWebpackPlugin({
