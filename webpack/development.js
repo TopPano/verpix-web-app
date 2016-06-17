@@ -20,7 +20,8 @@ let config = Object.assign({}, baseConfig, {
     new webpack.DefinePlugin({
       "process.env": {
         BROWSER: JSON.stringify(true),
-        API_ROOT: JSON.stringify(process.env.API_ROOT)
+        API_ROOT: JSON.stringify(process.env.API_ROOT),
+        STATIC_URL: JSON.stringify(process.env.STATIC_URL)
       }
     }),
     new BowerWebpackPlugin({
