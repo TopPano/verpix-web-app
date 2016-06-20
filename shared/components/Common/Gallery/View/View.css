@@ -1,7 +1,5 @@
 @import 'Variables.css';
 
-$likebtn-height: 30px;
-
 .view-component {
   position: relative;
   display: inline-block;
