@@ -20,3 +20,8 @@ export const ORIENTATION = {
   PORTRAIT: 'portrait',
   LANDSCAPE: 'landscape'
 }
+
+export const DIRECTION = {
+  VERTICAL: 'vertical',
+  HORIZONTAL: 'horizontal'
+}

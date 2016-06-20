@@ -14,14 +14,7 @@ if(process.env.BROWSER) {
 }
 
 const propTypes = {
-  post: PropTypes.object.isRequired,
-  likelist: PropTypes.object.isRequired,
-  userId: PropTypes.string.isRequired,
-  likePost: PropTypes.func.isRequired,
-  unlikePost: PropTypes.func.isRequired,
-  getLikelist: PropTypes.func.isRequired,
-  followUser: PropTypes.func.isRequired,
-  unfollowUser: PropTypes.func.isRequired
+  post: PropTypes.object.isRequired
 }
 
 const defaultProps = {

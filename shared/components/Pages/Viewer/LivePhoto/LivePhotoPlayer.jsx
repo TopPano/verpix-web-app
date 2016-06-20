@@ -4,17 +4,29 @@ import fill from 'lodash/fill';
 import isFunction from 'lodash/isFunction';
 import inRange from 'lodash/inRange';
 
+import { DIRECTION, ORIENTATION } from 'constants/common';
+import { STEP_DISTANCE } from 'constants/livePhoto';
+
 export default class LivePhotoPlayer {
   constructor(params) {
     // Read only member variables
     this.container = params.container;
-    this.srcRoot = params.srcRoot;
-    this.numPhotos = params.numPhotos;
+    this.photosSrcUrl = params.photosSrcUrl;
+    this.numPhotos = this.photosSrcUrl.length;
+    this.direction = params.dimension.direction;
+    this.orientation = params.dimension.orientation;
 
     // Writable member variables
     this.photos = fill(Array(this.numPhotos), null);
     this.curPhoto = Math.round(this.numPhotos / 2);
-    this.lastPosition = {};
+    this.lastPosition = null;
+    
+    // Transform container when orientation is portrait
+    if(this.orientation === ORIENTATION.PORTRAIT) {
+      const ctx = this.container.getContext('2d');
+      ctx.rotate(90 * Math.PI / 180);
+      ctx.translate(0, -this.container.width);
+    }
   }
 
   start() {
@@ -26,7 +38,7 @@ export default class LivePhotoPlayer {
 
   loadPhoto(index, callback) {
     let img = new Image();
-    img.src = `${this.srcRoot}/${index}.jpg`;
+    img.src = this.getPhotoSrc(index);
     img.onload = () => {
       this.photos[index] = img;
       if(callback && isFunction(callback)) {
@@ -61,6 +73,14 @@ export default class LivePhotoPlayer {
     }
   }
 
+  getPhotoSrc(index) {
+    return (
+      inRange(index, this.numPhotos) ?
+      this.photosSrcUrl[index].downloadUrl :
+      ''
+    );
+  }
+
   startAnimation(startIndex) {
     this.renderPhoto(startIndex);
     this.container.addEventListener('mousedown', this.handleTransitionStart);
@@ -68,9 +88,14 @@ export default class LivePhotoPlayer {
   }
 
   renderPhoto(index) {
-    const ctx = this.container.getContext('2d');
+    const container = this.container;
+    const ctx = container.getContext('2d');
     const img = this.photos[index];
-    ctx.drawImage(img, 0, 0, this.container.width, this.container.height);
+    if(this.orientation === ORIENTATION.PORTRAIT) {
+      ctx.drawImage(img, 0, 0, container.height, container.width);
+    } else {
+      ctx.drawImage(img, 0, 0, container.width, container.height);
+    }
   }
 
   handleTransitionStart = (e) => {
@@ -82,15 +107,18 @@ export default class LivePhotoPlayer {
   handleTransitionMove = (e) => {
     // Left button is clicked.
     if(this.isLeftBtnPressed(e)) {
-      const lastX = this.lastPosition.x;
+      const lastPosition = this.lastPosition;
       const curX = e.clientX, curY = e.clientY;
-      if(lastX) {
-        const deltaX = curX - lastX;
-        let newCurPhoto = this.curPhoto + deltaX;
+      if(lastPosition) {
+        const delta =
+            this.direction === DIRECTION.HORIZONTAL ?
+            curX - lastPosition.x :
+            curY - lastPosition.y;
+        let newCurPhoto = this.curPhoto + Math.round(delta / STEP_DISTANCE);
 
-        if(deltaX < 0 && newCurPhoto < 0) {
+        if(delta < 0 && newCurPhoto < 0) {
           newCurPhoto = 0;
-        } else if(deltaX > 0 && newCurPhoto >= this.numPhotos) {
+        } else if(delta > 0 && newCurPhoto >= this.numPhotos) {
           newCurPhoto = this.numPhotos - 1;
         }
         if(this.photos[newCurPhoto]) {
@@ -110,7 +138,7 @@ export default class LivePhotoPlayer {
     return new Promise((resolve, reject) => {
       if(inRange(this.curPhoto, this.numPhotos)) {
         resolve({
-          imgUrl: `${this.srcRoot}/${this.curPhoto}.jpg`,
+          imgUrl: this.getPhotoSrc(this.curPhoto),
           width,
           height
         });

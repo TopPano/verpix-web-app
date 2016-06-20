@@ -1,14 +1,17 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
 
 import LivePhotoPlayer from './LivePhotoPlayer';
+import { ORIENTATION } from 'constants/common';
 
 if (process.env.BROWSER) {
   require('./LivePhoto.css');
 }
 
 const propTypes = {
+  post: PropTypes.object.isRequired
 };
 
 const defaultProps = {
@@ -36,19 +39,33 @@ class LivePhoto extends Component {
 
   componentDidMount() {
     if(process.env.BROWSER) {
+      const { post } = this.props;
       this.player = new LivePhotoPlayer({
         container: this.refs.container,
-        srcRoot: 'https://dl.dropboxusercontent.com/u/89923172/live_photos',
-        numPhotos: 200
+        photosSrcUrl: post.media.srcHighImages,
+        dimension: post.dimension
       });
       this.player.start();
     }
   }
 
   render() {
+    const isPortrait = this.props.post.dimension.orientation == ORIENTATION.PORTRAIT;
+    const livePhotoClass = classNames({
+      'live-photo-component': true,
+      'orientation-portrait': isPortrait
+    });
+    const livePhotoContainerClass = classNames({
+      'live-photo-container': true,
+      'orientation-portrait': isPortrait
+    });
+    // TODO: Set canvas width and height automatically
+    const width = isPortrait ? 480 : 640;
+    const height = isPortrait ? 640 : 480;
+
     return (
-      <div className='live-photo-component live-photo-portrait'>
-        <canvas ref='container' className='live-photo-container' />
+      <div className={livePhotoClass}>
+        <canvas ref="container" className={livePhotoContainerClass} width={width} height={height} />
       </div>
     );
   }
