@@ -1,12 +1,17 @@
 .view-author-component {
+  width: 80%;
+  display: flex;
+  direction: column;
+  align-items: center;
+
   .view-author-photo {
     width: 40px;
     height: 40px;
     border-radius: 50%;
   }
+
   .view-author-name {
-    color: inherit;
-    text-decoration: none;
+    max-width: 70%;
     background-color: black;
   }
 }
