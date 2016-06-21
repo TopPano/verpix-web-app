@@ -23,7 +23,6 @@ const propTypes = {
   likePost: PropTypes.func.isRequired,
   unlikePost: PropTypes.func.isRequired,
   getLikelist: PropTypes.func.isRequired,
-  hasMorePosts: PropTypes.func.isRequired,
   loadMorePosts: PropTypes.func.isRequired,
   showAuthor: PropTypes.bool
 }
@@ -36,8 +35,7 @@ class Gallery extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      lastClickedPostId: '',
-      shouldShowMoreBtn: true
+      lastClickedPostId: ''
     };
   }
 
@@ -145,9 +143,6 @@ class Gallery extends Component{
 
   handleClickMoreBtn = () => {
     this.props.loadMorePosts();
-    this.setState({
-      shouldShowMoreBtn: false
-    });
   }
 
   showLikelist = (postId) => {
@@ -169,7 +164,7 @@ class Gallery extends Component{
   }
 
   render() {
-    const { posts, postIds, like, showAuthor, likePost, unlikePost, followUser, unfollowUser, hasMorePosts } = this.props;
+    const { posts, postIds, hasNext, like, showAuthor, likePost, unlikePost, followUser, unfollowUser } = this.props;
     const dividedPostIds = this.dividePostIds(postIds, 2);
     let dividedPreviews = [];
 
@@ -210,7 +205,6 @@ class Gallery extends Component{
 
     const { userId } = this.props;
     const likelist = genLikelist(like.list);
-    const showMoreBtn = this.state.shouldShowMoreBtn && hasMorePosts();
     return(
       <div className="gallery-component container-fluid">
         <div className="gallery-wrapper">
@@ -223,7 +217,7 @@ class Gallery extends Component{
           followUser={followUser}
           unfollowUser={unfollowUser}
         />
-        {showMoreBtn &&
+        {hasNext &&
           <div className="gallery-more-btn" onClick={this.handleClickMoreBtn}>{'more'}</div>
         }
       </div>
