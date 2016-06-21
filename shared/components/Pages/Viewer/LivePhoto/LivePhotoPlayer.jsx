@@ -6,6 +6,9 @@ import inRange from 'lodash/inRange';
 
 import { DIRECTION, ORIENTATION } from 'constants/common';
 import { STEP_DISTANCE } from 'constants/livePhoto';
+import { isMobile } from 'lib/devices';
+import { getPosition, getX, getY } from 'lib/events/click';
+import EVENTS from 'constants/events';
 
 export default class LivePhotoPlayer {
   constructor(params) {
@@ -83,8 +86,8 @@ export default class LivePhotoPlayer {
 
   startAnimation(startIndex) {
     this.renderPhoto(startIndex);
-    this.container.addEventListener('mousedown', this.handleTransitionStart);
-    this.container.addEventListener('mousemove', this.handleTransitionMove);
+    this.container.addEventListener(EVENTS.CLICK_START, this.handleTransitionStart);
+    this.container.addEventListener(EVENTS.CLICK_MOVE, this.handleTransitionMove);
   }
 
   renderPhoto(index) {
@@ -100,7 +103,7 @@ export default class LivePhotoPlayer {
 
   handleTransitionStart = (e) => {
     if(this.isLeftBtnPressed(e)) {
-      this.lastPosition = { x: e.clientX, y: e.clientY };
+      this.lastPosition = getPosition(e);
     }
   }
 
@@ -108,7 +111,7 @@ export default class LivePhotoPlayer {
     // Left button is clicked.
     if(this.isLeftBtnPressed(e)) {
       const lastPosition = this.lastPosition;
-      const curX = e.clientX, curY = e.clientY;
+      const curX = getX(e), curY = getY(e);
       if(lastPosition) {
         const delta =
             this.direction === DIRECTION.HORIZONTAL ?
@@ -131,7 +134,11 @@ export default class LivePhotoPlayer {
   }
 
   isLeftBtnPressed(e) {
-    return (e.which && e.button === 0) || (e.button && e.button === 0);
+    return (
+      isMobile() ?
+      true :
+      (e.which && e.button === 0) || (e.button && e.button === 0)
+    )
   }
 
   getSnapshot(width, height) {

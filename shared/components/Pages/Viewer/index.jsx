@@ -2,10 +2,11 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import { isIframe } from 'lib/devices';
+import { isIframe, isMobile } from 'lib/devices';
 import Panorama from './Panorama';
 import LivePhoto from './LivePhoto';
 import Sidebar from './Sidebar';
+import EVENTS from 'constants/events';
 import CONTENT from 'content/viewer/en-us.json';
 
 if(process.env.BROWSER) {
@@ -30,6 +31,23 @@ const defaultProps = {
 export default class Viewer extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    if(isMobile()) {
+      document.addEventListener(EVENTS.CLICK_MOVE, this.preventPageScrolling);
+    }
+  }
+
+  componentWillUnmount() {
+    if(isMobile()) {
+      document.removeEventListener(EVENTS.CLICK_MOVE, this.preventPageScrolling);
+    }
+  }
+
+  // Prevent scrolling the entire page.
+  preventPageScrolling = (e) => {
+    e.preventDefault();
   }
 
   render() {

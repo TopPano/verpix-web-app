@@ -141,9 +141,6 @@ export function stopViewer() {
     window.cancelAnimationFrame(requestAnimationFrameId);
     requestAnimationFrameId = undefined;
   }
-  if(TOPPANO.gv.mobile.isMobile) {
-    document.removeEventListener('touchmove', preventPageScrolling);
-  }
 }
 
 export function getCurrentUrl() {
@@ -274,13 +271,7 @@ function addMesh(texture, index) {
 function optimizeMobile() {
   if(isMobile()) {
     TOPPANO.gv.mobile.isMobile = true;
-    document.addEventListener('touchmove', preventPageScrolling);
   }
-}
-
-// Prevent scrolling the entire page.
-function preventPageScrolling(e) {
-  e.preventDefault();
 }
 
 // add listeners
