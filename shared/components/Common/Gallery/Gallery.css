@@ -1,4 +1,5 @@
 @import 'Variables.css';
+@import 'RWD.css';
 
 .gallery-component {
   overflow: hidden;
@@ -7,10 +8,14 @@
   align-items: center;
 
   .gallery-wrapper {
-    display: flex;
-    direction: column;
+    width: 100%;
+    max-width: 1000px;
     .gallery-sub {
-      width: 500px;
+      float: left;
+      width: 100%;
+      @media(width >= $gallery-boundary) {
+        width: 50%;
+      }
     }
   }
 

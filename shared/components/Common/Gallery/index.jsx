@@ -7,6 +7,7 @@ import { createFixedArray, parseUsername, parseProfilePhotoUrl, genLikelist } fr
 import View from './View';
 import PeopleList from '../PeopleList';
 import { MEDIA_TYPE, ORIENTATION } from 'constants/common';
+import { GALLERY_BOUNDARY } from 'constants/gallery';
 
 if (process.env.BROWSER) {
   require('./Gallery.css');
@@ -35,7 +36,8 @@ class Gallery extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      lastClickedPostId: ''
+      lastClickedPostId: '',
+      numOfDivs: 0
     };
   }
 
@@ -141,10 +143,6 @@ class Gallery extends Component{
     return this.getOrientation(post) === ORIENTATION.PORTRAIT;
   }
 
-  handleClickMoreBtn = () => {
-    this.props.loadMorePosts();
-  }
-
   showLikelist = (postId) => {
     this.props.getLikelist(postId);
     this.waitUpdateLikelist(postId);
@@ -163,45 +161,74 @@ class Gallery extends Component{
     }, 50);
   }
 
+  calculateNumOfDivs() {
+    return window.innerWidth > GALLERY_BOUNDARY ? 2 : 1;
+  }
+
+  componentDidMount() {
+    this.setState({
+      numOfDivs: this.calculateNumOfDivs()
+    });
+    window.addEventListener('resize', this.handleWindowResize);
+  }
+
+  componentWillUnmount() {
+     window.removeEventListener('resize', this.handleWindowResize, false);
+  }
+
+  handleWindowResize = () => {
+    const numOfDivs = this.calculateNumOfDivs();
+    if(numOfDivs != this.state.numOfDivs) {
+      this.setState({ numOfDivs });
+    }
+  }
+
+  handleClickMoreBtn = () => {
+    this.props.loadMorePosts();
+  }
+
   render() {
     const { posts, postIds, hasNext, like, showAuthor, likePost, unlikePost, followUser, unfollowUser } = this.props;
-    const dividedPostIds = this.dividePostIds(postIds, 2);
+    const { numOfDivs } = this.state;
     let dividedPreviews = [];
 
-    dividedPostIds.forEach((postIds) => {
-      let previews = [];
+    if(numOfDivs > 0) {
+      const dividedPostIds = this.dividePostIds(postIds, numOfDivs);
+      dividedPostIds.forEach((postIds) => {
+        let previews = [];
 
-      postIds.map((id) => {
-        const { sid, thumbnail, likes, owner } = posts[id];
-        const orientation = this.getOrientation(posts[id]);
-        const authorName = parseUsername(owner);
-        const authorPhotoUrl = parseProfilePhotoUrl(owner);
+        postIds.map((id) => {
+          const { sid, thumbnail, likes, owner } = posts[id];
+          const orientation = this.getOrientation(posts[id]);
+          const authorName = parseUsername(owner);
+          const authorPhotoUrl = parseProfilePhotoUrl(owner);
 
-        previews.push(
-          <View
-            key={sid}
-            postId={sid}
-            imgUrl={thumbnail.downloadUrl}
-            orientation={orientation}
-            count={likes.count}
-            isLiked={likes.isLiked}
-            showAuthor={showAuthor}
-            authorPhotoUrl={authorPhotoUrl}
-            authorName={authorName}
-            authorId={owner.sid}
-            likePost={likePost.bind(this, sid)}
-            unlikePost={unlikePost.bind(this, sid)}
-            showLikelist={this.showLikelist.bind(this, sid)}
-          />
+          previews.push(
+            <View
+              key={sid}
+              postId={sid}
+              imgUrl={thumbnail.downloadUrl}
+              orientation={orientation}
+              count={likes.count}
+              isLiked={likes.isLiked}
+              showAuthor={showAuthor}
+              authorPhotoUrl={authorPhotoUrl}
+              authorName={authorName}
+              authorId={owner.sid}
+              likePost={likePost.bind(this, sid)}
+              unlikePost={unlikePost.bind(this, sid)}
+              showLikelist={this.showLikelist.bind(this, sid)}
+            />
+          );
+        });
+
+        dividedPreviews.push(
+          <div className="gallery-sub" >
+            {previews}
+          </div>
         );
       });
-
-      dividedPreviews.push(
-        <div className="gallery-sub" >
-          {previews}
-        </div>
-      );
-    });
+    }
 
     const { userId } = this.props;
     const likelist = genLikelist(like.list);
