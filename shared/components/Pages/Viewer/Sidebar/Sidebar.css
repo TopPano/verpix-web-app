@@ -1,7 +1,4 @@
-@import '../../Common/Styles/Variables.css';
-
-$header-height: 60px;
-$footer-height: 30px;
+@import 'Variables.css';
 
 $sidebar-length: 60px;
 $sidebar-padding: 10px;
@@ -17,8 +14,6 @@ $share-input-bg: rgba(0, 0, 0, 0.25);
 .sidebar-component {
   height: 100%;
   width: $sidebar-length;
-  padding-top: $header-height;
-  padding-bottom: $footer-height;
   position: absolute;
   right: 0;
   top: 0;

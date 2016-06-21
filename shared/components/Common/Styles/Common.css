@@ -1,8 +1,9 @@
-@import './Variables.css';
+@import 'Variables.css';
 
 .text-single-line {
-  overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   cursor: default;
 }
 

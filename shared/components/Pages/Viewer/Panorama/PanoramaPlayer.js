@@ -1,8 +1,10 @@
 import THREE from 'three';
 import { Base64 } from 'js-base64';
 import sortBy from 'lodash/sortBy';
+import fetch from 'isomorphic-fetch';
 
-import { isMobile } from '../../../lib/devices';
+import { isMobile } from 'lib/devices';
+import externalApiConfig from 'etc/external-api';
 
 var requestAnimationFrameId;
 var TOPPANO = TOPPANO || {};
@@ -13,7 +15,7 @@ TOPPANO.gv = {
     objScene: null,
     renderer: null,
     stats: null,
-    canvasID: 'pano-container',
+    canvasID: 'container',
     isFullScreen: false,
     headingOffset: 0,
 
@@ -139,9 +141,6 @@ export function stopViewer() {
     window.cancelAnimationFrame(requestAnimationFrameId);
     requestAnimationFrameId = undefined;
   }
-  if(TOPPANO.gv.mobile.isMobile) {
-    document.removeEventListener('touchmove', preventPageScrolling);
-  }
 }
 
 export function getCurrentUrl() {
@@ -152,7 +151,7 @@ export function getCurrentUrl() {
   return window.location.href.split('?')[0] + '?' + Base64.encode(queryStr);
 }
 
-export function getSnapshot (width, height) {
+export function getSnapshot(width, height, accessToken) {
   const container = document.getElementById('container');
   let canvasMini, snapshot;
 
@@ -163,10 +162,39 @@ export function getSnapshot (width, height) {
   container.appendChild(canvasMini);
 
   canvasMini.getContext('2d').drawImage(TOPPANO.gv.renderer.domElement, 0, 0, width, height);
-  snapshot = canvasMini.toDataURL('image/jpeg', 0.8);
+  snapshot = base64toBlob(canvasMini.toDataURL('image/jpeg', 0.8));
   container.removeChild(canvasMini);
 
-  return snapshot;
+  return new Promise((resolve, reject) => {
+    uploadPhoto(accessToken, snapshot).then((response) => {
+      if(response.status >= 400) {
+        // TODO: Error handling
+        reject();
+      }
+      return response.json();
+    }).then((data) => {
+      // Get URL of the uploaded photo.
+      const snapshotUrl = `${externalApiConfig.facebook.apiRoot}/${data.id}/picture?access_token=${accessToken}`;
+
+      shortenUrl(snapshotUrl).then((response) => {
+        if(response.status >= 400) {
+          // TODO: Error handling
+          reject();
+        }
+        return response.json();
+      }).then((data) => {
+        // Shorten the URL.
+        // We use the shorter URL because the original URL of uploaded snapshot (fb.cdn)
+        // is not allowed in Facebook previewe image.
+        const shortUrl = data.id;
+        resolve({
+          imgUrl: shortUrl,
+          width,
+          height
+        });
+      });
+    });
+  });
 }
 
 function initThree(params) {
@@ -243,13 +271,7 @@ function addMesh(texture, index) {
 function optimizeMobile() {
   if(isMobile()) {
     TOPPANO.gv.mobile.isMobile = true;
-    document.addEventListener('touchmove', preventPageScrolling);
   }
-}
-
-// Prevent scrolling the entire page.
-function preventPageScrolling(e) {
-  e.preventDefault();
 }
 
 // add listeners
@@ -366,6 +388,42 @@ function clamp(number, min, max) {
     return Math.min(Math.max(number, min), max);
 }
 
+function base64toBlob(dataUrl) {
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  let byteString;
+  if(dataUrl.split(',')[0].indexOf('base64') >= 0) {
+    byteString = atob(dataUrl.split(',')[1]);
+  } else {
+    byteString = unescape(dataUrl.split(',')[1]);
+  }
+
+  // separate out the mime component
+  let mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+  // write the bytes of the string to a typed array
+  let ia = new Uint8Array(byteString.length);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  return new Blob([ia], {type:mimeString});
+}
+
+// Upload an image to Facebook by using Graph API.
+function uploadPhoto(accessToken, photo) {
+  let data = new FormData();
+  let config;
+
+  data.append('access_token', accessToken);
+  data.append('source', photo);
+  data.append('privacy', JSON.stringify({ 'value': 'SELF' }));
+  config = {
+    method: 'POST',
+    body: data
+  }
+  // Upload the photo to user's Facebook by using multipart/form-data post.
+  return fetch(`${externalApiConfig.facebook.apiRoot}/me/photos?access_token=${accessToken}`, config);
+}
+
 // Add handlers about rotating the scene
 function addRotationHandlers(){
   let container = document.getElementById('container');
@@ -405,6 +463,21 @@ function handleRotationStart(e) {
     clearTimeout(TOPPANO.gv.cursor.slide_func_array.shift());
   }
   document.getElementById('container').addEventListener(moveEvent, handleRotationMove);
+}
+
+// Shorten URL by using Google URL Shortener.
+function shortenUrl(longUrl) {
+  const config = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      longUrl: longUrl
+    })
+  }
+  return fetch(`${externalApiConfig.google.apiRoot}/urlshortener/v1/url?key=${externalApiConfig.google.shortUrlKey}`, config);
 }
 
 function handleRotationMove(e) {
@@ -643,14 +716,12 @@ TOPPANO.handleClick = function() {
 };
 
 TOPPANO.onWindowResize = function() {
-    if (TOPPANO.gv.isFullScreen) {
-        TOPPANO.gv.cam.camera.aspect = window.innerWidth / window.innerHeight;
-        TOPPANO.gv.cam.camera.updateProjectionMatrix();
-        TOPPANO.gv.renderer.setSize(window.innerWidth, window.innerHeight);
+  TOPPANO.gv.cam.camera.aspect = window.innerWidth / window.innerHeight;
+  TOPPANO.gv.cam.camera.updateProjectionMatrix();
+  TOPPANO.gv.renderer.setSize(window.innerWidth, window.innerHeight);
 
-        TOPPANO.gv.container.bound.bottom = window.innerHeight;
-        TOPPANO.gv.container.bound.right = window.innerWidth;
-        TOPPANO.gv.control.bound.bottom = TOPPANO.gv.container.bound.bottom;
-        TOPPANO.gv.control.bound.right = TOPPANO.gv.container.bound.right;
-    }
+  TOPPANO.gv.container.bound.bottom = window.innerHeight;
+  TOPPANO.gv.container.bound.right = window.innerWidth;
+  TOPPANO.gv.control.bound.bottom = TOPPANO.gv.container.bound.bottom;
+  TOPPANO.gv.control.bound.right = TOPPANO.gv.container.bound.right;
 };
