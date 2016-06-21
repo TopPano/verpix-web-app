@@ -55,5 +55,13 @@
     bottom: 10px;
     right: 10px;
   }
+
+  .view-type {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+  }
 }
 

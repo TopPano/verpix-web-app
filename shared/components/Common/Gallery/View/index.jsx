@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 import ViewAuthor from './ViewAuthor';
 import ViewLike from './ViewLike';
-import { ORIENTATION } from 'constants/common';
+import { MEDIA_TYPE, ORIENTATION } from 'constants/common';
 
 if (process.env.BROWSER) {
   require('./View.css');
@@ -15,8 +15,9 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   postId: PropTypes.string.isRequired,
-  imgUrl: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   orientation: PropTypes.string.isRequired,
+  imgUrl: PropTypes.string.isRequired,
   count: PropTypes.number.isRequired,
   isLiked: PropTypes.bool.isRequired,
   likePost: PropTypes.func.isRequired,
@@ -41,7 +42,7 @@ class View extends Component {
   }
 
   render() {
-    const { postId, imgUrl, orientation, showAuthor, authorPhotoUrl, authorName, authorId, count, isLiked } = this.props;
+    const { postId, type, orientation, imgUrl, showAuthor, authorPhotoUrl, authorName, authorId, count, isLiked } = this.props;
     const { likePost, unlikePost, showLikelist } = this.props;
     const viewClass = classNames({
       'view-component': true,
@@ -51,6 +52,7 @@ class View extends Component {
       'view-preview': true,
       'view-preview-portrait': orientation === ORIENTATION.PORTRAIT
     });
+    const typeImgUrl = `/static/images/view/type-${type === MEDIA_TYPE.PANO_PHOTO ? 'pano-photo' : 'live-photo'}.png`;
 
     return (
       <div className={viewClass}>
@@ -71,6 +73,11 @@ class View extends Component {
           likePost={likePost}
           unlikePost={unlikePost}
           showLikelist={showLikelist}
+        />
+        <img
+          className="view-type"
+          src={typeImgUrl}
+          alt={type}
         />
       </div>
     );

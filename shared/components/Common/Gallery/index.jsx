@@ -198,7 +198,7 @@ class Gallery extends Component{
         let previews = [];
 
         postIds.map((id) => {
-          const { sid, thumbnail, likes, owner } = posts[id];
+          const { sid, thumbnail, likes, owner, mediaType } = posts[id];
           const orientation = this.getOrientation(posts[id]);
           const authorName = parseUsername(owner);
           const authorPhotoUrl = parseProfilePhotoUrl(owner);
@@ -207,8 +207,9 @@ class Gallery extends Component{
             <View
               key={sid}
               postId={sid}
-              imgUrl={thumbnail.downloadUrl}
+              type={mediaType}
               orientation={orientation}
+              imgUrl={thumbnail.downloadUrl}
               count={likes.count}
               isLiked={likes.isLiked}
               showAuthor={showAuthor}
