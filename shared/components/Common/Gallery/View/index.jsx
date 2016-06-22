@@ -5,7 +5,6 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 import isRequiredIf from 'react-proptype-conditional-require';
 
-import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 import ViewAuthor from './ViewAuthor';
 import ViewLike from './ViewLike';
 import { MEDIA_TYPE, ORIENTATION } from 'constants/common';
