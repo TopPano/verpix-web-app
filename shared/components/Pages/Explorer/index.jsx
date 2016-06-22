@@ -2,35 +2,36 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import Gallery from '../../Common/Gallery';
+import Gallery from 'components/Common/Gallery';
 
 if (process.env.BROWSER) {
   require('./Explorer.css');
 }
 
-export default class Explorer extends Component {
-  static propTyes = {
-    explorer: PropTypes.object.isRequired,
-    userId: PropTypes.string.isRequired,
-    like: PropTypes.object.isRequired,
-    followUser: PropTypes.func.isRequired,
-    unfollowUser: PropTypes.func.isRequired,
-    likePost: PropTypes.func.isRequired,
-    unlikePost: PropTypes.func.isRequired,
-    getLikelist: PropTypes.func.isRequired,
-    hasMorePosts: PropTypes.func.isRequired,
-    loadMorePosts: PropTypes.func.isRequired
-  };
+const propTypes = {
+  explorer: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
+  like: PropTypes.object.isRequired,
+  followUser: PropTypes.func.isRequired,
+  unfollowUser: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
+  unlikePost: PropTypes.func.isRequired,
+  getLikelist: PropTypes.func.isRequired,
+  loadMorePosts: PropTypes.func.isRequired
+};
 
+const defaultProps = {
+}
+
+class Explorer extends Component {
   render() {
-    const { explorer, like, userId, likePost, unlikePost, followUser, unfollowUser, getLikelist, hasMorePosts, loadMorePosts } = this.props;
+    const { explorer, like, userId, likePost, unlikePost, followUser, unfollowUser, getLikelist, loadMorePosts } = this.props;
     return (
       <div className="explorer-component">
         <Gallery
           posts={explorer.posts.feedPosts}
           postIds={explorer.posts.feedIds}
-          maxWidth={500}
-          ratio={2}
+          hasNext={explorer.posts.hasNext}
           userId={userId}
           like={like}
           followUser={followUser}
@@ -38,7 +39,6 @@ export default class Explorer extends Component {
           likePost={likePost}
           unlikePost={unlikePost}
           getLikelist={getLikelist}
-          hasMorePosts={hasMorePosts}
           loadMorePosts={loadMorePosts}
           showAuthor={true}
         />
@@ -47,4 +47,7 @@ export default class Explorer extends Component {
   }
 }
 
-Explorer.displayName = 'Explorer';
+Explorer.propTypes = propTypes;
+Explorer.defaultProps = defaultProps;
+
+export default Explorer;

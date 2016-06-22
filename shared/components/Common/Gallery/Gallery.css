@@ -1,11 +1,24 @@
-@import '../Styles/Variables.css';
+@import 'Variables.css';
+@import 'RWD.css';
 
 .gallery-component {
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   .gallery-wrapper {
-    max-width: 100%;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 1000px;
+    .gallery-sub {
+      float: left;
+      width: 100%;
+      @media(width >= $gallery-boundary) {
+        width: 50%;
+      }
+    }
   }
+
   .gallery-more-btn {
     width: 80px;
     position: fixed;
