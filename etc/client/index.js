@@ -8,5 +8,6 @@ var config =
 
 module.exports = merge(config, {
   apiRoot: process.env.API_ROOT,
-  staticUrl: process.env.STATIC_URL
+  staticUrl: process.env.STATIC_URL,
+  gaTrackingCode: process.env.GA_CODE ? process.env.GA_CODE : 'UA-75307622-2'
 });
