@@ -1,13 +1,15 @@
+'use strict';
+
 var merge = require('lodash/merge');
 
-var customConfig = process.env.CLIENT_CONFIG;
+var base = require('./base');
 var config =
   (process.env.NODE_ENV === 'production') ?
-  require('./client-config.prod.js') :
-  require('./client-config.dev.js');
+  require('./production.js') :
+  require('./development.js');
 
-module.exports = merge(config, {
+module.exports = merge({}, base, config, {
   apiRoot: process.env.API_ROOT,
   staticUrl: process.env.STATIC_URL,
-  gaTrackingCode: process.env.GA_CODE ? process.env.GA_CODE : 'UA-75307622-2'
+  gaTrackingCode: process.env.GA_CODE
 });
