@@ -10,6 +10,8 @@ import { listFollowers, listFollowing } from '../../actions/user';
 import ScrollablePageContainer from './Scrollable';
 import Personal from '../../components/Pages/Personal';
 
+import { sendEvent } from 'lib/utils/googleAnalytics';
+
 class PersonalPageContainer extends ScrollablePageContainer {
   static propTyes = {
     person: PropTypes.object.isRequired,
@@ -51,11 +53,13 @@ class PersonalPageContainer extends ScrollablePageContainer {
   followAndUpdate = (followeeId) => {
     this.follow(followeeId);
     this.updateFollowerList();
+    sendEvent('personal page', 'follow');
   }
 
   unfollowAndUpdate = (followeeId) => {
     this.unfollow(followeeId);
     this.updateFollowerList();
+    sendEvent('personal page', 'unfollow');
   }
 
   updateFollowerList = () => {

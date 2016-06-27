@@ -1,7 +1,7 @@
 import merge from 'lodash/merge';
 import assign from 'lodash/assign';
 import {
-  GET_POST_REQUSET,
+  GET_POST_REQUEST,
   GET_POST_SUCCESS,
   GET_POST_FAILURE,
   LIKE_POST_REQUEST,
@@ -32,7 +32,7 @@ const DEFAULT_STATE = {
 export default function post(state=DEFAULT_STATE, action) {
   let nextState = {};
   switch (action.type) {
-    case GET_POST_REQUSET:
+    case GET_POST_REQUEST:
     case LIKE_POST_REQUEST:
     case UNLIKE_POST_REQUEST:
       return merge({}, state, {
