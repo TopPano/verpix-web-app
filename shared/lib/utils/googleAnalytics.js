@@ -1,7 +1,7 @@
-import { gaTrackingCode } from '../../../etc/client';
+import { google } from '../../../etc/external-api';
 
 export function initialize() {
-  ga('create', gaTrackingCode, 'auto');
+  ga('create', google.gaTrackingCode, 'auto');
 }
 
 export function navigate(pageData) {

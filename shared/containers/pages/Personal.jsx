@@ -10,7 +10,7 @@ import { listFollowers, listFollowing } from '../../actions/user';
 import ScrollablePageContainer from './Scrollable';
 import Personal from '../../components/Pages/Personal';
 
-import { sendEvent } from '../../lib/utils/googleAnalytics';
+import { sendEvent } from 'lib/utils/googleAnalytics';
 
 class PersonalPageContainer extends ScrollablePageContainer {
   static propTyes = {

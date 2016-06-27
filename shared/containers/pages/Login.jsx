@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Login from '../../components/Pages/Login';
 import { loginUser, facebookTokenLogin, registerUser, resetErrMsg } from '../../actions/user';
 
-import { sendEvent } from '../../lib/utils/googleAnalytics';
+import { sendEvent } from 'lib/utils/googleAnalytics';
 
 class LoginPageContainer extends Component {
   static propTyes = {

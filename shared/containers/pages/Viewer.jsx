@@ -9,7 +9,7 @@ import Viewer from '../../components/Pages/Viewer';
 import { followUser, unfollowUser } from '../../actions/user';
 import { getPost, likePost, unlikePost, showLikeList } from '../../actions/post';
 
-import { sendEvent } from '../../lib/utils/googleAnalytics';
+import { sendEvent } from 'lib/utils/googleAnalytics';
 
 class ViewerPageContainer extends Component {
   static propTyes = {
