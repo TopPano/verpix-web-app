@@ -39,11 +39,16 @@ class Gallery extends Component{
       lastClickedPostId: '',
       numOfDivs: 0
     };
+    this.handleClickMoreBtn = this.handleClickMoreBtn.bind(this);
+    this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
   // Divide post IDs into multiple sub divisions which have almost equal heights.
-  dividePostIds(postIds, numDivs) {
-    const { posts, hasNext } = this.props;
+  dividePostIds(postIds, posts, numDivs, hasNext) {
+    if(numDivs <= 0) {
+      return [];
+    }
+
     let oldPostIds = clone(postIds);
     let portraitPostIds = [];
     let dividedPostIds = createFixedArray([], numDivs);
@@ -60,7 +65,7 @@ class Gallery extends Component{
     });
     // Handling for there is a "single" portrait post.
     if(portraitPostIds.length % 2 === 1) {
-      // If there are still posts to load, do not show it as this time;
+      // If there are still posts to load, do not show it at this time;
       // otherwise, place it at the last position.
       const lastPortraitPostId = portraitPostIds.pop();
       oldPostIds.splice(oldPostIds.indexOf(lastPortraitPostId), 1);
@@ -93,9 +98,6 @@ class Gallery extends Component{
               // the single portrait post will be at last position,
               // just push it.
               dividedPostIds[curIndex].push(postId);
-            } else if(oldPostIds.length > 0) {
-              // Otherwise, push next landscape.
-              dividedPostIds[curIndex].push(oldPostIds.shift());
             }
           }
         }
@@ -150,6 +152,7 @@ class Gallery extends Component{
 
   waitUpdateLikelist = (postId) => {
     setTimeout(() => {
+      // TODO: Set limitation of times of try again.
       if(this.props.like.isFetching) {
         this.waitUpdateLikelist(postId);
       } else {
@@ -173,17 +176,17 @@ class Gallery extends Component{
   }
 
   componentWillUnmount() {
-     window.removeEventListener('resize', this.handleWindowResize, false);
+    window.removeEventListener('resize', this.handleWindowResize, false);
   }
 
-  handleWindowResize = () => {
+  handleWindowResize() {
     const numOfDivs = this.calculateNumOfDivs();
     if(numOfDivs != this.state.numOfDivs) {
       this.setState({ numOfDivs });
     }
   }
 
-  handleClickMoreBtn = () => {
+  handleClickMoreBtn() {
     this.props.loadMorePosts();
   }
 
@@ -193,20 +196,20 @@ class Gallery extends Component{
     let dividedPreviews = [];
 
     if(numOfDivs > 0) {
-      const dividedPostIds = this.dividePostIds(postIds, numOfDivs);
-      dividedPostIds.forEach((postIds) => {
+      const dividedPostIds = this.dividePostIds(postIds, posts, numOfDivs, hasNext);
+      dividedPostIds.forEach((postIds, index) => {
         let previews = [];
 
         postIds.map((id) => {
-          const { sid, thumbnail, likes, owner, mediaType } = posts[id];
+          const { thumbnail, likes, owner, mediaType } = posts[id];
           const orientation = this.getOrientation(posts[id]);
           const authorName = parseUsername(owner);
           const authorPhotoUrl = parseProfilePhotoUrl(owner);
 
           previews.push(
             <View
-              key={sid}
-              postId={sid}
+              key={id}
+              postId={id}
               type={mediaType}
               orientation={orientation}
               imgUrl={thumbnail.downloadUrl}
@@ -216,15 +219,18 @@ class Gallery extends Component{
               authorPhotoUrl={authorPhotoUrl}
               authorName={authorName}
               authorId={owner.sid}
-              likePost={likePost.bind(this, sid)}
-              unlikePost={unlikePost.bind(this, sid)}
-              showLikelist={this.showLikelist.bind(this, sid)}
+              likePost={() => likePost(id)}
+              unlikePost={() => unlikePost(id)}
+              showLikelist={() => this.showLikelist(id)}
             />
           );
         });
 
         dividedPreviews.push(
-          <div className="gallery-sub" >
+          <div
+            key={index}
+            className="gallery-sub"
+          >
             {previews}
           </div>
         );

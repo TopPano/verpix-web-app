@@ -3,8 +3,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
+import isRequiredIf from 'react-proptype-conditional-require';
 
-import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 import ViewAuthor from './ViewAuthor';
 import ViewLike from './ViewLike';
 import { MEDIA_TYPE, ORIENTATION } from 'constants/common';
@@ -12,6 +12,12 @@ import { MEDIA_TYPE, ORIENTATION } from 'constants/common';
 if (process.env.BROWSER) {
   require('./View.css');
 }
+
+const requireShowAuthor = () => {
+  return isRequiredIf(PropTypes.string, (props) => {
+    return props.hasOwnProperty('showAuthor') && props.showAuthor === true;
+  })
+};
 
 const propTypes = {
   postId: PropTypes.string.isRequired,
@@ -24,16 +30,13 @@ const propTypes = {
   unlikePost: PropTypes.func.isRequired,
   showLikelist: PropTypes.func.isRequired,
   showAuthor: PropTypes.bool,
-  authorPhotoUrl: PropTypes.string,
-  authorName: PropTypes.string,
-  authorId: PropTypes.string
+  authorPhotoUrl: requireShowAuthor(),
+  authorName: requireShowAuthor(),
+  authorId: requireShowAuthor()
 }
 
 const defaultProps = {
-  showAuthor: false,
-  authorPhotoUrl: DEFAULT_PROFILE_PHOTO_URL,
-  authorName: 'Verpixer',
-  authorId: ''
+  showAuthor: false
 }
 
 class View extends Component {

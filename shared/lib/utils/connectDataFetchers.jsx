@@ -1,5 +1,4 @@
 import React from 'react';
-import Promise from 'bluebird';
 
 export default function connectDataFetchers(Component, actionCreators) {
   return class DataFetchersWrapper extends React.Component {
