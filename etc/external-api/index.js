@@ -1,5 +1,15 @@
-if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./external-api-config.prod.js');
-} else {
-  module.exports = require('./external-api-config.dev.js');
-}
+'use strict';
+
+var merge = require('lodash/merge');
+
+var base = require('./base');
+var config =
+  (process.env.NODE_ENV === 'production') ?
+    require('./production.js') :
+    require('./development.js');
+
+module.exports = merge({}, base, config, {
+  google: {
+    gaTrackingCode: process.env.GA_CODE
+  }
+});
