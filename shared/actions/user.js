@@ -6,6 +6,7 @@ import api from 'lib/api';
 import { loadNewsFeed } from './post';
 import config from 'etc/client';
 import { DEFAULT_FOLLOWING_USER } from 'constants/common';
+import Promise from 'lib/utils/promise';
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
