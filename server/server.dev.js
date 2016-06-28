@@ -22,6 +22,7 @@ import api from 'lib/api';
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
 import DevTools from 'containers/DevTools';
+import Promise from 'lib/utils/promise';
 
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';

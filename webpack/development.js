@@ -20,6 +20,7 @@ let config = Object.assign({}, baseConfig, {
     new webpack.DefinePlugin({
       "process.env": {
         BROWSER: JSON.stringify(true),
+        NODE_ENV: JSON.stringify('development'),
         API_ROOT: JSON.stringify(process.env.API_ROOT),
         STATIC_URL: JSON.stringify(process.env.STATIC_URL),
         GA_CODE: JSON.stringify(process.env.GA_CODE)

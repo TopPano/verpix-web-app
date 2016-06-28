@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch';
 
 import { isMobile } from 'lib/devices';
 import externalApiConfig from 'etc/external-api';
+import Promise from 'lib/utils/promise';
 
 var requestAnimationFrameId;
 var TOPPANO = TOPPANO || {};

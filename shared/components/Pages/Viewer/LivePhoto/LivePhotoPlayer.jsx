@@ -9,6 +9,7 @@ import { STEP_DISTANCE } from 'constants/livePhoto';
 import { isMobile } from 'lib/devices';
 import { getPosition, getX, getY } from 'lib/events/click';
 import EVENTS from 'constants/events';
+import Promise from 'lib/utils/promise';
 
 export default class LivePhotoPlayer {
   constructor(params) {

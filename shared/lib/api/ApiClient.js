@@ -1,11 +1,11 @@
 import fetch from 'isomorphic-fetch';
 import queryString from 'query-string';
-import Promise from 'bluebird';
 import isEmpty from 'lodash/isEmpty';
 import cookie from 'cookie';
 import { normalize } from 'normalizr';
 
 import config from 'etc/client';
+import Promise from 'lib/utils/promise';
 
 export default class ApiClient {
   constructor() {

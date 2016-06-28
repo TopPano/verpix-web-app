@@ -1,4 +1,4 @@
-import Promise from 'bluebird';
+import Promise from 'lib/utils/promise';
 
 export function fetchComponentsData(dispatch, components, params, query, authToken) {
   const promises = components.map(current => {
