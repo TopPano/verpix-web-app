@@ -8,7 +8,7 @@ require('babel-polyfill');
 delete process.env.BROWSER;
 
 if (process.env.NODE_ENV === 'production') {
-  require('./server.prod.js');
+  require('./production.js');
 } else {
-  require('./server.dev.js');
+  require('./development.js');
 }
