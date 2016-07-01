@@ -9,18 +9,15 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
-import merge from 'lodash/merge';
 
-import { fetchComponentsData, getViewerPostId } from './utils';
+import { fetchComponentsData, renderSharePropsHtml } from './utils';
 
-import api from 'lib/api';
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
 import Promise from 'lib/utils/promise';
 
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';
-import externalApiConfig from 'etc/external-api';
 
 const app = new Express();
 
@@ -53,80 +50,51 @@ app.use((req, res) => {
     }
   }
 
-  let ogProps = {};
-  let requestPostInfo;
+  const store = configureStore(initState);
 
-  ogProps = {
-    appId: `${externalApiConfig.facebook.id}`,
-    type: 'website',
-    siteName: 'Verpix',
-    image: `${clientConfig.staticUrl}/static/images/fb-share-default.jpg`,
-    imgWidth: 600,
-    imgHeight: 315,
-    title: 'LOOK it\'s my awesome 360 photo!!',
-    description: 'Register ＆ add your friends in Verpix to join more activities.',
-    url: `${req.protocol}://${req.get('Host')}${req.url}`
-  }
-  if(isViewerPage) {
-    const postId = getViewerPostId(req.url);
-    requestPostInfo = api.posts.getPost(postId).then((response) => {
-      const newImage = response.result.thumbnail.srcUrl,
-            newTitle = response.result.caption;
-      ogProps = merge({}, ogProps, {
-        image: newImage ? newImage : ogProps.image,
-        title: newTitle ? newTitle : ogProps.title
+  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+    if (error) {
+      res.send(500, error.message);
+    } else if (!renderProps) {
+      res.send(404, 'Not found')
+    } else {
+      fetchComponentsData(
+        store.dispatch,
+        renderProps.components,
+        renderProps.params,
+        renderProps.location.query,
+        accessToken
+      )
+      .then(() => {
+        return renderSharePropsHtml(req, isViewerPage);
+      })
+      .then(sharePropsHtml => {
+        const html = renderToString(
+          <Provider store={store}>
+            <div>
+              <RouterContext {...renderProps} />
+            </div>
+          </Provider>
+        );
+
+        // Grab the inital state from the store
+        const initialState = store.getState();
+
+        return renderHTML(html, initialState, clientConfig, sharePropsHtml);
+      })
+      .then(html => {
+        // Send the rendered page back to the client
+        res.end(html);
+      })
+      .catch(err => {
+        console.log(err.stack);
+        res.end(err.message);
       });
-    }).catch((error) => {
-      console.log(error);
-    });
-  } else {
-    requestPostInfo = Promise.resolve();
-  }
-
-  requestPostInfo.then(() => {
-    const store = configureStore(initState);
-
-    match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-      if (error) {
-        res.send(500, error.message);
-      } else if (!renderProps) {
-        res.send(404, 'Not found')
-      } else {
-        fetchComponentsData(
-          store.dispatch,
-          renderProps.components,
-          renderProps.params,
-          renderProps.location.query,
-          accessToken
-        )
-        .then(() => {
-          const html = renderToString(
-            <Provider store={store}>
-              <div>
-                <RouterContext {...renderProps} />
-              </div>
-            </Provider>
-          );
-
-          // Grab the inital state from the store
-          const initialState = store.getState();
-
-          return renderHTML(html, initialState, clientConfig, ogProps);
-        })
-        .then(html => {
-          // Send the rendered page back to the client
-          res.end(html);
-        })
-        .catch(err => {
-          console.log(err.stack);
-          res.end(err.message);
-        });
-      }
-    });
+    }
   });
 });
 
-function renderHTML(html, initialState, config, ogProps) {
+function renderHTML(html, initialState, config, sharePropsHtml) {
   return `
     <!doctype html>
     <html>
@@ -134,14 +102,7 @@ function renderHTML(html, initialState, config, ogProps) {
       <meta charset="utf8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-      <meta property="fb:app_id" content="${ogProps.appId}">
-      <meta property="og:site_name" content="${ogProps.siteName}">
-      <meta property="og:image" content="${ogProps.image}">
-      <meta property="og:image:width" content="${ogProps.imgWidth}">
-      <meta property="og:image:height" content="${ogProps.imgHeight}">
-      <meta property="og:title" content="${ogProps.title}">
-      <meta property="og:description" content="${ogProps.description}">
-      <meta property="og:url" content="${ogProps.url}">
+      ${sharePropsHtml}
       <title>Verpix</title>
       <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -151,6 +112,9 @@ function renderHTML(html, initialState, config, ogProps) {
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      </script>
+      <script>
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
       </script>
     </head>
     <body>
