@@ -1,7 +1,9 @@
 import fetchComponentsData from './fetchComponentsData';
-import renderSharePropsHtml from './renderSharePropsHtml';
+import genShareContent from './genShareContent';
+import renderHTML from './renderHTML';
 
 export {
   fetchComponentsData,
-  renderSharePropsHtml
+  genShareContent,
+  renderHTML
 }

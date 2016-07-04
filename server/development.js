@@ -15,7 +15,7 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
 
-import { fetchComponentsData, renderSharePropsHtml } from './utils';
+import { fetchComponentsData, genShareContent, renderHTML } from './utils';
 
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
@@ -77,9 +77,8 @@ app.use((req, res) => {
         accessToken
       )
       .then(() => {
-        return renderSharePropsHtml(req, isViewerPage);
-      })
-      .then(sharePropsHtml => {
+        // Grab the inital state from the store
+        const initialState = store.getState();
         const html = renderToString(
           <Provider store={store}>
             <div>
@@ -88,11 +87,9 @@ app.use((req, res) => {
             </div>
           </Provider>
         );
+        const shareContent = genShareContent(req, isViewerPage, initialState.post);
 
-        // Grab the inital state from the store
-        const initialState = store.getState();
-
-        return renderHTML(html, initialState, clientConfig, sharePropsHtml);
+        return renderHTML(html, initialState, clientConfig, shareContent, 'development');
       })
       .then(html => {
         // Send the rendered page back to the client
@@ -105,37 +102,6 @@ app.use((req, res) => {
     }
   });
 });
-
-function renderHTML(html, initialState, config, sharePropsHtml) {
-  return `
-    <!doctype html>
-    <html>
-    <head>
-      <meta charset="utf8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-      ${sharePropsHtml}
-      <title>Verpix</title>
-      <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-      <link rel="stylesheet" href="${config.staticUrl}/static/build/app.css">
-      <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics_debug.js','ga');
-      </script>
-    </head>
-    <body>
-      <div id="app">${html}</div>
-
-      <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
-      <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
-      <script type="text/javascript" src="${config.staticUrl}/static/build/app.js"></script>
-    </body>
-    </html>
-  `;
-}
 
 app.listen(serverConfig.port, (error) => {
   if (error) {
