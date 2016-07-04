@@ -25,3 +25,14 @@ export const DIRECTION = {
   VERTICAL: 'vertical',
   HORIZONTAL: 'horizontal'
 }
+
+export const SHARE_IMAGE_SIZE = {
+  PORTRAIT: {
+    WIDTH: 300,
+    HEIGHT: 450
+  },
+  LANDSCAPE: {
+    WIDTH: 600,
+    HEIGHT: 315
+  }
+}
