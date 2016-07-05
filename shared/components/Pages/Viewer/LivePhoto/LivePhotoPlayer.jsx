@@ -4,7 +4,7 @@ import fill from 'lodash/fill';
 import isFunction from 'lodash/isFunction';
 import inRange from 'lodash/inRange';
 
-import { DIRECTION, ORIENTATION } from 'constants/common';
+import { DIRECTION } from 'constants/common';
 import { STEP_DISTANCE } from 'constants/livePhoto';
 import { isMobile } from 'lib/devices';
 import { getPosition, getX, getY } from 'lib/events/click';
@@ -18,19 +18,11 @@ export default class LivePhotoPlayer {
     this.photosSrcUrl = params.photosSrcUrl;
     this.numPhotos = this.photosSrcUrl.length;
     this.direction = params.dimension.direction;
-    this.orientation = params.dimension.orientation;
 
     // Writable member variables
     this.photos = fill(Array(this.numPhotos), null);
     this.curPhoto = Math.round(this.numPhotos / 2);
     this.lastPosition = null;
-    
-    // Transform container when orientation is portrait
-    if(this.orientation === ORIENTATION.PORTRAIT) {
-      const ctx = this.container.getContext('2d');
-      ctx.rotate(90 * Math.PI / 180);
-      ctx.translate(0, -this.container.width);
-    }
   }
 
   start() {
@@ -95,11 +87,7 @@ export default class LivePhotoPlayer {
     const container = this.container;
     const ctx = container.getContext('2d');
     const img = this.photos[index];
-    if(this.orientation === ORIENTATION.PORTRAIT) {
-      ctx.drawImage(img, 0, 0, container.height, container.width);
-    } else {
-      ctx.drawImage(img, 0, 0, container.width, container.height);
-    }
+    ctx.drawImage(img, 0, 0, container.width, container.height);
   }
 
   handleTransitionStart = (e) => {
