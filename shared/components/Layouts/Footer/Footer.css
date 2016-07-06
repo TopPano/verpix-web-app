@@ -1,4 +1,4 @@
-@import '../../Common/Styles/Variables.css';
+@import 'Variables.css';
 
 $img-length: 18px;
 
@@ -11,6 +11,7 @@ $img-length: 18px;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 
   .footer-item {
     color: white;
