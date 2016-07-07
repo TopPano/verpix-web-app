@@ -22,15 +22,17 @@
 
     .view-preview {
       width: 100%;
+      height: auto;
       position: absolute;
       top: 50%;
       left: 0;
       transform: translateY(-50%);
       &.view-preview-portrait {
-        width: 200%;
-        top: 50%;
+        width: auto;
+        height: 100%;
+        top: 0;
         left: 50%;
-        transform: translate(-50%, -50%) rotate(90deg);
+        transform: translateX(-50%);
       }
     }
 

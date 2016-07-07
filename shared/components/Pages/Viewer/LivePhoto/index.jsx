@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import LivePhotoPlayer from './LivePhotoPlayer';
 import { ORIENTATION } from 'constants/common';
+import { CANVAS_SIZE } from 'constants/livePhoto';
 
 if (process.env.BROWSER) {
   require('./LivePhoto.css');
@@ -60,8 +61,8 @@ class LivePhoto extends Component {
       'orientation-portrait': isPortrait
     });
     // TODO: Set canvas width and height automatically
-    const width = isPortrait ? 480 : 640;
-    const height = isPortrait ? 640 : 480;
+    const width = isPortrait ? CANVAS_SIZE.SHORT_SIDE : CANVAS_SIZE.LONG_SIDE;
+    const height = isPortrait ? CANVAS_SIZE.LONG_SIDE : CANVAS_SIZE.SHORT_SIDE;
 
     return (
       <div className={livePhotoClass}>
